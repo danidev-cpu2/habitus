@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class SignupRequest extends FormRequest
+class UpdateUserRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,24 +22,33 @@ class SignupRequest extends FormRequest
      */
     public function rules(): array
     {
+        $userId = $this->route('user')->id;
+
         return [
-            'name' => 'required|string|max:100',
-            'surname' => 'required|string|max:100',
-            'email' => 'required|email|unique:users,email',
-            'dni' => 'required|string|unique:users,dni',
-            'telephone' => 'string|max:20',
-            'password' => 'required|string|min:8|confirmed',
-            'rol' => 'required|in:admin,psychologist,receptionist,patient',
-            'status' => [
-                Rule::requiredIf(fn() => $this->rol === 'patient'),
+            'name'      => 'sometimes|required|string|max:100',
+            'surname'   => 'sometimes|required|string|max:100',
+            'email'     => [
+                'sometimes',
+                'required',
+                'email',
+                Rule::unique('users', 'email')->ignore($userId),
+            ],
+            'dni'       => [
+                'sometimes',
+                'required',
+                'string',
+                Rule::unique('users', 'dni')->ignore($userId),
+            ],
+            'telephone' => 'nullable|string|max:20',
+            'password'  => 'sometimes|required|string|min:8|confirmed',
+            'rol'       => 'sometimes|required|in:admin,psychologist,receptionist,patient',
+            'status'    => [
+                Rule::requiredIf(fn () => ($this->rol ?? $this->route('user')->rol) === 'patient'),
                 'in:active,inactive',
-            ]
+            ],
         ];
     }
-
-    /**
-     * Mensajes de error customizados
-     */
+    // Mensajes para validación del request
     public function messages(): array
     {
         return [
@@ -62,5 +71,4 @@ class SignupRequest extends FormRequest
             'status.in'          => 'El estado debe ser: active o inactive.',
         ];
     }
-
 }
