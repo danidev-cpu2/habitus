@@ -4,13 +4,14 @@
  *
  *
  * @author Taylor Hernández
- * @version 1.0
+ * @version 2.0
  *
  * Aquí se registran las rutas de la api. Por cada ruta,
  * crearemos un phpDOC para documentar los endpoints.
  *      (Se sacan del php artisan route:list)
  */
 
+use App\Http\Controllers\LoginController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -24,10 +25,16 @@ use Illuminate\Support\Facades\Route;
 *
 */
 // Se utilizará esta ruta para las pruebas con usuarios
-Route::apiResource('users', UserController::class);
-
-// La siguiente ruta será la definitiva, pero se mantiene
-// comentada hasta finalizar api
-/* Route::middleware('auth:sanctum')->group(function () {
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', [LoginController::class, 'logout']);
     Route::apiResource('users', UserController::class);
-}); */
+});
+
+/**                        USERS
+ *
+ * POST     /api/login          -> LoginController@login
+ * POST     /api/logout         -> LoginController@logout (auth required)
+*
+*/
+// Rutas para hacer el loggin
+Route::post('/login', [LoginController::class, 'login']);

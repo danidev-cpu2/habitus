@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -79,6 +78,7 @@ class UserController extends Controller
         }
 
         if(Auth::check() && Auth::user()->rol === 'psychologist' && $user->rol !== 'patient'){
+            // Si el usuario que esta viendo el psicologo no es paciente, no tiene permiso
             return response()->json([
                 'message' => 'No tienes permiso.'
             ], 403);
