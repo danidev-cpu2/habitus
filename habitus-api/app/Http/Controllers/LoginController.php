@@ -27,7 +27,7 @@ class LoginController extends Controller
             // Si el usuario ha introducido mal las credenciales
 
             return response()->json([
-                'message' => 'Credenciales incorrectas'
+                'message' => 'Credenciales incorrectas',
             ], 401);
             // Devolvemo sun mensaje indicándolo, además del estado de la petición.
         }

@@ -78,6 +78,15 @@ class AppointmentController extends Controller
 
         // Si no existe, la creamos
         $appointment = Appointment::create($data);
+
+        /**
+         * !! importante, esta linea ayuda a tener más información del usuario
+         * dado que al front eventualmente necesitará mas información del
+         * usuario, no solo el id.
+         *
+         * Básicamente, de no hacerla, solo se guardaría el ID de los usuarios,
+         * mas no los nombres, ni la fecha, y otro tipo de información pertinente.
+         */
         $appointment->load(['patient', 'psychologist']);
 
         return response()->json([
