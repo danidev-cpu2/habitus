@@ -6,7 +6,6 @@ use App\Http\Requests\AppointmentRequest;
 use App\Http\Requests\UpdateAppointmentRequest;
 use App\Models\Appointment;
 use App\Models\User;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class AppointmentController extends Controller
@@ -14,7 +13,7 @@ class AppointmentController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
 
         if (Auth::check() && Auth::user()->rol === 'admin' || Auth::user()->rol === 'receptionist') {
