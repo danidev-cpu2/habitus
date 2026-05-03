@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 import { AuthService } from '../../core/services/auth.service';
 import { AuthResponse } from '../../core/models/auth.model';
+import { UserRole } from '../../core/models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -18,7 +20,7 @@ export class LoginComponent {
   cargando: boolean = false;
   mostrarPassword: boolean = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private router: Router) { }
 
   onLogin(): void {
     this.cargando = true;
@@ -26,10 +28,12 @@ export class LoginComponent {
     this.mensaje = '';
 
     this.authService.login({ email: this.email, password: this.password }).subscribe({
+
       next: (response: AuthResponse) => {
         this.mensaje = response.message; // '¡Bienvenido!'
         this.cargando = false;
         console.log('✅ Login correcto:', response.data.user);
+        this.router.navigate([this.getRouteForRole(response.data.user.rol)]);
       },
       error: (err: HttpErrorResponse) => {
         this.error = err.error?.message || `Error ${err.status}`;
@@ -37,5 +41,20 @@ export class LoginComponent {
         console.error('❌ Error login:', err);
       },
     });
+  }
+
+  private getRouteForRole(role: UserRole): string {
+    switch (role) {
+      case 'admin':
+        return '/admin';
+      case 'psychologist':
+        return '/psychologist';
+      case 'receptionist':
+        return '/receptionist';
+      case 'patient':
+        return '/patient';
+      default:
+        return '/login';
+    }
   }
 }

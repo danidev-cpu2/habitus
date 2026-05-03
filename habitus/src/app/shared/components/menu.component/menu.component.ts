@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-menu-component',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule], // Añadido LucideAngularModule aquí
+  imports: [CommonModule, RouterModule, LucideAngularModule, ],
   templateUrl: './menu.component.html'
 })
 export class MenuComponent implements OnInit {
@@ -94,6 +94,10 @@ export class MenuComponent implements OnInit {
 
   getUserEmail(): string {
     return this.user?.email || '';
+  }
+
+  getUserRole(): string {
+    return this.user?.rol || '';
   }
 
   getInitials(): string {
