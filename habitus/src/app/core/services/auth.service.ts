@@ -37,14 +37,14 @@ export class AuthService {
       tap((response: AuthResponse) => {
         this.setSession(response.data.token, response.data.user);
       }),
-      catchError((error) => throwError(() => error))
+      catchError((error: Error) => throwError(() => error))
     );
   }
 
   logout(): Observable<LogoutResponse> {
     return this.http.post<LogoutResponse>(`${this.apiUrl}/logout`, {}).pipe(
       tap(() => this.clearSession()),
-      catchError((error) => {
+      catchError((error: Error) => {
         this.clearSession();
         return throwError(() => error);
       })
