@@ -47,8 +47,10 @@ export const roleGuard: CanActivateFn = (route: ActivatedRouteSnapshot) => {
     return true;
   }
 
-  // Si no tiene el rol adecuado, redirigir a una página de acceso denegado o dashboard
-  router.navigate(['/unauthorized']);
+  // Si no tiene el rol adecuado, redirigir al login o al panel propio
+  const user = authService.currentUser();
+  const redirectRoute = user?.rol ? `/${user.rol}` : '/login';
+  router.navigate([redirectRoute]);
   return false;
 };
 

@@ -1,6 +1,14 @@
 import { inject } from '@angular/core';
 import { Router, CanActivateFn } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { UserRole } from '../models/user.model';
+
+const roleRouteMap: Record<UserRole, string> = {
+  admin: '/admin',
+  psychologist: '/psychologist',
+  receptionist: '/receptionist',
+  patient: '/patient'
+};
 
 /**
  * Guard que protege rutas que requieren autenticación.
@@ -21,7 +29,7 @@ export const authGuard: CanActivateFn = () => {
 
 /**
  * Guard que previene acceso a rutas de auth (login) si ya está autenticado.
- * Redirige a /dashboard si el usuario ya está autenticado.
+ * Redirige al panel correspondiente si el usuario ya está autenticado.
  */
 export const noAuthGuard: CanActivateFn = () => {
   const authService = inject(AuthService);
@@ -31,7 +39,7 @@ export const noAuthGuard: CanActivateFn = () => {
     return true;
   }
 
-  // Redirigir al dashboard si ya está autenticado
-  router.navigate(['/dashboard']);
+  const role = authService.currentUser()?.rol;
+  router.navigate([role ? roleRouteMap[role] : '/']);
   return false;
 };
