@@ -1,5 +1,4 @@
 <div style="display: flex; min-height: 100vh">
-  <!-- Panel izquierdo -->
   <div
     style="
       background: #3b82f6;
@@ -21,23 +20,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        color: white;
       "
     >
-      <svg
-        width="32"
-        height="32"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="white"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
-      >
-        <path
-          d="M9.5 2a2.5 2.5 0 0 1 5 0v1a6.5 6.5 0 0 1 6.5 6.5v1a4 4 0 0 1-2 3.46V17a5 5 0 0 1-10 0v-3.04A4 4 0 0 1 7 10.5v-1A6.5 6.5 0 0 1 9.5 3V2z"
-        />
-        <path d="M12 6v6M9 9h6" />
-      </svg>
+      <lucide-icon [name]="brain" stroke="white"></lucide-icon>
     </div>
 
     <div style="text-align: center">
@@ -66,7 +52,6 @@
     </div>
   </div>
 
-  <!-- Panel derecho -->
   <div
     style="
       width: 50%;
@@ -110,7 +95,6 @@
       Ingresa tus credenciales para acceder a tu cuenta
     </p>
 
-    <!-- Email -->
     <div style="margin-bottom: 1.25rem">
       <label
         style="
@@ -162,7 +146,6 @@
       </div>
     </div>
 
-    <!-- Contraseña -->
     <div style="margin-bottom: 1.5rem">
       <div
         style="
@@ -236,7 +219,6 @@
       </div>
     </div>
 
-    <!-- ✅ Login exitoso -->
     @if (mensaje) {
       <div
         style="
@@ -264,7 +246,6 @@
       </div>
     }
 
-    <!-- ❌ Error -->
     @if (error) {
       <div
         style="
@@ -294,7 +275,6 @@
       </div>
     }
 
-    <!-- Botón -->
     <button
       (click)="onLogin()"
       [disabled]="cargando"
@@ -319,6 +299,5 @@
         Iniciar sesión
       }
     </button>
-
   </div>
 </div>

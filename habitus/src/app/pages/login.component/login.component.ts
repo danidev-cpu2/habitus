@@ -6,19 +6,27 @@ import { AuthResponse } from '../../core/models/auth.model';
 import { UserRole } from '../../core/models/user.model';
 import { HttpErrorResponse } from '@angular/common/http';
 
+import {
+  LucideAngularModule,
+  Brain
+} from 'lucide-angular';
+
 @Component({
   selector: 'app-login.component',
-  imports: [FormsModule],
+  standalone: true,
+  imports: [FormsModule, LucideAngularModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css',
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent {
+
   email: string = '';
   password: string = '';
   error: string = '';
   mensaje: string = '';
   cargando: boolean = false;
   mostrarPassword: boolean = false;
+  readonly brain = 'brain';
 
   constructor(private authService: AuthService, private router: Router) { }
 
@@ -58,7 +66,8 @@ export class LoginComponent {
     }
   }
 
-  returnToLanding(){
+  returnToLanding() {
     this.router.navigate(['/']);
   }
+
 }
