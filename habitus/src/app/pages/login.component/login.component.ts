@@ -57,4 +57,8 @@ export class LoginComponent {
         return '/login';
     }
   }
+
+  returnToLanding(){
+    this.router.navigate(['/']);
+  }
 }
