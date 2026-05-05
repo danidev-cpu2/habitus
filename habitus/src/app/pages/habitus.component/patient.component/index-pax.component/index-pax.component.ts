@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-index-pax.component',
+  selector: 'app-index-pax',
   imports: [],
   templateUrl: './index-pax.component.html',
-  styleUrl: './index-pax.component.css',
+  styleUrls: ['./index-pax.component.css'],
 })
 export class IndexPaxComponent {
 
