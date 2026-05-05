@@ -15,7 +15,8 @@ import {
   selector: 'app-menu-component',
   standalone: true,
   imports: [CommonModule, RouterModule, LucideAngularModule, ],
-  templateUrl: './menu.component.html'
+  templateUrl: './menu.component.html',
+  styleUrl: './menu.component.css',
 })
 export class MenuComponent implements OnInit {
   sidebarOpen = false;
@@ -45,9 +46,9 @@ export class MenuComponent implements OnInit {
   private readonly navigationConfig: Record<string, any[]> = {
     patient: [
       { href: '/paciente', label: 'Inicio', icon: this.icons.Home },
-      { href: '/paciente/calendario', label: 'Calendario', icon: this.icons.Calendar },
+/*       { href: '/paciente/calendario', label: 'Calendario', icon: this.icons.Calendar },
       { href: '/paciente/autoregistro', label: 'Autoregistro', icon: this.icons.BookOpen },
-      { href: '/paciente/tareas', label: 'Mis Tareas', icon: this.icons.CheckSquare },
+      { href: '/paciente/tareas', label: 'Mis Tareas', icon: this.icons.CheckSquare }, */
     ],
     psychologist: [
       { href: '/psicologo', label: 'Mi Panel', icon: this.icons.LayoutDashboard },

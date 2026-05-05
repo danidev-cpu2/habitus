@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
-  selector: 'app-patient.component',
-  imports: [],
+  selector: 'app-patient',
+  imports: [RouterOutlet],
   templateUrl: './patient.component.html',
-  styleUrl: './patient.component.css',
+  styleUrls: ['./patient.component.css'],
 })
 export class PatientComponent {
 
