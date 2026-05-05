@@ -15,7 +15,8 @@ import {
   selector: 'app-menu-component',
   standalone: true,
   imports: [CommonModule, RouterModule, LucideAngularModule, ],
-  templateUrl: './menu.component.html'
+  templateUrl: './menu.component.html',
+  styleUrl: './menu.component.css',
 })
 export class MenuComponent implements OnInit {
   sidebarOpen = false;

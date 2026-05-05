@@ -1,0 +1,30 @@
+:host nav a,
+:host nav a span {
+  text-decoration: none !important;
+}
+
+:host nav a.menu-link {
+  color: #64748b;
+  /* slate-500 */
+}
+
+:host nav a.menu-link:hover,
+:host nav a.menu-link:hover span,
+:host nav a.menu-link:hover lucide-icon {
+  color: #ffffff !important;
+}
+
+:host nav a.menu-link:hover {
+  background-color: #4f84d4 !important;
+}
+
+:host nav a.active-menu-item,
+:host nav a.active-menu-item:hover {
+  background-color: #4f84d4 !important;
+  color: #ffffff !important;
+}
+
+:host nav a.active-menu-item span,
+:host nav a.active-menu-item lucide-icon {
+  color: #ffffff !important;
+}

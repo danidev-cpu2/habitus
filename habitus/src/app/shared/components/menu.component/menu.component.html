@@ -1,14 +1,16 @@
 <div class="min-h-screen bg-[#F8FAFC]">
-  <aside
-    class="fixed top-0 left-0 z-50 h-full w-72 bg-white border-r border-slate-200"
-  >
+  <aside class="fixed top-0 left-0 z-50 h-full w-72 bg-white border-r border-slate-200">
     <div class="flex flex-col h-full p-6">
       <div class="flex items-center gap-3 mb-10">
-        <div class="w-9 h-9 bg-[#4F84D4] rounded-lg flex items-center justify-center text-white font-bold text-lg">
+        <div
+          class="w-9 h-9 bg-[#4F84D4] rounded-lg flex items-center justify-center text-white font-bold text-lg"
+        >
           H
         </div>
         <span class="font-bold text-xl text-slate-800 tracking-tight">Habitus</span>
-        <span class="ml-2 px-2 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase rounded border border-slate-200">
+        <span
+          class="ml-2 px-2 py-0.5 bg-slate-100 text-slate-500 text-[10px] font-bold uppercase rounded border border-slate-200"
+        >
           {{ this.getUserRole() }}
         </span>
       </div>
@@ -17,21 +19,26 @@
         @for (item of navItems; track item.href) {
           <a
             [routerLink]="item.href"
-            routerLinkActive="bg-[#4F84D4] text-white shadow-lg shadow-blue-100"
+            routerLinkActive="active-menu-item bg-[#4F84D4] text-white shadow-lg shadow-blue-100"
             [routerLinkActiveOptions]="{
               exact:
                 item.href === '/paciente' ||
                 item.href === '/psicologo' ||
                 item.href === '/recepcion' ||
-                item.href === '/admin'
+                item.href === '/admin',
             }"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-500 hover:bg-slate-50 hover:text-slate-800 group"
+            class="menu-link flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-200 text-slate-500 hover:bg-[#4F84D4] hover:text-white no-underline decoration-none"
           >
-            <lucide-icon [name]="item.icon" class="w-5 h-5 opacity-70 group-hover:opacity-100"></lucide-icon>
-            <span class="flex-1">{{ item.label }}</span>
+            <lucide-icon
+              [name]="item.icon"
+              class="w-5 h-5 opacity-70 group-hover:opacity-100"
+            ></lucide-icon>
+            <span class="flex-1 no-underline decoration-none">{{ item.label }}</span>
 
             @if (item.badge) {
-              <span class="bg-[#4F84D4] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-sm">
+              <span
+                class="bg-[#4F84D4] text-white text-[10px] font-bold rounded-full w-5 h-5 flex items-center justify-center shadow-sm"
+              >
                 {{ item.badge }}
               </span>
             }
@@ -41,7 +48,9 @@
 
       <div class="pt-6 border-t border-slate-100">
         <div class="flex items-center gap-3 mb-4 px-2">
-          <div class="w-11 h-11 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-bold text-sm">
+          <div
+            class="w-11 h-11 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-bold text-sm"
+          >
             {{ getInitials() }}
           </div>
           <div class="flex-1 min-w-0">
