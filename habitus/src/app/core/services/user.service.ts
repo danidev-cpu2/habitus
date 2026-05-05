@@ -11,7 +11,7 @@ import { ApiResponse } from '../models/auth.model';
 export class UserService {
   private readonly apiUrl = `${environment.apiUrl}/users`;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   /**
    * Obtiene todos los usuarios
@@ -61,5 +61,19 @@ export class UserService {
    */
   getByRole(role: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}?role=${role}`);
+  }
+
+  /**
+   * Obtiene todos los psicólogos
+   */
+  getPsychologists(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}?role=psychologist`);
+  }
+
+  /**
+   * Crea un nuevo paciente con perfil
+   */
+  createPatient(patientData: any): Observable<ApiResponse<User>> {
+    return this.http.post<ApiResponse<User>>(this.apiUrl, patientData);
   }
 }
