@@ -1,0 +1,233 @@
+<div class="w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
+    <!-- Header -->
+    <div class="mb-6 flex items-start justify-between gap-4">
+        <div>
+            <h2 class="text-2xl font-bold text-slate-800">
+                Calendario de Citas
+            </h2>
+
+            <p class="mt-1 text-sm text-slate-500">
+                Gestiona y reprograma las citas
+            </p>
+        </div>
+
+        <button
+            class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+        >
+            + Nueva Cita
+        </button>
+    </div>
+
+    <!-- Calendar -->
+    <div class="overflow-hidden rounded-2xl border border-slate-200">
+
+        <!-- Month Header -->
+        <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
+
+            <h3 class="text-lg font-semibold capitalize text-slate-700">
+                Marzo 2026
+            </h3>
+
+            <div class="flex items-center gap-2">
+                <button
+                    class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100"
+                >
+                    ←
+                </button>
+
+                <button
+                    class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+                >
+                    Hoy
+                </button>
+
+                <button
+                    class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100"
+                >
+                    →
+                </button>
+            </div>
+        </div>
+
+        <!-- Days -->
+        <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
+
+            <div class="border-r border-slate-200 p-3 text-center">
+                <p class="text-xs text-slate-400">Lun</p>
+                <p class="mt-1 font-semibold text-slate-700">2</p>
+            </div>
+
+            <div class="border-r border-slate-200 p-3 text-center">
+                <p class="text-xs text-slate-400">Mar</p>
+                <p class="mt-1 font-semibold text-slate-700">3</p>
+            </div>
+
+            <div class="border-r border-slate-200 p-3 text-center">
+                <p class="text-xs text-slate-400">Mié</p>
+                <p class="mt-1 font-semibold text-slate-700">4</p>
+            </div>
+
+            <div class="border-r border-slate-200 bg-blue-50 p-3 text-center">
+                <p class="text-xs text-slate-400">Jue</p>
+                <p class="mt-1 font-semibold text-blue-600">5</p>
+            </div>
+
+            <div class="border-r border-slate-200 p-3 text-center">
+                <p class="text-xs text-slate-400">Vie</p>
+                <p class="mt-1 font-semibold text-slate-700">6</p>
+            </div>
+
+            <div class="border-r border-slate-200 p-3 text-center">
+                <p class="text-xs text-slate-400">Sáb</p>
+                <p class="mt-1 font-semibold text-slate-700">7</p>
+            </div>
+
+            <div class="p-3 text-center">
+                <p class="text-xs text-slate-400">Dom</p>
+                <p class="mt-1 font-semibold text-slate-700">8</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-7 min-h-[320px]">
+
+            <div class="border-r border-slate-200 p-2 space-y-2">
+
+                <div
+                    class="rounded-xl border border-blue-200 bg-blue-100 p-3 transition hover:shadow-sm"
+                >
+                    <p class="text-xs font-medium text-blue-600">
+                        09:00
+                    </p>
+
+                    <p class="mt-1 text-sm font-semibold text-slate-700">
+                        Ana López
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                        Dr. García
+                    </p>
+                </div>
+
+                <div
+                    class="rounded-xl border border-amber-200 bg-amber-100 p-3 transition hover:shadow-sm"
+                >
+                    <p class="text-xs font-medium text-amber-600">
+                        10:30
+                    </p>
+
+                    <p class="mt-1 text-sm font-semibold text-slate-700">
+                        Carlos Ruiz
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                        Dra. Martínez
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="border-r border-slate-200 p-2 space-y-2">
+
+                <div
+                    class="rounded-xl border border-blue-200 bg-blue-100 p-3 transition hover:shadow-sm"
+                >
+                    <p class="text-xs font-medium text-blue-600">
+                        11:00
+                    </p>
+
+                    <p class="mt-1 text-sm font-semibold text-slate-700">
+                        María Sánchez
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                        Dr. García
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="border-r border-slate-200 p-2 space-y-2">
+
+                <div
+                    class="rounded-xl border border-emerald-200 bg-emerald-100 p-3 transition hover:shadow-sm"
+                >
+                    <p class="text-xs font-medium text-emerald-600">
+                        09:30
+                    </p>
+
+                    <p class="mt-1 text-sm font-semibold text-slate-700">
+                        Pedro Gómez
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                        Dr. Fernández
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="border-r border-slate-200 bg-blue-50/40 p-2 space-y-2">
+
+                <div
+                    class="rounded-xl border border-blue-200 bg-blue-100 p-3 transition hover:shadow-sm"
+                >
+                    <p class="text-xs font-medium text-blue-600">
+                        14:00
+                    </p>
+
+                    <p class="mt-1 text-sm font-semibold text-slate-700">
+                        Laura Torres
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                        Dra. Ramírez
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="border-r border-slate-200 p-2 space-y-2">
+
+                <div
+                    class="rounded-xl border border-amber-200 bg-amber-100 p-3 transition hover:shadow-sm"
+                >
+                    <p class="text-xs font-medium text-amber-600">
+                        16:00
+                    </p>
+
+                    <p class="mt-1 text-sm font-semibold text-slate-700">
+                        Javier Díaz
+                    </p>
+
+                    <p class="text-xs text-slate-500">
+                        Dr. García
+                    </p>
+                </div>
+
+            </div>
+
+            <div class="border-r border-slate-200 p-2"></div>
+
+            <div class="p-2"></div>
+        </div>
+    </div>
+
+    <div class="mt-5 flex flex-wrap items-center gap-5 text-sm">
+
+        <div class="flex items-center gap-2">
+            <span class="h-3 w-3 rounded-full bg-blue-400"></span>
+            <span class="text-slate-600">Psicologo 1</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+            <span class="text-slate-600">Psicologo 2</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+            <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+            <span class="text-slate-600">Psicologo 3</span>
+        </div>
+    </div>
+</div>
