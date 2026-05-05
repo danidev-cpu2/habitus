@@ -7,6 +7,9 @@ import { PatientComponent } from './pages/habitus.component/patient.component/pa
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
+import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
+import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
+import { TransferPaxComponent } from './pages/habitus.component/receptionist.component/transfer-pax.component/transfer-pax.component';
 import { authGuard, noAuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
@@ -20,6 +23,29 @@ const patientChildrenRoutes: Routes = [
       {
         path: '',
         component: IndexPaxComponent,
+      },
+    ],
+  },
+];
+
+const receptionistChildrenRoutes: Routes = [
+  {
+    path: '',
+    component: ReceptionistComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['receptionist'] },
+    children: [
+      {
+        path: '',
+        component: IndexRecepComponent,
+      },
+      {
+        path: 'alta-paciente',
+        component: CreatePaxComponent,
+      },
+      {
+        path: 'transferir',
+        component: TransferPaxComponent,
       },
     ],
   },
@@ -77,14 +103,7 @@ export const routes: Routes = [
     path: 'receptionist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: ReceptionistComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['receptionist'] }
-      }
-    ]
+    children: [...receptionistChildrenRoutes]
   },
   {
     path: 'psicologo',
@@ -93,8 +112,9 @@ export const routes: Routes = [
   },
   {
     path: 'recepcion',
-    redirectTo: 'receptionist',
-    pathMatch: 'full'
+    component: HabitusComponent,
+    canActivate: [authGuard],
+    children: [...receptionistChildrenRoutes]
   },
   {
     path: '**',

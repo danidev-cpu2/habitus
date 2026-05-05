@@ -46,6 +46,16 @@ class UserRequest extends FormRequest
                 Rule::requiredIf(fn () => ($this->rol ?? $this->route('user')->rol) === 'patient'),
                 'in:active,inactive',
             ],
+            // Campos opcionales del perfil del paciente
+            'birth_date' => 'nullable|date',
+            'profession' => 'nullable|string|max:100',
+            'marital_status' => 'nullable|in:single,married,divorced,widowed',
+            'emergency_phone' => 'nullable|string|max:20',
+            'address' => 'nullable|string|max:255',
+            'city' => 'nullable|string|max:100',
+            'postal_code' => 'nullable|string|max:10',
+            'consultation_reason' => 'nullable|string',
+            'psychologist_id' => 'nullable|exists:users,id',
         ];
 
     }

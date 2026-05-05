@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\SignupRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
+use App\Models\PatientProfile;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -23,7 +24,13 @@ class UserController extends Controller
             ], 403);
         }
 
-        if (Auth::check() && Auth::user()->rol === 'psychologist') {
+        // Filtrar por rol si se proporciona
+        $role = request()->query('role');
+
+        if ($role) {
+            // Si se especifica un rol, filtrar por ese rol
+            $users = User::where('rol', $role)->get();
+        } elseif (Auth::check() && Auth::user()->rol === 'psychologist') {
             // los psicologos solo podrán ver a los pacientes
             $users = User::where('rol', 'patient')->get();
         } else {
@@ -57,6 +64,27 @@ class UserController extends Controller
         // esto es posible gracias a no hacer todos los request
         $user = User::create($data);
 
+        // Si es un paciente, guardamos también su perfil
+        if ($user->rol === 'patient') {
+            $profileData = $request->only([
+                'birth_date',
+                'profession',
+                'marital_status',
+                'emergency_phone',
+                'address',
+                'city',
+                'postal_code',
+                'consultation_reason',
+                'psychologist_id',
+            ]);
+
+            $profileData['user_id'] = $user->id;
+            PatientProfile::create($profileData);
+        }
+
+        // Cargar la relación del perfil
+        $user->load('patientProfile');
+
         // creamos el usuario y envamos un mensaje de confirmación
         // 201 -> crear
         return response()->json([
@@ -84,6 +112,11 @@ class UserController extends Controller
             ], 403);
         }
 
+        // Cargar la relación del perfil si es paciente
+        if ($user->rol === 'patient') {
+            $user->load('patientProfile');
+        }
+
         return response()->json($user, 200);
     }
 
@@ -105,6 +138,31 @@ class UserController extends Controller
 
         // y actualizamos directamente con ->update
         $user->update($data);
+
+        // Si es un paciente, actualizamos también su perfil
+        if ($user->rol === 'patient') {
+            $profileData = $request->only([
+                'birth_date',
+                'profession',
+                'marital_status',
+                'emergency_phone',
+                'address',
+                'city',
+                'postal_code',
+                'consultation_reason',
+                'psychologist_id',
+            ]);
+
+            if ($user->patientProfile) {
+                $user->patientProfile->update($profileData);
+            } else {
+                $profileData['user_id'] = $user->id;
+                PatientProfile::create($profileData);
+            }
+        }
+
+        // Cargar la relación del perfil
+        $user->load('patientProfile');
 
         // enviamos un mensaje de confirmación con códido HTTP 200 leer
         return response()->json([

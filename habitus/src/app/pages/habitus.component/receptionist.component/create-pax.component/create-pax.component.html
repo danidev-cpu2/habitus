@@ -1,0 +1,316 @@
+<!-- Mensajes de error y éxito -->
+<div
+  *ngIf="errorMessage"
+  class="mb-4 rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800"
+>
+  {{ errorMessage }}
+</div>
+
+<div
+  *ngIf="successMessage"
+  class="mb-4 rounded-xl border border-green-200 bg-green-50 p-4 text-sm text-green-800"
+>
+  {{ successMessage }}
+</div>
+
+<form [formGroup]="patientForm" (ngSubmit)="onSubmit()" class="w-full space-y-6">
+  <!-- Header -->
+  <div>
+    <div class="flex items-center gap-3">
+      <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-100 text-blue-600">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="h-5 w-5"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M18 9v3m0 0v3m-3-3h6M8 7a4 4 0 118 0v1h1a2 2 0 012 2v7a2 2 0 01-2 2H7a2 2 0 01-2-2v-7a2 2 0 012-2h1V7z"
+          />
+        </svg>
+      </div>
+
+      <div>
+        <h1 class="text-2xl font-bold text-slate-800">Alta de Nuevo Paciente</h1>
+
+        <p class="text-sm text-slate-500">
+          Complete el formulario para registrar un nuevo paciente
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATOS PERSONALES -->
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-slate-800">Datos Personales</h2>
+
+      <p class="mt-1 text-sm text-slate-500">Información básica del paciente</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+      <!-- Nombre -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Nombre * </label>
+
+        <input
+          type="text"
+          formControlName="name"
+          placeholder="Ej: María"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Apellidos -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Apellidos * </label>
+
+        <input
+          type="text"
+          formControlName="surname"
+          placeholder="Ej: García López"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- DNI -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> DNI/NIE * </label>
+
+        <input
+          type="text"
+          formControlName="dni"
+          placeholder="12345678A"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Fecha -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Fecha de Nacimiento </label>
+
+        <input
+          type="date"
+          formControlName="birthDate"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Profesión -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Profesión </label>
+
+        <input
+          type="text"
+          formControlName="profession"
+          placeholder="Ej: Ingeniero"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Estado Civil -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Estado Civil </label>
+
+        <select
+          formControlName="maritalStatus"
+          class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        >
+          <option value="">Seleccionar...</option>
+
+          <option value="single">Soltero/a</option>
+
+          <option value="married">Casado/a</option>
+
+          <option value="divorced">Divorciado/a</option>
+
+          <option value="widowed">Viudo/a</option>
+        </select>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-slate-800">Información de Contacto</h2>
+
+      <p class="mt-1 text-sm text-slate-500">Datos de contacto y dirección</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+      <!-- Teléfono -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Teléfono * </label>
+
+        <input
+          type="tel"
+          formControlName="telephone"
+          placeholder="+34 612 345 678"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Emergencia -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700">
+          Teléfono de Emergencia
+        </label>
+
+        <input
+          type="tel"
+          formControlName="emergencyPhone"
+          placeholder="+34 698 765 432"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Email -->
+      <div class="md:col-span-2">
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Email * </label>
+
+        <input
+          type="email"
+          formControlName="email"
+          placeholder="paciente@email.com"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Dirección -->
+      <div class="md:col-span-2">
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Dirección </label>
+
+        <input
+          type="text"
+          formControlName="address"
+          placeholder="Calle, número, piso..."
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Ciudad -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Ciudad </label>
+
+        <input
+          type="text"
+          formControlName="city"
+          placeholder="Madrid"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- CP -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Código Postal </label>
+
+        <input
+          type="text"
+          formControlName="postalCode"
+          placeholder="28001"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- CLÍNICA -->
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-slate-800">Información Clínica</h2>
+
+      <p class="mt-1 text-sm text-slate-500">Datos relacionados con la consulta</p>
+    </div>
+
+    <div class="space-y-5">
+      <!-- Psicólogo -->
+      <div class="max-w-md">
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Psicólogo Asignado * </label>
+
+        <select
+          formControlName="psychologistId"
+          class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        >
+          <option value="">Seleccionar psicólogo...</option>
+
+          <option *ngFor="let psychologist of psychologists" [value]="psychologist.id">
+            {{ psychologist.name }} {{ psychologist.surname }}
+          </option>
+        </select>
+      </div>
+
+      <!-- Motivo -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Motivo de Consulta </label>
+
+        <textarea
+          rows="4"
+          formControlName="consultationReason"
+          placeholder="Describe brevemente el motivo por el que el paciente acude a consulta..."
+          class="w-full resize-none rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        ></textarea>
+      </div>
+    </div>
+  </section>
+
+  <!-- PASSWORD -->
+  <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+    <div class="mb-6">
+      <h2 class="text-lg font-semibold text-slate-800">Credenciales de Acceso</h2>
+
+      <p class="mt-1 text-sm text-slate-500">Contraseña para acceder al sistema</p>
+    </div>
+
+    <div class="grid grid-cols-1 gap-5 md:grid-cols-2">
+      <!-- Contraseña -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700"> Contraseña * </label>
+
+        <input
+          type="password"
+          formControlName="password"
+          placeholder="Mínimo 8 caracteres"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+
+      <!-- Confirmar Contraseña -->
+      <div>
+        <label class="mb-2 block text-sm font-medium text-slate-700">
+          Confirmar Contraseña *
+        </label>
+
+        <input
+          type="password"
+          formControlName="password_confirmation"
+          placeholder="Repite la contraseña"
+          class="w-full rounded-xl border border-slate-300 px-4 py-3 text-sm outline-none transition focus:border-blue-500 focus:ring-4 focus:ring-blue-100"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- ACTIONS -->
+  <div class="flex flex-col-reverse gap-3 pt-2 sm:flex-row sm:justify-end">
+    <button
+      type="button"
+      routerLink="/recepcion"
+      class="rounded-xl border border-slate-300 bg-white px-5 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+    >
+      Cancelar
+    </button>
+
+    <button
+      type="submit"
+      [disabled]="patientForm.invalid || loading"
+      class="rounded-xl bg-blue-500 px-5 py-3 text-sm font-medium text-white transition hover:bg-blue-600 disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {{ loading ? 'Guardando...' : 'Guardar Paciente' }}
+    </button>
+  </div>
+</form>

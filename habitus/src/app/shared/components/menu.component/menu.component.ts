@@ -59,8 +59,8 @@ export class MenuComponent implements OnInit {
       { href: '/recepcion', label: 'Calendario', icon: this.icons.Calendar },
       { href: '/recepcion/alta-paciente', label: 'Alta de Paciente', icon: this.icons.UserPlus },
       { href: '/recepcion/transferir', label: 'Transferir Paciente', icon: this.icons.ArrowLeftRight },
-      { href: '/recepcion/mensajes', label: 'Mensajes', icon: this.icons.MessageSquare, badge: 3 },
-    ],
+/*       { href: '/recepcion/mensajes', label: 'Mensajes', icon: this.icons.MessageSquare, badge: 3 },
+ */    ],
     admin: [
       { href: '/admin', label: 'Dashboard', icon: this.icons.LayoutDashboard },
       { href: '/admin/usuarios', label: 'Usuarios', icon: this.icons.Users },
