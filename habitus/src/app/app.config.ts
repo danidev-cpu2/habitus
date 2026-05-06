@@ -10,7 +10,7 @@ import {
   LucideAngularModule,
   Brain, Menu, X, Home, Calendar, BookOpen,
   CheckSquare, LayoutDashboard, Users, UserPlus,
-  ArrowLeftRight, MessageSquare, LogOut
+  ArrowLeftRight, MessageSquare, LogOut, Search
 } from 'lucide-angular';
 
 export const appConfig: ApplicationConfig = {
@@ -25,7 +25,7 @@ export const appConfig: ApplicationConfig = {
       LucideAngularModule.pick({
         Brain, Menu, X, Home, Calendar, BookOpen,
         CheckSquare, LayoutDashboard, Users, UserPlus,
-        ArrowLeftRight, MessageSquare, LogOut
+        ArrowLeftRight, MessageSquare, LogOut, Search
       })
     )
   ]

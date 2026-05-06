@@ -1,1 +1,216 @@
-<p>transfer-pax.component works!</p>
+<!-- app-transfer-patient.component.html -->
+
+<div class="p-6 app-bg-secondary h-full overflow-y-auto">
+  <!-- Encabezado Principal -->
+  <header class="flex items-center gap-3 mb-6">
+    <div class="text-blue-600 flex items-center">
+      <lucide-icon name="arrow-left-right" class="w-8 h-8"></lucide-icon>
+    </div>
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900">Transferir Paciente</h1>
+      <p class="text-gray-600">Reasigna pacientes a diferentes psicólogos del equipo</p>
+    </div>
+  </header>
+
+  <!-- Sección Central: Dos Columnas -->
+  <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+    <!-- COLUMNA IZQUIERDA: Buscar Paciente -->
+    <section class="app-card p-6 rounded-2xl bg-white shadow-sm">
+      <h2 class="text-2xl font-semibold text-gray-900">Buscar Paciente</h2>
+      <p class="text-gray-600 mb-6">
+        Busca por nombre o DNI para seleccionar el paciente a transferir
+      </p>
+
+      <!-- Campo de Búsqueda -->
+      <div class="relative mb-6">
+        <span class="absolute inset-y-0 left-0 pl-4 flex items-center text-gray-400">
+          <lucide-icon name="search" class="w-5 h-5"></lucide-icon>
+        </span>
+        <input
+          type="text"
+          placeholder="Buscar por nombre o DNI..."
+          class="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none transition"
+          [(ngModel)]="searchTerm"
+          (input)="onSearch()"
+        />
+      </div>
+
+      <!-- Lista de Pacientes con Scroll -->
+      <div
+        class="space-y-4 max-h-[500px] overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400"
+      >
+        @for (patient of filteredPatients; track patient.dni) {
+          <div
+            class="flex items-center gap-4 p-4 border border-gray-100 rounded-xl hover:border-blue-100 hover:bg-blue-50 cursor-pointer transition"
+            (click)="selectPatient(patient)"
+          >
+            <div
+              class="avatar flex-shrink-0 w-12 h-12 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-lg"
+            >
+              {{ patient.name.charAt(0) }}{{ patient.surname.charAt(0) }}
+            </div>
+            <div class="flex-grow">
+              <div class="flex items-center gap-2 mb-1">
+                <h4 class="text-lg font-medium text-gray-950">
+                  {{ patient.name }} {{ patient.surname }}
+                </h4>
+                <span
+                  class="badge badge-activo px-3 py-1 rounded-full text-xs font-semibold bg-green-50 text-green-700"
+                  >activo</span
+                >
+              </div>
+              <p class="text-sm text-gray-600">
+                DNI: <span class="font-medium text-gray-900">{{ patient.dni | uppercase }}</span>
+              </p>
+              <p class="text-sm text-gray-600">
+                Psicólogo:
+                @if (patient.patient_profile) {
+                  @if (patient.patient_profile.psychologist; as psychologist) {
+                    <span class="font-medium text-gray-900">
+                      {{ psychologist.name }} {{ psychologist.surname }}
+                    </span>
+                  } @else {
+                    <span class="font-medium text-red-600">Sin asignar</span>
+                  }
+                } @else {
+                  <span class="font-medium text-orange-600">Sin perfil</span>
+                }
+              </p>
+            </div>
+          </div>
+        } @empty {
+          <p class="text-center text-gray-500 py-4">No se encontraron pacientes.</p>
+        }
+      </div>
+    </section>
+
+    <!-- COLUMNA DERECHA: Detalles de Transferencia -->
+    <section class="app-card p-6 rounded-2xl bg-white shadow-sm flex flex-col">
+      <h2 class="text-2xl font-semibold text-gray-900">Detalles de Transferencia</h2>
+      <p class="text-gray-600 mb-6">
+        Selecciona el nuevo psicólogo y el motivo de la transferencia
+      </p>
+
+      @if (!selectedPatient) {
+        <!-- Estado INICIAL -->
+        <div
+          class="flex-grow flex flex-col items-center justify-center text-center py-20 px-8 border-2 border-dashed border-gray-200 rounded-2xl bg-gray-50"
+        >
+          <div class="text-gray-400 mb-6 flex justify-center">
+            <lucide-icon name="arrow-left-right" class="w-12 h-12"></lucide-icon>
+          </div>
+          <h3 class="text-xl font-medium text-gray-900 mb-2">Selecciona un paciente</h3>
+          <p class="text-gray-600 max-w-sm">
+            Busca y selecciona un paciente de la lista para comenzar con el proceso de
+            transferencia.
+          </p>
+        </div>
+      } @else {
+        <!-- Estado: Paciente seleccionado -->
+        <div class="flex-grow">
+          <div class="mb-6 p-4 bg-blue-50 rounded-xl">
+            <h4 class="text-lg font-medium text-gray-900 mb-2">Paciente Seleccionado</h4>
+            <p class="text-gray-700">{{ selectedPatient.name }} {{ selectedPatient.surname }}</p>
+            <p class="text-sm text-gray-600">DNI: {{ selectedPatient.dni }}</p>
+            <p class="text-sm text-gray-600">
+              Psicólogo Actual:
+              @if (selectedPatient.patient_profile) {
+                @if (selectedPatient.patient_profile.psychologist; as psychologist) {
+                  <span class="font-medium text-gray-900">
+                    {{ psychologist.name }} {{ psychologist.surname }}
+                  </span>
+                } @else {
+                  <span class="font-medium text-red-600">Sin asignar</span>
+                }
+              } @else {
+                <span class="font-medium text-orange-600">Sin perfil</span>
+              }
+            </p>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Nuevo Psicólogo</label>
+              <select
+                [(ngModel)]="newPsychologist"
+                class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none"
+              >
+                <option [ngValue]="null" disabled>Selecciona un psicólogo</option>
+                @for (psych of psychologists; track psych.id) {
+                  <option [ngValue]="psych">{{ psych.name }} {{ psych.surname }}</option>
+                }
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2"
+                >Motivo de Transferencia</label
+              >
+              <textarea
+                [(ngModel)]="transferReason"
+                placeholder="Describe el motivo..."
+                class="w-full p-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-100 focus:border-blue-400 outline-none"
+                rows="4"
+              ></textarea>
+            </div>
+
+            <button
+              (click)="transferPatient()"
+              class="w-full bg-blue-600 text-white py-3 rounded-xl font-medium hover:bg-blue-700 transition"
+              [disabled]="!newPsychologist || !transferReason"
+            >
+              Transferir Paciente
+            </button>
+          </div>
+        </div>
+      }
+    </section>
+  </div>
+
+  <!-- Sección Inferior: Disponibilidad del Equipo -->
+  <section class="mt-10">
+    <h2 class="text-2xl font-semibold text-gray-900">Disponibilidad del Equipo</h2>
+    <p class="text-gray-600 mb-6">Vista general de la carga de trabajo de cada psicólogo</p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+      @for (pv of psychologistViews; track pv.user.id) {
+        <div
+          class="app-card p-6 rounded-2xl bg-white shadow-sm border border-gray-100 transition hover:border-gray-200"
+        >
+          <div class="flex items-center gap-4 mb-4">
+            <div
+              class="avatar w-12 h-12 rounded-full bg-sky-100 text-sky-700 flex items-center justify-center font-bold text-lg"
+            >
+              {{ pv.user.name.charAt(0) }}{{ pv.user.surname.charAt(0) }}
+            </div>
+          </div>
+
+          <h4 class="text-xl font-semibold text-gray-950 mb-4">
+            {{ pv.user.name }} {{ pv.user.surname }}
+          </h4>
+
+          <div class="space-y-1">
+            <div class="flex justify-between text-sm mb-1">
+              <span class="text-gray-600">Pacientes</span>
+              <span class="font-medium text-gray-900"
+                >{{ pv.patientCount }}/{{ pv.maxPatients }}</span
+              >
+            </div>
+            <div class="progress-container w-full h-2 rounded-full bg-gray-100 overflow-hidden">
+              <div
+                class="progress-bar h-full"
+                [ngClass]="{
+                  'bg-sky-500': pv.patientCount / pv.maxPatients <= 0.7,
+                  'bg-orange-500':
+                    pv.patientCount / pv.maxPatients > 0.7 && pv.patientCount / pv.maxPatients < 1,
+                  'bg-red-500': pv.patientCount >= pv.maxPatients,
+                }"
+                [style.width.%]="(pv.patientCount / pv.maxPatients) * 100"
+              ></div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+</div>

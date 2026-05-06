@@ -57,8 +57,8 @@ export class UserService {
   }
 
   /**
-   * Obtiene usuarios filtrados por rol
-   */
+ * Obtiene usuarios filtrados por rol
+ */
   getByRole(role: string): Observable<User[]> {
     return this.http.get<User[]>(`${this.apiUrl}?role=${role}`);
   }

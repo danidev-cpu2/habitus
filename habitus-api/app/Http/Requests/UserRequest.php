@@ -43,7 +43,8 @@ class UserRequest extends FormRequest
             'password'  => 'sometimes|required|string|min:8|confirmed',
             'rol'       => 'sometimes|required|in:admin,psychologist,receptionist,patient',
             'status'    => [
-                Rule::requiredIf(fn () => ($this->rol ?? $this->route('user')->rol) === 'patient'),
+                Rule::requiredIf(fn () => $this->has('rol') && $this->rol === 'patient'),
+                'sometimes',
                 'in:active,inactive',
             ],
             // Campos opcionales del perfil del paciente
