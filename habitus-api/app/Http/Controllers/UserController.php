@@ -27,16 +27,24 @@ class UserController extends Controller
         // Filtrar por rol si se proporciona
         $role = request()->query('role');
 
+        // Construir la consulta base
+        $query = User::query();
+
         if ($role) {
             // Si se especifica un rol, filtrar por ese rol
-            $users = User::where('rol', $role)->get();
+            $query->where('rol', $role);
+
+            // Si es paciente, cargar relaciones con eager loading
+            if ($role === 'patient') {
+                $query->with('patientProfile.psychologist');
+            }
         } elseif (Auth::check() && Auth::user()->rol === 'psychologist') {
             // los psicologos solo podrán ver a los pacientes
-            $users = User::where('rol', 'patient')->get();
-        } else {
-            // Los recepcionistas y administradores lo podrán ver todo
-            $users = User::all();
+            $query->where('rol', 'patient')->with('patientProfile.psychologist');
         }
+
+        // Ejecutar la consulta
+        $users = $query->get();
 
         // devolvemos todos los usuarios y controlamos las peticiones http
         // 200 -> leer
@@ -114,7 +122,7 @@ class UserController extends Controller
 
         // Cargar la relación del perfil si es paciente
         if ($user->rol === 'patient') {
-            $user->load('patientProfile');
+            $user->load('patientProfile.psychologist');
         }
 
         return response()->json($user, 200);
@@ -153,6 +161,11 @@ class UserController extends Controller
                 'psychologist_id',
             ]);
 
+            // Filtrar solo los campos que tienen valor
+            $profileData = array_filter($profileData, function($value) {
+                return $value !== null;
+            });
+
             if ($user->patientProfile) {
                 $user->patientProfile->update($profileData);
             } else {
@@ -161,8 +174,10 @@ class UserController extends Controller
             }
         }
 
-        // Cargar la relación del perfil
-        $user->load('patientProfile');
+        // Cargar la relación del perfil y del psicólogo asociado
+        if ($user->rol === 'patient') {
+            $user->load('patientProfile.psychologist');
+        }
 
         // enviamos un mensaje de confirmación con códido HTTP 200 leer
         return response()->json([
