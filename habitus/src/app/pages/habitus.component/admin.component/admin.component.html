@@ -1,1 +1,398 @@
-<p>admin.component works!</p>
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habitus – Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Mono:wght@400;500&display=swap"
+        rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['DM Sans', 'sans-serif'],
+                        mono: ['DM Mono', 'monospace'],
+                    },
+                    colors: {
+                        sidebar: '#1a2340',
+                    },
+                    borderRadius: {
+                        card: '13px',
+                    },
+                },
+            },
+        };
+    </script>
+</head>
+
+<body class="bg-slate-50 text-slate-900 font-sans m-0 p-0">
+    <div class="max-w-[1400px] mx-auto min-h-screen">
+        <!-- TOPBAR -->
+        <div class="flex items-center justify-between px-6 py-4">
+            <div>
+                <div class="text-lg font-bold tracking-tight">Dashboard</div>
+                <div class="text-xs text-slate-500 mt-0.5">
+                    Resumen general de la actividad de Habitus
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <button
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-medium border border-slate-200 text-slate-500 bg-transparent cursor-pointer">
+                    Exportar
+                </button>
+                <button
+                    class="px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-[0_2px_6px_rgba(37,99,235,0.25)] cursor-pointer">
+                    + Nueva cita
+                </button>
+            </div>
+        </div>
+
+        <!-- CONTENT -->
+        <div class="px-6 pb-6">
+            <!-- STATS -->
+            <div class="grid grid-cols-4 gap-3 mb-4 max-[1100px]:grid-cols-2 max-[700px]:grid-cols-1">
+
+                <!-- Citas del día -->
+
+
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex justify-between items-start">
+                    <div>
+                        <div class="text-[11px] text-slate-500 font-medium mb-1.5">Citas del día</div>
+                        <div class="text-[30px] font-bold tracking-[-1.2px] leading-none">12</div>
+                        <div class="text-[11px] text-slate-400 mt-1.5">
+                            <span class="text-emerald-500 font-medium">+3</span> vs. ayer
+                        </div>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-blue-50 text-blue-600 shrink-0">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <rect x="3" y="4" width="18" height="18" rx="2" />
+                            <line x1="16" y1="2" x2="16" y2="6" />
+                            <line x1="8" y1="2" x2="8" y2="6" />
+                            <line x1="3" y1="10" x2="21" y2="10" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Psicólogos Activos -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex justify-between items-start">
+                    <div>
+                        <div class="text-[11px] text-slate-500 font-medium mb-1.5">Psicólogos Activos</div>
+                        <div class="text-[30px] font-bold tracking-[-1.2px] leading-none">
+                            {{ activePsychologistsCount() ?? '—' }}
+                        </div>
+                        <div class="text-[11px] text-slate-400 mt-1.5">4 en sesión</div>
+                    </div>
+                    <div
+                        class="w-9 h-9 rounded-lg flex items-center justify-center bg-emerald-50 text-emerald-500 shrink-0">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <circle cx="9" cy="7" r="4" />
+                            <path d="M3 21v-2a4 4 0 0 1 4-4h4" />
+                            <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            <path d="M21 21v-2a4 4 0 0 0-3-3.87" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Pacientes Ausentes -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex justify-between items-start">
+                    <div>
+                        <div class="text-[11px] text-red-500 font-medium mb-1.5">Pacientes Ausentes</div>
+                        <div class="text-[30px] font-bold tracking-[-1.2px] leading-none text-red-500">3</div>
+                        <div class="text-[11px] text-slate-400 mt-1.5">Requieren seguimiento</div>
+                    </div>
+                    <div class="w-9 h-9 rounded-lg flex items-center justify-center bg-red-50 text-red-500 shrink-0">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <path
+                                d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                            <line x1="12" y1="9" x2="12" y2="13" />
+                            <line x1="12" y1="17" x2="12.01" y2="17" />
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- Tasa de Asistencia -->
+                <div
+                    class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 flex justify-between items-start">
+                    <div>
+                        <div class="text-[11px] text-slate-500 font-medium mb-1.5">Tasa de Asistencia</div>
+                        <div class="text-[30px] font-bold tracking-[-1.2px] leading-none">94%</div>
+                        <div class="text-[11px] text-slate-400 mt-1.5">
+                            <span class="text-emerald-500 font-medium">+2%</span> esta semana
+                        </div>
+                    </div>
+                    <div
+                        class="w-9 h-9 rounded-lg flex items-center justify-center bg-amber-50 text-amber-500 shrink-0">
+                        <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2"
+                            viewBox="0 0 24 24">
+                            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MID GRID -->
+            <div class="grid gap-3.5 mb-3.5" style="grid-template-columns: 1fr 308px">
+                <!-- Citas de Hoy -->
+                <div
+                    class="bg-white rounded-lg border border-slate-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden">
+                    <div class="flex justify-between items-center px-[18px] py-3.5 border-b border-slate-100">
+                        <div class="text-sm font-semibold">Citas de Hoy</div>
+                        <div class="text-xs text-blue-600 font-medium cursor-pointer">Ver todas →</div>
+                    </div>
+
+                    <!-- María García -->
+                    <div
+                        class="flex items-center justify-between px-[18px] py-2.5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <div
+                                class="w-[33px] h-[33px] rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-[11px] font-bold shrink-0">
+                                MG
+                            </div>
+                            <div>
+                                <div class="text-[13px] font-medium">María García</div>
+                                <div class="text-[11px] text-slate-400">Dr. López</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-medium font-mono text-slate-500">09:00</span>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500">confirmada</span>
+                        </div>
+                    </div>
+
+                    <!-- Juan Pérez -->
+                    <div
+                        class="flex items-center justify-between px-[18px] py-2.5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <div
+                                class="w-[33px] h-[33px] rounded-full bg-violet-100 text-violet-600 flex items-center justify-center text-[11px] font-bold shrink-0">
+                                JP
+                            </div>
+                            <div>
+                                <div class="text-[13px] font-medium">Juan Pérez</div>
+                                <div class="text-[11px] text-slate-400">Dra. Martínez</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-medium font-mono text-slate-500">10:30</span>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-500">pendiente</span>
+                        </div>
+                    </div>
+
+                    <!-- Ana Rodríguez -->
+                    <div
+                        class="flex items-center justify-between px-[18px] py-2.5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <div
+                                class="w-[33px] h-[33px] rounded-full bg-teal-100 text-teal-600 flex items-center justify-center text-[11px] font-bold shrink-0">
+                                AR
+                            </div>
+                            <div>
+                                <div class="text-[13px] font-medium">Ana Rodríguez</div>
+                                <div class="text-[11px] text-slate-400">Dr. López</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-medium font-mono text-slate-500">11:00</span>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500">confirmada</span>
+                        </div>
+                    </div>
+
+                    <!-- Carlos Sánchez -->
+                    <div
+                        class="flex items-center justify-between px-[18px] py-2.5 border-b border-slate-100 hover:bg-slate-50 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <div
+                                class="w-[33px] h-[33px] rounded-full bg-amber-100 text-amber-600 flex items-center justify-center text-[11px] font-bold shrink-0">
+                                CS
+                            </div>
+                            <div>
+                                <div class="text-[13px] font-medium">Carlos Sánchez</div>
+                                <div class="text-[11px] text-slate-400">Dr. Ruiz</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-medium font-mono text-slate-500">12:00</span>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500">confirmada</span>
+                        </div>
+                    </div>
+
+                    <!-- Laura Fernández -->
+                    <div class="flex items-center justify-between px-[18px] py-2.5 hover:bg-slate-50 transition-colors">
+                        <div class="flex items-center gap-2.5">
+                            <div
+                                class="w-[33px] h-[33px] rounded-full bg-pink-100 text-pink-600 flex items-center justify-center text-[11px] font-bold shrink-0">
+                                LF
+                            </div>
+                            <div>
+                                <div class="text-[13px] font-medium">Laura Fernández</div>
+                                <div class="text-[11px] text-slate-400">Dra. Martínez</div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-[13px] font-medium font-mono text-slate-500">16:00</span>
+                            <span
+                                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-amber-50 text-amber-500">pendiente</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pacientes Ausentes -->
+                <div
+                    class="bg-white rounded-lg border border-slate-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden">
+                    <div class="flex justify-between items-center px-[18px] py-3.5 border-b border-slate-100">
+                        <div class="text-sm font-semibold flex items-center gap-1.5">
+                            <svg width="13" height="13" fill="none" stroke="#ef4444" stroke-width="2.2"
+                                viewBox="0 0 24 24">
+                                <path
+                                    d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+                                <line x1="12" y1="9" x2="12" y2="13" />
+                                <line x1="12" y1="17" x2="12.01" y2="17" />
+                            </svg>
+                            Pacientes Ausentes
+                        </div>
+                    </div>
+
+                    <!-- Pedro Gómez -->
+                    <div class="px-3.5 py-2.5 border-b border-slate-100">
+                        <div class="bg-red-50 rounded-[9px] p-3">
+                            <div class="flex justify-between items-center mb-0.5">
+                                <span class="text-[13px] font-semibold">Pedro Gómez</span>
+                                <span
+                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-100 text-red-500">3
+                                    faltas</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mb-2">Última cita: 15 Ene 2025</div>
+                            <span
+                                class="text-[11px] text-blue-600 font-medium border border-blue-200 rounded-md px-2.5 py-1 bg-blue-50 cursor-pointer inline-block">Contactar
+                                paciente</span>
+                        </div>
+                    </div>
+
+                    <!-- Lucía Torres -->
+                    <div class="px-3.5 py-2.5 border-b border-slate-100">
+                        <div class="bg-red-50 rounded-[9px] p-3">
+                            <div class="flex justify-between items-center mb-0.5">
+                                <span class="text-[13px] font-semibold">Lucía Torres</span>
+                                <span
+                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-100 text-red-500">2
+                                    faltas</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mb-2">Última cita: 12 Ene 2025</div>
+                            <span
+                                class="text-[11px] text-blue-600 font-medium border border-blue-200 rounded-md px-2.5 py-1 bg-blue-50 cursor-pointer inline-block">Contactar
+                                paciente</span>
+                        </div>
+                    </div>
+
+                    <!-- Miguel Ángel Ruiz -->
+                    <div class="px-3.5 py-2.5">
+                        <div class="bg-red-50 rounded-[9px] p-3">
+                            <div class="flex justify-between items-center mb-0.5">
+                                <span class="text-[13px] font-semibold">Miguel Ángel Ruiz</span>
+                                <span
+                                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-red-100 text-red-500">2
+                                    faltas</span>
+                            </div>
+                            <div class="text-[11px] text-slate-400 mb-2">Última cita: 10 Ene 2025</div>
+                            <span
+                                class="text-[11px] text-blue-600 font-medium border border-blue-200 rounded-md px-2.5 py-1 bg-blue-50 cursor-pointer inline-block">Contactar
+                                paciente</span>
+                        </div>
+                    </div>
+            </div>
+
+            
+
+            <!-- PSICÓLOGOS ACTIVOS -->
+            <div
+                class="bg-white rounded- border border-slate-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden">
+                <div class="flex justify-between items-center px-[18px] py-3.5 border-b border-slate-100">
+                    <div class="text-sm font-semibold">Psicólogos Activos</div>
+                    <div class="text-xs text-blue-600 font-medium cursor-pointer">Gestionar →</div>
+                </div>
+                <div class="grid grid-cols-4 gap-3 p-[14px_18px] max-[1100px]:grid-cols-2 max-[700px]:grid-cols-1">
+                    <!-- Dr. López -->
+                    <div class="border border-slate-100 rounded-[10px] p-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div
+                                class="w-[30px] h-[30px] rounded-[7px] bg-blue-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0">
+                                DL
+                            </div>
+                            <div>
+                                <div class="text-xs font-semibold">Dr. López</div>
+                                <div class="text-[10px] text-slate-400">Ansiedad</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-500 mb-1.5">4 pacientes hoy</div>
+                        <span
+                            class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500">disponible</span>
+                    </div>
+
+                    <!-- Dra. Martínez -->
+                    <div class="border border-slate-100 rounded-[10px] p-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div
+                                class="w-[30px] h-[30px] rounded-[7px] bg-violet-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0">
+                                DM
+                            </div>
+                            <div>
+                                <div class="text-xs font-semibold">Dra. Martínez</div>
+                                <div class="text-[10px] text-slate-400">Depresión</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-500 mb-1.5">3 pacientes hoy</div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600">en
+                            sesión</span>
+                    </div>
+
+                    <!-- Dr. Ruiz -->
+                    <div class="border border-slate-100 rounded-[10px] p-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div
+                                class="w-[30px] h-[30px] rounded-[7px] bg-teal-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0">
+                                DR
+                            </div>
+                            <div>
+                                <div class="text-xs font-semibold">Dr. Ruiz</div>
+                                <div class="text-[10px] text-slate-400">Terapia Familiar</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-500 mb-1.5">2 pacientes hoy</div>
+                        <span
+                            class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500">disponible</span>
+                    </div>
+
+                    <!-- Dra. Vega -->
+                    <div class="border border-slate-100 rounded-[10px] p-3">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div
+                                class="w-[30px] h-[30px] rounded-[7px] bg-rose-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0">
+                                DV
+                            </div>
+                            <div>
+                                <div class="text-xs font-semibold">Dra. Vega</div>
+                                <div class="text-[10px] text-slate-400">Infantil</div>
+                            </div>
+                        </div>
+                        <div class="text-[11px] text-slate-500 mb-1.5">5 pacientes hoy</div>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600">en
+                            sesión</span>
+                    </div>
+                </div>
+            </div>
+            </div>
+

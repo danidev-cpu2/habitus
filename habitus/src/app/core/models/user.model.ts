@@ -45,7 +45,9 @@ export interface CreateUserDto {
   telephone?: string;
   rol?: UserRole;
   status?: UserStatus;
+  psychologist_id?: number | null;
   password: string;
+  password_confirmation?: string;
 }
 
 export interface UpdateUserDto {
@@ -56,5 +58,6 @@ export interface UpdateUserDto {
   telephone?: string;
   rol?: UserRole;
   status?: UserStatus;
+  psychologist_id?: number | null;
   password?: string;
 }

@@ -3,6 +3,8 @@ import { LandingPageComponent } from './pages/landing-page.component/landing-pag
 import { LoginComponent } from './pages/login.component/login.component';
 import { HabitusComponent } from './pages/habitus.component/habitus.component';
 import { AdminComponent } from './pages/habitus.component/admin.component/admin.component';
+import { UserList } from './pages/habitus.component/admin.component/user-list/user-list';
+import { AddUsers } from './pages/habitus.component/admin.component/add-users/add-users';
 import { PatientComponent } from './pages/habitus.component/patient.component/patient.component';
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
@@ -69,6 +71,30 @@ export const routes: Routes = [
       {
         path: '',
         component: AdminComponent,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'usuarios/:id/editar',
+        component: AddUsers,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'usuarios/:id/editar',
+        component: AddUsers,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'usuarios',
+        component: UserList,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'usuarios/nuevo',
+        component: AddUsers,
         canActivate: [roleGuard],
         data: { roles: ['admin'] }
       }
