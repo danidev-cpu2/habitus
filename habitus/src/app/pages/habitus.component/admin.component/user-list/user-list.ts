@@ -15,6 +15,7 @@ export class UserList implements OnInit {
   readonly users = signal<User[]>([]);
   readonly loading = signal<boolean>(false);
   readonly errorMessage = signal<string | null>(null);
+  readonly deletingIds = signal<Set<number>>(new Set<number>());
 
   readonly searchTerm = signal<string>('');
   readonly selectedRole = signal<UserRole | 'all'>('all');
@@ -58,6 +59,46 @@ export class UserList implements OnInit {
 
   trackById(index: number, user: User): number {
     return user?.id ?? index;
+  }
+
+  isDeleting(id: number): boolean {
+    return this.deletingIds().has(id);
+  }
+
+  deleteUser(user: User): void {
+    const id = user?.id;
+    if (!id) return;
+    if (this.isDeleting(id)) return;
+
+    const name = `${user.name ?? ''} ${user.surname ?? ''}`.trim() || 'este usuario';
+    const ok = window.confirm(`¿Seguro que quieres borrar a ${name}?`);
+    if (!ok) return;
+
+    this.errorMessage.set(null);
+    this.deletingIds.update((prev) => {
+      const next = new Set(prev);
+      next.add(id);
+      return next;
+    });
+
+    this.userService.delete(id).subscribe({
+      next: () => {
+        this.users.update((prev) => prev.filter((u) => u.id !== id));
+        this.deletingIds.update((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      },
+      error: () => {
+        this.errorMessage.set('No se pudo borrar el usuario.');
+        this.deletingIds.update((prev) => {
+          const next = new Set(prev);
+          next.delete(id);
+          return next;
+        });
+      },
+    });
   }
 
   initials(user: User): string {
