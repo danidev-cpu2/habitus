@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, computed, signal } from '@angular/core';
+import { Component, OnInit, computed, signal, Output, EventEmitter } from '@angular/core';
+import { RouterModule } from '@angular/router';
+
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../../core/services/user.service';
 import { User, UserRole } from '../../../../core/models/user.model';
@@ -7,11 +9,13 @@ import { User, UserRole } from '../../../../core/models/user.model';
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterModule],
   templateUrl: './user-list.html',
   styleUrl: './user-list.css',
 })
 export class UserList implements OnInit {
+  @Output() readonly addUser = new EventEmitter<void>();
+
   readonly users = signal<User[]>([]);
   readonly loading = signal<boolean>(false);
   readonly errorMessage = signal<string | null>(null);
@@ -39,7 +43,7 @@ export class UserList implements OnInit {
       });
   });
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService) { }
 
   ngOnInit(): void {
     this.loading.set(true);
