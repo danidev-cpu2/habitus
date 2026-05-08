@@ -6,6 +6,7 @@ import { AdminComponent } from './pages/habitus.component/admin.component/admin.
 import { PatientComponent } from './pages/habitus.component/patient.component/patient.component';
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
+import { IndexPsychologistComponent } from './pages/habitus.component/psychologist.component/index-psychologist.component/index-psychologist.component';
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
@@ -95,7 +96,13 @@ export const routes: Routes = [
         path: '',
         component: PsychologistComponent,
         canActivate: [roleGuard],
-        data: { roles: ['psychologist'] }
+        data: { roles: ['psychologist'] },
+        children: [
+          {
+            path: '',
+            component: IndexPsychologistComponent,
+          },
+        ],
       }
     ]
   },

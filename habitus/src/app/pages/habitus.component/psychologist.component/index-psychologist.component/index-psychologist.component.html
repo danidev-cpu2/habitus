@@ -1,0 +1,194 @@
+<div class="space-y-6">
+  <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
+    <div>
+      <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">
+        {{ greeting() }}, Dr. {{ fullName(currentUser()) || '—' }}
+      </h1>
+      <p class="text-sm text-slate-400 mt-1">{{ formatTodayLong() }}</p>
+    </div>
+
+    <div class="flex items-center gap-2">
+      <button class="btn btn-outline rounded-xl border-slate-200 text-slate-700 hover:bg-slate-50" type="button">
+        <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+        Ver Calendario
+      </button>
+      <button class="btn rounded-xl bg-[#4F84D4] hover:bg-[#4679C2] border-none text-white" type="button">
+        <lucide-icon name="users" class="w-4 h-4"></lucide-icon>
+        Mis Pacientes
+      </button>
+    </div>
+  </div>
+
+  @if (error()) {
+    <div class="alert alert-error rounded-xl">
+      <span class="font-semibold">Error:</span>
+      <span>{{ error() }}</span>
+      <button class="btn btn-sm ml-auto" type="button" (click)="refresh()">Reintentar</button>
+    </div>
+  }
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
+    <div class="bg-white border border-slate-200 rounded-2xl p-5">
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold text-slate-500">Citas Hoy</p>
+        <div class="w-9 h-9 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-slate-500">
+          <lucide-icon name="calendar" class="w-4 h-4"></lucide-icon>
+        </div>
+      </div>
+      <div class="mt-3">
+        <p class="text-3xl font-extrabold text-slate-900">{{ appointmentsToday().length }}</p>
+        <p class="text-xs text-slate-400 mt-1">Programadas</p>
+      </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-5">
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold text-slate-500">Pacientes Activos</p>
+        <div class="w-9 h-9 rounded-xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-emerald-600">
+          <lucide-icon name="users" class="w-4 h-4"></lucide-icon>
+        </div>
+      </div>
+      <div class="mt-3">
+        <p class="text-3xl font-extrabold text-slate-900">{{ activePatientsCount() }}</p>
+        <p class="text-xs text-slate-400 mt-1">En seguimiento</p>
+      </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-5">
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold text-slate-500">Informes Pendientes</p>
+        <div class="w-9 h-9 rounded-xl bg-amber-50 border border-amber-100 flex items-center justify-center text-amber-600">
+          <lucide-icon name="book-open" class="w-4 h-4"></lucide-icon>
+        </div>
+      </div>
+      <div class="mt-3">
+        <p class="text-3xl font-extrabold text-slate-900">{{ pendingReportsCount() }}</p>
+        <p class="text-xs text-slate-400 mt-1">Urgentes</p>
+      </div>
+    </div>
+
+    <div class="bg-white border border-slate-200 rounded-2xl p-5">
+      <div class="flex items-center justify-between">
+        <p class="text-sm font-semibold text-slate-500">Horas Esta Semana</p>
+        <div class="w-9 h-9 rounded-xl bg-violet-50 border border-violet-100 flex items-center justify-center text-violet-600">
+          <lucide-icon name="layout-dashboard" class="w-4 h-4"></lucide-icon>
+        </div>
+      </div>
+      <div class="mt-3">
+        <p class="text-3xl font-extrabold text-slate-900">{{ hoursThisWeek() }}</p>
+        <p class="text-xs text-slate-400 mt-1">En consulta</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <div class="xl:col-span-2 bg-white border border-slate-200 rounded-2xl">
+      <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+        <h2 class="text-sm font-extrabold text-slate-800">Horario del Día</h2>
+        <span class="text-xs text-slate-400">{{ appointmentsToday().length }} citas</span>
+      </div>
+
+      <div class="p-3">
+        @if (loading()) {
+          <div class="p-6 text-slate-500 text-sm">Cargando horario…</div>
+        } @else if (appointmentsToday().length === 0) {
+          <div class="p-6 text-slate-500 text-sm">No hay citas para hoy.</div>
+        } @else {
+          <div class="space-y-2">
+            @for (a of appointmentsToday(); track a.id) {
+              <div
+                class="flex items-center gap-4 rounded-xl border border-slate-100 px-4 py-3 hover:bg-slate-50 transition"
+              >
+                <div class="w-24">
+                  <p class="text-sm font-extrabold text-slate-800">{{ formatHour(a.hour) }}</p>
+                  <p class="text-xs text-slate-400">{{ formatHour(a.hour) }}</p>
+                </div>
+
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-extrabold text-slate-800 truncate">
+                    {{ fullName(a.patient) || ('Paciente #' + a.patient_id) }}
+                  </p>
+                  <p class="text-xs text-slate-400 truncate">Sesión de seguimiento</p>
+                </div>
+
+                <span
+                  class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border"
+                  [ngClass]="badgeForStatus(a).classes"
+                >
+                  {{ badgeForStatus(a).label }}
+                </span>
+
+                <button class="btn btn-sm rounded-xl bg-[#4F84D4] hover:bg-[#4679C2] border-none text-white" type="button">
+                  Continuar
+                </button>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="space-y-6">
+      <div class="bg-white border border-slate-200 rounded-2xl">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+          <h2 class="text-sm font-extrabold text-slate-800">Tareas Pendientes</h2>
+          <span class="text-xs text-slate-400">3 tareas</span>
+        </div>
+        <div class="p-4 space-y-3">
+          @for (t of tasks(); track t.title) {
+            <div class="rounded-xl border border-slate-100 p-3">
+              <p class="text-sm font-extrabold text-slate-800">{{ t.title }}</p>
+              <p class="text-xs text-slate-400 mt-1">{{ t.dueLabel }}</p>
+            </div>
+          }
+          <button class="btn btn-ghost btn-sm w-full rounded-xl text-[#4F84D4]" type="button">
+            Ver todas las tareas
+          </button>
+        </div>
+      </div>
+
+      <div class="bg-white border border-slate-200 rounded-2xl">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between">
+          <h2 class="text-sm font-extrabold text-slate-800">Pacientes Recientes</h2>
+          <button class="btn btn-ghost btn-sm rounded-xl text-[#4F84D4]" type="button">Ver todos</button>
+        </div>
+        <div class="p-4 space-y-3">
+          @if (loading()) {
+            <div class="p-2 text-slate-500 text-sm">Cargando pacientes…</div>
+          } @else if (recentPatients().length === 0) {
+            <div class="p-2 text-slate-500 text-sm">Aún no hay pacientes.</div>
+          } @else {
+            @for (p of recentPatients(); track p.id) {
+              <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+                <div
+                  class="w-9 h-9 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-extrabold text-xs"
+                >
+                  {{ initials(p) }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <p class="text-sm font-extrabold text-slate-800 truncate">{{ fullName(p) }}</p>
+                  <p class="text-xs text-slate-400 truncate">{{ (p.patient_profile?.consultation_reason || '—') }}</p>
+                </div>
+                <span class="text-slate-300">›</span>
+              </div>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-[#EEF5FF] border border-blue-100 rounded-2xl p-5">
+    <div class="flex items-start gap-3">
+      <div class="w-10 h-10 rounded-xl bg-white border border-blue-100 flex items-center justify-center text-[#4F84D4]">
+        <lucide-icon name="brain" class="w-5 h-5"></lucide-icon>
+      </div>
+      <div class="flex-1">
+        <p class="text-sm font-extrabold text-slate-800">Resumen de IA del Día</p>
+        <p class="text-sm text-slate-600 mt-1 leading-relaxed">{{ aiSummary() }}</p>
+        <button class="btn btn-ghost btn-sm rounded-xl text-[#4F84D4] px-0" type="button">Ver análisis completo</button>
+      </div>
+    </div>
+  </div>
+</div>
+
