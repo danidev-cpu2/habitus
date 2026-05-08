@@ -1,10 +1,8 @@
 <div class="space-y-6">
   <div class="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
     <div>
-      <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">
-        {{ greeting() }}, Dr. {{ fullName(currentUser()) || '—' }}
-      </h1>
-      <p class="text-sm text-slate-400 mt-1">{{ formatTodayLong() }}</p>
+      <h1 class="text-2xl font-extrabold text-slate-900 tracking-tight">Buenas noches, Dr. Juan Pérez</h1>
+      <p class="text-sm text-slate-400 mt-1">jueves, 6 de marzo</p>
     </div>
 
     <div class="flex items-center gap-2">
@@ -19,14 +17,6 @@
     </div>
   </div>
 
-  @if (error()) {
-    <div class="alert alert-error rounded-xl">
-      <span class="font-semibold">Error:</span>
-      <span>{{ error() }}</span>
-      <button class="btn btn-sm ml-auto" type="button" (click)="refresh()">Reintentar</button>
-    </div>
-  }
-
   <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4">
     <div class="bg-white border border-slate-200 rounded-2xl p-5">
       <div class="flex items-center justify-between">
@@ -36,8 +26,8 @@
         </div>
       </div>
       <div class="mt-3">
-        <p class="text-3xl font-extrabold text-slate-900">{{ appointmentsToday().length }}</p>
-        <p class="text-xs text-slate-400 mt-1">Programadas</p>
+        <p class="text-3xl font-extrabold text-slate-900">5</p>
+        <p class="text-xs text-slate-400 mt-1">Completadas</p>
       </div>
     </div>
 
@@ -49,8 +39,8 @@
         </div>
       </div>
       <div class="mt-3">
-        <p class="text-3xl font-extrabold text-slate-900">{{ activePatientsCount() }}</p>
-        <p class="text-xs text-slate-400 mt-1">En seguimiento</p>
+        <p class="text-3xl font-extrabold text-slate-900">24</p>
+        <p class="text-xs text-slate-400 mt-1">En este mes</p>
       </div>
     </div>
 
@@ -62,7 +52,7 @@
         </div>
       </div>
       <div class="mt-3">
-        <p class="text-3xl font-extrabold text-slate-900">{{ pendingReportsCount() }}</p>
+        <p class="text-3xl font-extrabold text-slate-900">3</p>
         <p class="text-xs text-slate-400 mt-1">Urgentes</p>
       </div>
     </div>
@@ -75,8 +65,8 @@
         </div>
       </div>
       <div class="mt-3">
-        <p class="text-3xl font-extrabold text-slate-900">{{ hoursThisWeek() }}</p>
-        <p class="text-xs text-slate-400 mt-1">En consulta</p>
+        <p class="text-3xl font-extrabold text-slate-900">28</p>
+        <p class="text-xs text-slate-400 mt-1">De 40 programadas</p>
       </div>
     </div>
   </div>
@@ -85,46 +75,98 @@
     <div class="xl:col-span-2 bg-white border border-slate-200 rounded-2xl">
       <div class="p-5 border-b border-slate-100 flex items-center justify-between">
         <h2 class="text-sm font-extrabold text-slate-800">Horario del Día</h2>
-        <span class="text-xs text-slate-400">{{ appointmentsToday().length }} citas</span>
+        <span class="text-xs text-slate-400">5 citas</span>
       </div>
 
       <div class="p-3">
-        @if (loading()) {
-          <div class="p-6 text-slate-500 text-sm">Cargando horario…</div>
-        } @else if (appointmentsToday().length === 0) {
-          <div class="p-6 text-slate-500 text-sm">No hay citas para hoy.</div>
-        } @else {
-          <div class="space-y-2">
-            @for (a of appointmentsToday(); track a.id) {
-              <div
-                class="flex items-center gap-4 rounded-xl border border-slate-100 px-4 py-3 hover:bg-slate-50 transition"
-              >
-                <div class="w-24">
-                  <p class="text-sm font-extrabold text-slate-800">{{ formatHour(a.hour) }}</p>
-                  <p class="text-xs text-slate-400">{{ formatHour(a.hour) }}</p>
-                </div>
-
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-extrabold text-slate-800 truncate">
-                    {{ fullName(a.patient) || ('Paciente #' + a.patient_id) }}
-                  </p>
-                  <p class="text-xs text-slate-400 truncate">Sesión de seguimiento</p>
-                </div>
-
-                <span
-                  class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border"
-                  [ngClass]="badgeForStatus(a).classes"
-                >
-                  {{ badgeForStatus(a).label }}
-                </span>
-
-                <button class="btn btn-sm rounded-xl bg-[#4F84D4] hover:bg-[#4679C2] border-none text-white" type="button">
-                  Continuar
-                </button>
-              </div>
-            }
+        <div class="space-y-2">
+          <div class="flex items-center gap-4 rounded-xl border border-emerald-100 bg-emerald-50/40 px-4 py-3">
+            <div class="w-24">
+              <p class="text-sm font-extrabold text-slate-800">09:30</p>
+              <p class="text-xs text-slate-400">09:50</p>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">María García</p>
+              <p class="text-xs text-slate-400 truncate">Sesión de seguimiento</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border bg-slate-50 text-slate-700 border-slate-200">
+              Individual
+            </span>
+            <button class="btn btn-sm rounded-xl bg-[#4F84D4] hover:bg-[#4679C2] border-none text-white" type="button">
+              Continuar
+            </button>
           </div>
-        }
+
+          <div class="flex items-center gap-4 rounded-xl border border-slate-100 px-4 py-3 hover:bg-slate-50 transition">
+            <div class="w-24">
+              <p class="text-sm font-extrabold text-slate-800">10:30</p>
+              <p class="text-xs text-slate-400">11:00</p>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Carlos López</p>
+              <p class="text-xs text-slate-400 truncate">Primera evaluación psicológica</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border bg-amber-50 text-amber-700 border-amber-100">
+                Evaluación
+              </span>
+              <button class="btn btn-sm rounded-xl bg-[#4F84D4] hover:bg-[#4679C2] border-none text-white" type="button">
+                Continuar
+              </button>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-4 rounded-xl border border-slate-100 px-4 py-3 hover:bg-slate-50 transition">
+            <div class="w-24">
+              <p class="text-sm font-extrabold text-slate-800">11:30</p>
+              <p class="text-xs text-slate-400">12:20</p>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Ana Martínez</p>
+              <p class="text-xs text-slate-400 truncate">Terapia cognitivo-conductual</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border bg-slate-50 text-slate-700 border-slate-200">
+              Individual
+            </span>
+            <button class="btn btn-sm rounded-xl bg-slate-100 hover:bg-slate-200 border-none text-slate-700" type="button">
+              Iniciar
+            </button>
+          </div>
+
+          <div class="flex items-center gap-4 rounded-xl border border-slate-100 px-4 py-3 hover:bg-slate-50 transition">
+            <div class="w-24">
+              <p class="text-sm font-extrabold text-slate-800">14:00</p>
+              <p class="text-xs text-slate-400">15:30</p>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Grupo Ansiedad</p>
+              <p class="text-xs text-slate-400 truncate">Sesión grupal – Manejo de ansiedad</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border bg-emerald-50 text-emerald-700 border-emerald-100">
+              Grupal
+            </span>
+            <button class="btn btn-sm rounded-xl bg-slate-100 hover:bg-slate-200 border-none text-slate-700" type="button">
+              Iniciar
+            </button>
+          </div>
+
+          <div class="flex items-center gap-4 rounded-xl border border-slate-100 px-4 py-3 hover:bg-slate-50 transition">
+            <div class="w-24">
+              <p class="text-sm font-extrabold text-slate-800">16:00</p>
+              <p class="text-xs text-slate-400">16:50</p>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Pedro Sánchez</p>
+              <p class="text-xs text-slate-400 truncate">Seguimiento tratamiento</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full text-[11px] font-extrabold border bg-slate-50 text-slate-700 border-slate-200">
+              Individual
+            </span>
+            <button class="btn btn-sm rounded-xl bg-slate-100 hover:bg-slate-200 border-none text-slate-700" type="button">
+              Iniciar
+            </button>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -135,15 +177,19 @@
           <span class="text-xs text-slate-400">3 tareas</span>
         </div>
         <div class="p-4 space-y-3">
-          @for (t of tasks(); track t.title) {
-            <div class="rounded-xl border border-slate-100 p-3">
-              <p class="text-sm font-extrabold text-slate-800">{{ t.title }}</p>
-              <p class="text-xs text-slate-400 mt-1">{{ t.dueLabel }}</p>
-            </div>
-          }
-          <button class="btn btn-ghost btn-sm w-full rounded-xl text-[#4F84D4]" type="button">
-            Ver todas las tareas
-          </button>
+          <div class="rounded-xl border border-slate-100 p-3">
+            <p class="text-sm font-extrabold text-slate-800">Completar informe de María García</p>
+            <p class="text-xs text-slate-400 mt-1">Vence: Hoy</p>
+          </div>
+          <div class="rounded-xl border border-slate-100 p-3">
+            <p class="text-sm font-extrabold text-slate-800">Revisar test de Carlos López</p>
+            <p class="text-xs text-slate-400 mt-1">Vence: Mañana</p>
+          </div>
+          <div class="rounded-xl border border-slate-100 p-3">
+            <p class="text-sm font-extrabold text-slate-800">Preparar sesión grupal</p>
+            <p class="text-xs text-slate-400 mt-1">Vence: Hoy 14:00</p>
+          </div>
+          <button class="btn btn-ghost btn-sm w-full rounded-xl text-[#4F84D4]" type="button">Ver todas las tareas</button>
         </div>
       </div>
 
@@ -153,26 +199,46 @@
           <button class="btn btn-ghost btn-sm rounded-xl text-[#4F84D4]" type="button">Ver todos</button>
         </div>
         <div class="p-4 space-y-3">
-          @if (loading()) {
-            <div class="p-2 text-slate-500 text-sm">Cargando pacientes…</div>
-          } @else if (recentPatients().length === 0) {
-            <div class="p-2 text-slate-500 text-sm">Aún no hay pacientes.</div>
-          } @else {
-            @for (p of recentPatients(); track p.id) {
-              <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
-                <div
-                  class="w-9 h-9 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-extrabold text-xs"
-                >
-                  {{ initials(p) }}
-                </div>
-                <div class="flex-1 min-w-0">
-                  <p class="text-sm font-extrabold text-slate-800 truncate">{{ fullName(p) }}</p>
-                  <p class="text-xs text-slate-400 truncate">{{ (p.patient_profile?.consultation_reason || '—') }}</p>
-                </div>
-                <span class="text-slate-300">›</span>
-              </div>
-            }
-          }
+          <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+            <div class="w-9 h-9 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-extrabold text-xs">
+              MG
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">María García</p>
+              <p class="text-xs text-slate-400 truncate">2 sesiones</p>
+            </div>
+            <span class="text-slate-300">›</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+            <div class="w-9 h-9 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-extrabold text-xs">
+              CL
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Carlos López</p>
+              <p class="text-xs text-slate-400 truncate">1 sesión</p>
+            </div>
+            <span class="text-slate-300">›</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+            <div class="w-9 h-9 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-extrabold text-xs">
+              LD
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Laura Díaz</p>
+              <p class="text-xs text-slate-400 truncate">3 sesiones</p>
+            </div>
+            <span class="text-slate-300">›</span>
+          </div>
+          <div class="flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition">
+            <div class="w-9 h-9 rounded-full bg-[#E0E7FF] border-2 border-white shadow-sm flex items-center justify-center text-[#4F84D4] font-extrabold text-xs">
+              PS
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-extrabold text-slate-800 truncate">Pedro Sánchez</p>
+              <p class="text-xs text-slate-400 truncate">5 sesiones</p>
+            </div>
+            <span class="text-slate-300">›</span>
+          </div>
         </div>
       </div>
     </div>
@@ -185,7 +251,11 @@
       </div>
       <div class="flex-1">
         <p class="text-sm font-extrabold text-slate-800">Resumen de IA del Día</p>
-        <p class="text-sm text-slate-600 mt-1 leading-relaxed">{{ aiSummary() }}</p>
+        <p class="text-sm text-slate-600 mt-1 leading-relaxed">
+          Basado en el análisis de tus pacientes de hoy: María García muestra una tendencia positiva en sus últimos registros.
+          Carlos López es una primera evaluación — considera usar el inventario de ansiedad. El grupo de ansiedad ha mostrado una
+          reducción del 15% en síntomas reportados esta semana.
+        </p>
         <button class="btn btn-ghost btn-sm rounded-xl text-[#4F84D4] px-0" type="button">Ver análisis completo</button>
       </div>
     </div>
