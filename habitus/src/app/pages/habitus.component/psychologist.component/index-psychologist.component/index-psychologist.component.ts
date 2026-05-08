@@ -9,6 +9,6 @@ import { LucideAngularModule } from 'lucide-angular';
   styleUrl: './index-psychologist.component.css',
 })
 export class IndexPsychologistComponent {
-  // Component base (solo plantilla estática por ahora)
+  
 }
 
