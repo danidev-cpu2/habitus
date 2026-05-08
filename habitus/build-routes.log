@@ -1,0 +1,510 @@
+❯ Building...
+
+  polyfills.server.mjs  227.8kb
+
+⚡ Done in 577ms
+fatal error: all goroutines are asleep - deadlock!
+
+goroutine 1 [chan receive]:
+github.com/evanw/esbuild/internal/helpers.(*ThreadSafeWaitGroup).Wait(...)
+	github.com/evanw/esbuild/internal/helpers/waitgroup.go:36
+main.runService.func2()
+	github.com/evanw/esbuild/cmd/esbuild/service.go:114 +0x8c
+main.runService(0x1)
+	github.com/evanw/esbuild/cmd/esbuild/service.go:160 +0x43c
+main.main()
+	github.com/evanw/esbuild/cmd/esbuild/main.go:252 +0xa70
+
+goroutine 7 [chan receive]:
+main.runService.func1()
+	github.com/evanw/esbuild/cmd/esbuild/service.go:98 +0x40
+created by main.runService in goroutine 1
+	github.com/evanw/esbuild/cmd/esbuild/service.go:97 +0x180
+
+goroutine 8 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x140010822a0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.runService.func3()
+	github.com/evanw/esbuild/cmd/esbuild/service.go:125 +0x44
+created by main.runService in goroutine 1
+	github.com/evanw/esbuild/cmd/esbuild/service.go:122 +0x2b0
+
+goroutine 175 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064eff0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400041b8f0, 0x69}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400041b8f0, 0x69}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x14001e50060?, 0xa?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 19 [chan receive]:
+github.com/evanw/esbuild/internal/bundler.(*scanner).scanAllDependencies(0x140000d7208)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:2178 +0x1cc
+github.com/evanw/esbuild/internal/bundler.ScanBundle(_, {_, _, _, _, _, _}, {_, _}, _, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1501 +0x8ac
+github.com/evanw/esbuild/pkg/api.rebuildImpl({0x140000843c0, {0x0, 0x0, 0x0}, {0x0, 0x0, 0x0}, {0x0, 0x1, 0x0, ...}, ...}, ...)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1493 +0x1f0
+github.com/evanw/esbuild/pkg/api.(*internalContext).rebuild(_)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1007 +0x2c8
+github.com/evanw/esbuild/pkg/api.(*internalContext).Rebuild(...)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1068
+github.com/evanw/esbuild/pkg/api.Build({0x0, 0x2, 0x0, 0x140000e51a0, 0x0, 0x0, {0x0, 0x0}, 0x1, 0x0, ...})
+	github.com/evanw/esbuild/pkg/api/api.go:396 +0x74
+main.(*serviceType).handleBuildRequest(0x140000e4e70, 0x1, 0x14000384780)
+	github.com/evanw/esbuild/cmd/esbuild/service.go:782 +0x7e4
+main.(*serviceType).handleIncomingPacket.func2()
+	github.com/evanw/esbuild/cmd/esbuild/service.go:235 +0x54
+created by main.(*serviceType).handleIncomingPacket in goroutine 1
+	github.com/evanw/esbuild/cmd/esbuild/service.go:233 +0x1a4
+
+goroutine 33 [chan receive]:
+github.com/evanw/esbuild/internal/bundler.(*scanner).scanAllDependencies(0x14000544908)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:2178 +0x1cc
+github.com/evanw/esbuild/internal/bundler.ScanBundle(_, {_, _, _, _, _, _}, {_, _}, _, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1501 +0x8ac
+github.com/evanw/esbuild/pkg/api.rebuildImpl({0x14000430180, {0x0, 0x0, 0x0}, {0x0, 0x0, 0x0}, {0x0, 0x1, 0x0, ...}, ...}, ...)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1493 +0x1f0
+github.com/evanw/esbuild/pkg/api.(*internalContext).rebuild(_)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1007 +0x2c8
+github.com/evanw/esbuild/pkg/api.(*internalContext).Rebuild(...)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1068
+github.com/evanw/esbuild/pkg/api.Build({0x0, 0x2, 0x0, 0x140004240c0, 0x0, 0x0, {0x0, 0x0}, 0x1, 0x0, ...})
+	github.com/evanw/esbuild/pkg/api/api.go:396 +0x74
+main.(*serviceType).handleBuildRequest(0x140000e4e70, 0x2, 0x14000116000)
+	github.com/evanw/esbuild/cmd/esbuild/service.go:782 +0x7e4
+main.(*serviceType).handleIncomingPacket.func2()
+	github.com/evanw/esbuild/cmd/esbuild/service.go:235 +0x54
+created by main.(*serviceType).handleIncomingPacket in goroutine 1
+	github.com/evanw/esbuild/cmd/esbuild/service.go:233 +0x1a4
+
+goroutine 34 [chan receive]:
+github.com/evanw/esbuild/internal/bundler.(*scanner).scanAllDependencies(0x14000182908)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:2178 +0x1cc
+github.com/evanw/esbuild/internal/bundler.ScanBundle(_, {_, _, _, _, _, _}, {_, _}, _, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1501 +0x8ac
+github.com/evanw/esbuild/pkg/api.rebuildImpl({0x1400035f1a0, {0x0, 0x0, 0x0}, {0x0, 0x0, 0x0}, {0x0, 0x1, 0x0, ...}, ...}, ...)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1493 +0x1f0
+github.com/evanw/esbuild/pkg/api.(*internalContext).rebuild(_)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1007 +0x2c8
+github.com/evanw/esbuild/pkg/api.(*internalContext).Rebuild(...)
+	github.com/evanw/esbuild/pkg/api/api_impl.go:1068
+github.com/evanw/esbuild/pkg/api.Build({0x0, 0x2, 0x0, 0x14000384ae0, 0x0, 0x0, {0x0, 0x0}, 0x1, 0x0, ...})
+	github.com/evanw/esbuild/pkg/api/api.go:396 +0x74
+main.(*serviceType).handleBuildRequest(0x140000e4e70, 0x3, 0x14000116450)
+	github.com/evanw/esbuild/cmd/esbuild/service.go:782 +0x7e4
+main.(*serviceType).handleIncomingPacket.func2()
+	github.com/evanw/esbuild/cmd/esbuild/service.go:235 +0x54
+created by main.(*serviceType).handleIncomingPacket in goroutine 1
+	github.com/evanw/esbuild/cmd/esbuild/service.go:233 +0x1a4
+
+goroutine 264 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x140010948a0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140013eda40, 0x9c}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140013eda40, 0x9c}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x0?, 0x0?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 200 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14001088060})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001542d80, 0x79}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001542d80, 0x79}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x0?, 0x0?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 151 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14001550ae0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001dc4700, 0x61}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001dc4700, 0x61}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x140004301e0?, 0x0?, 0x0?}, {0x102df4c80, 0x1400042a320}, 0x14000430180, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400042a320}, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, 0x2, 0x14000424570}, 0x14000544488, 0x14000430180, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 33
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 257 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14000488e40})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14000235580, 0x7b}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14000235580, 0x7b}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x2e7473696c28676e?, 0x222022286e696f6a?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 211 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400187ea20})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001ebccb0, 0x65}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001ebccb0, 0x65}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x0?, 0x0?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 261 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14001094840})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140007195f0, 0x85}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140007195f0, 0x85}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x0?, 0x300009c40?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 263 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064f170})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140013ed4a0, 0x98}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140013ed4a0, 0x98}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x0?, 0x0?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 265 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14000488c90})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001f216e0, 0x56}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001f216e0, 0x56}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x140009f1a00?, 0x3cf5d?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 266 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x140010947e0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001f21a40, 0x56}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001f21a40, 0x56}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x0?, 0x0?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 215 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400187f500})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140021110a0, 0x6c}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140021110a0, 0x6c}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x14000bda090?, 0x21?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 171 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400109e0c0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400029eb40, 0x58}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400029eb40, 0x58}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x1400153ee10?, 0x11?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 154 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14001088870})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400002dc80, 0x52}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400002dc80, 0x52}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x1400035f200?, 0x140013fd1b0?, 0x6?}, {0x102df4c80, 0x1400020c0e0}, 0x1400035f1a0, {0x1400044a000, 0x1400037e060, 0x1400037e078, 0x1400020c0a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400020c0e0}, {0x1400044a000, 0x1400037e060, 0x1400037e078, 0x1400020c0a0, 0x2, 0x14000384ea0}, 0x14000182008, 0x1400035f1a0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 34
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 155 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x140010895f0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001543f80, 0x79}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001543f80, 0x79}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x140004301e0?, 0xe666a9c8?, 0x14000913728?}, {0x102df4c80, 0x1400042a320}, 0x14000430180, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400042a320}, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, 0x2, 0x14000424570}, 0x14000544488, 0x14000430180, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 33
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 219 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14000385da0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14002111f80, 0x65}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14002111f80, 0x65}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x140004301e0?, 0x14002100bd0?, 0x3?}, {0x102df4c80, 0x1400042a320}, 0x14000430180, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400042a320}, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, 0x2, 0x14000424570}, 0x14000544488, 0x14000430180, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 33
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 262 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14000488c00})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140013ece60, 0x9a}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140013ece60, 0x9a}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x1031dc108?, 0x160?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 260 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400164e6f0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14000719050, 0x85}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14000719050, 0x85}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x1031dd8a0?, 0x160?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 252 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400109e030})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140001c8a00, 0x4a}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140001c8a00, 0x4a}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x140004301e0?, 0x1031dcf30?, 0x160?}, {0x102df4c80, 0x1400042a320}, 0x14000430180, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400042a320}, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, 0x2, 0x14000424570}, 0x14000544488, 0x14000430180, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 33
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 259 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064f350})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x140013ec6e0, 0x91}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x140013ec6e0, 0x91}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x3a746c7561666564?, 0x702e736968743d65?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 258 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064f260})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14000235a00, 0x7b}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14000235a00, 0x7b}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x140004dfc70?, 0x3cab1?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 213 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400187f5c0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14002110540, 0x63}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14002110540, 0x63}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0xcba00000002?, 0x3de7a?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 210 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14001082660})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001ebc5b0, 0x61}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001ebc5b0, 0x61}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x1031dd3e8?, 0x160?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 176 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064f080})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14000235180, 0x77}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14000235180, 0x77}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x140001c45a0?, 0x10?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 150 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x14001550a80})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400002c3c0, 0x5f}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400002c3c0, 0x5f}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x140004301e0?, 0x0?, 0x0?}, {0x102df4c80, 0x1400042a320}, 0x14000430180, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400042a320}, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, 0x2, 0x14000424570}, 0x14000544488, 0x14000430180, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 33
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 173 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064ebd0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14000234880, 0x73}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14000234880, 0x73}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x1031dc108?, 0x160?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 153 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x140010888d0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400002d3e0, 0x60}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400002d3e0, 0x60}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x1400035f200?, 0x0?, 0x0?}, {0x102df4c80, 0x1400020c0e0}, 0x1400035f1a0, {0x1400044a000, 0x1400037e060, 0x1400037e078, 0x1400020c0a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400020c0e0}, {0x1400044a000, 0x1400037e060, 0x1400037e078, 0x1400020c0a0, 0x2, 0x14000384ea0}, 0x14000182008, 0x1400035f1a0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 34
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 227 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x140010887b0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400209c6c0, 0x5f}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400209c6c0, 0x5f}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x1400035f200?, 0x0?, 0x0?}, {0x102df4c80, 0x1400020c0e0}, 0x1400035f1a0, {0x1400044a000, 0x1400037e060, 0x1400037e078, 0x1400020c0a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400020c0e0}, {0x1400044a000, 0x1400037e060, 0x1400037e078, 0x1400020c0a0, 0x2, 0x14000384ea0}, 0x14000182008, 0x1400035f1a0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 34
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 174 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400064ee10})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400041b490, 0x65}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400041b490, 0x65}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x140001c4450?, 0xa?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 172 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400067fef0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x1400029f140, 0x5a}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x1400029f140, 0x5a}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x14000084420?, 0x1031dcf30?, 0x160?}, {0x102df4c80, 0x140000830c0}, 0x140000843c0, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x140000830c0}, {0x140000f77a0, 0x1400000e8a0, 0x1400000e8b8, 0x140000830a0, 0x2, 0x140000e5530}, 0x140000d6908, 0x140000843c0, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 19
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c
+
+goroutine 253 [chan receive]:
+main.(*serviceType).sendRequest(0x140000e4e70, {0x102d6aae0, 0x1400025b980})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:192 +0x134
+main.(*serviceType).convertPlugins.func2.4({{0x14001538180, 0x51}, {0x102c16479, 0x4}, {0x0, 0x0}, {0x0, 0x0}, 0x0})
+	github.com/evanw/esbuild/cmd/esbuild/service.go:1088 +0x5e4
+github.com/evanw/esbuild/pkg/api.(*pluginImpl).onLoad.func1({{0x0, 0x0}, {{0x14001538180, 0x51}, {0x102c16479, 0x4}, {0x0, 0x0}, {{0x0, 0x0}}, ...}})
+	github.com/evanw/esbuild/pkg/api/api_impl.go:2014 +0x114
+github.com/evanw/esbuild/internal/bundler.runOnLoadPlugins({0x140004301e0?, 0x14001fefea8?, 0x10278b524?}, {0x102df4c80, 0x1400042a320}, 0x14000430180, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, ...}, ...)
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1199 +0x89c
+github.com/evanw/esbuild/internal/bundler.parseFile({{0x102df4c80, 0x1400042a320}, {0x1400044a540, 0x1400042e390, 0x1400042e3a8, 0x1400042a300, 0x2, 0x14000424570}, 0x14000544488, 0x14000430180, ...})
+	github.com/evanw/esbuild/internal/bundler/bundler.go:163 +0x238
+created by github.com/evanw/esbuild/internal/bundler.(*scanner).maybeParseFile in goroutine 33
+	github.com/evanw/esbuild/internal/bundler/bundler.go:1626 +0x96c

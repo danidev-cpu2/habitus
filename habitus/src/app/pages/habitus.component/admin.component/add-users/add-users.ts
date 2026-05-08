@@ -26,7 +26,7 @@ export class AddUsers implements OnInit {
   readonly submitLabel = computed(() => (this.isEdit() ? 'Guardar cambios' : 'Crear usuario'));
 
   readonly form;
-  readonly isPatient: ReturnType<typeof computed>;
+  readonly isPatient;
 
   constructor(
     private fb: FormBuilder,
@@ -64,16 +64,25 @@ export class AddUsers implements OnInit {
       { validators: [this.passwordsMatchValidator] }
     );
 
-    this.isPatient = computed(() => this.form.controls.rol.value === 'patient');
+    const rolSignal = signal(this.form.controls.rol.value);
+    this.form.controls.rol.valueChanges.subscribe(val => rolSignal.set(val));
+    this.isPatient = computed(() => rolSignal() === 'patient');
   }
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
+    const idParam = this.route.snapshot.paramMap.get('id');
 
-    if (!Number.isNaN(id)) {
-      this.editingUserId.set(id);
-      this.setEditPasswordValidators();
-      this.loadUser(id);
+    if (idParam !== null) {
+      const id = Number(idParam);
+      if (!Number.isNaN(id)) {
+        this.editingUserId.set(id);
+        this.setEditPasswordValidators();
+        this.loadUser(id);
+      } else {
+        // Si el ID no es un número válido, tratar como creación
+        this.setCreatePasswordValidators();
+        this.loadPsychologistsIfNeeded();
+      }
     } else {
       this.setCreatePasswordValidators();
       this.loadPsychologistsIfNeeded();
@@ -137,7 +146,8 @@ export class AddUsers implements OnInit {
     this.psychologistsLoading.set(true);
     this.userService.getByRole('psychologist').subscribe({
       next: (data: User[]) => {
-        this.psychologists.set((data ?? []).filter((u) => u.status === 'active'));
+        const users = Array.isArray(data) ? data : [];
+        this.psychologists.set(users.filter((u) => u.rol === 'psychologist' && u.status === 'active'));
         this.psychologistsLoading.set(false);
       },
       error: () => {
