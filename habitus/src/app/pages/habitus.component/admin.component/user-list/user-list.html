@@ -7,11 +7,14 @@
                 <div class="text-xs text-slate-500 mt-0.5">Administra pacientes, psicólogos y recepcionistas</div>
             </div>
 
-            <button type="button"
+            <button
+                type="button"
+                routerLink="/admin/usuarios/nuevo"
                 class="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold bg-blue-600 text-white shadow-[0_2px_6px_rgba(37,99,235,0.25)]">
                 <span class="text-sm leading-none">+</span>
                 Nuevo Usuario
             </button>
+
         </div>
 
         <!-- Stats -->
@@ -189,7 +192,7 @@
 
                                 <td class="px-5 py-3">
                                     <div class="flex justify-end items-center gap-2 text-slate-400">
-                                        <button type="button"
+                                        <button type="button" [routerLink]="['/admin/usuarios', u.id, 'editar']"
                                             class="p-2 rounded-md hover:bg-slate-100 hover:text-slate-600">
                                             <svg width="16" height="16" fill="none" stroke="currentColor"
                                                 stroke-width="2" viewBox="0 0 24 24">
