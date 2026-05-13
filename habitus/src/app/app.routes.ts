@@ -14,6 +14,7 @@ import { CreatePaxComponent } from './pages/habitus.component/receptionist.compo
 import { TransferPaxComponent } from './pages/habitus.component/receptionist.component/transfer-pax.component/transfer-pax.component';
 import { authGuard, noAuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { IndexPsychologistComponent } from './pages/habitus.component/psychologist.component/index-psychologist.component/index-psychologist.component';
 
 const patientChildrenRoutes: Routes = [
   {
@@ -53,15 +54,30 @@ const receptionistChildrenRoutes: Routes = [
   },
 ];
 
+const psychologistChildrenRoutes: Routes = [
+  {
+    path: '',
+    component: PsychologistComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['psychologist'] },
+    children: [
+      {
+        path: '',
+        component: IndexPsychologistComponent,
+      },
+    ],
+  },
+];
+
 export const routes: Routes = [
   {
     path: '',
-    component: LandingPageComponent
+    component: LandingPageComponent,
   },
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [noAuthGuard]
+    canActivate: [noAuthGuard],
   },
   {
     path: 'admin',
@@ -72,78 +88,71 @@ export const routes: Routes = [
         path: '',
         component: AdminComponent,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/:id/editar',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/:id/editar',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios',
         component: UserList,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/nuevo',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
-      }
-    ]
+        data: { roles: ['admin'] },
+      },
+    ],
   },
   {
     path: 'patient',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...patientChildrenRoutes]
+    children: [...patientChildrenRoutes],
   },
   {
     path: 'paciente',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...patientChildrenRoutes]
+    children: [...patientChildrenRoutes],
   },
   {
     path: 'psychologist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: PsychologistComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['psychologist'] }
-      }
-    ]
+    children: [...psychologistChildrenRoutes],
   },
   {
     path: 'receptionist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...receptionistChildrenRoutes]
+    children: [...receptionistChildrenRoutes],
   },
   {
     path: 'psicologo',
     redirectTo: 'psychologist',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'recepcion',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...receptionistChildrenRoutes]
+    children: [...receptionistChildrenRoutes],
   },
   {
     path: '**',
-    redirectTo: ''
-  }
+    redirectTo: '',
+  },
 ];
