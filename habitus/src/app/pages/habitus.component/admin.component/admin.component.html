@@ -371,7 +371,7 @@
 
         <!-- PSICÓLOGOS ACTIVOS -->
         <div
-          class="bg-white rounded- border border-slate-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden"
+          class="bg-white rounded-2xl border border-slate-100 shadow-[0_1px_2px_rgba(15,23,42,0.04)] overflow-hidden"
         >
           <div class="flex justify-between items-center px-[18px] py-3.5 border-b border-slate-100">
             <div class="text-sm font-semibold">Psicólogos Activos</div>
@@ -380,85 +380,33 @@
           <div
             class="grid grid-cols-4 gap-3 p-[14px_18px] max-[1100px]:grid-cols-2 max-[700px]:grid-cols-1"
           >
-            <!-- Dr. López -->
-            <div class="border border-slate-100 rounded-[10px] p-3">
-              <div class="flex items-center gap-2 mb-2">
-                <div
-                  class="w-[30px] h-[30px] rounded-[7px] bg-blue-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0"
-                >
-                  DL
-                </div>
-                <div>
-                  <div class="text-xs font-semibold">Dr. López</div>
-                  <div class="text-[10px] text-slate-400">Ansiedad</div>
-                </div>
+            @if (psychologistsLoading()) {
+              <div class="col-span-full text-center text-sm text-slate-500 py-6">
+                Cargando psicólogos…
               </div>
-              <div class="text-[11px] text-slate-500 mb-1.5">4 pacientes hoy</div>
-              <span
-                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500"
-                >disponible</span
-              >
-            </div>
-
-            <!-- Dra. Martínez -->
-            <div class="border border-slate-100 rounded-[10px] p-3">
-              <div class="flex items-center gap-2 mb-2">
-                <div
-                  class="w-[30px] h-[30px] rounded-[7px] bg-violet-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0"
-                >
-                  DM
-                </div>
-                <div>
-                  <div class="text-xs font-semibold">Dra. Martínez</div>
-                  <div class="text-[10px] text-slate-400">Depresión</div>
-                </div>
+            } @else if (activePsychologists().length === 0) {
+              <div class="col-span-full text-center text-sm text-slate-500 py-6">
+                No hay psicólogos activos.
               </div>
-              <div class="text-[11px] text-slate-500 mb-1.5">3 pacientes hoy</div>
-              <span
-                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600"
-                >en sesión</span
-              >
-            </div>
-
-            <!-- Dr. Ruiz -->
-            <div class="border border-slate-100 rounded-[10px] p-3">
-              <div class="flex items-center gap-2 mb-2">
-                <div
-                  class="w-[30px] h-[30px] rounded-[7px] bg-teal-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0"
-                >
-                  DR
+            } @else {
+              @for (p of activePsychologists(); track p.id; let i = $index) {
+                <div class="border border-slate-100 rounded-[10px] p-3">
+                  <div class="flex items-center gap-2 mb-2">
+                    <div [class]="psychologistAvatarBoxClass(i)">
+                      {{ psychologistInitials(p) }}
+                    </div>
+                    <div class="min-w-0">
+                      <div class="text-xs font-semibold truncate">{{ psychologistDisplayName(p) }}</div>
+                      <div class="text-[10px] text-slate-400 truncate">{{ p.email }}</div>
+                    </div>
+                  </div>
+                  <span
+                    class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500"
+                    >activo</span
+                  >
                 </div>
-                <div>
-                  <div class="text-xs font-semibold">Dr. Ruiz</div>
-                  <div class="text-[10px] text-slate-400">Terapia Familiar</div>
-                </div>
-              </div>
-              <div class="text-[11px] text-slate-500 mb-1.5">2 pacientes hoy</div>
-              <span
-                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-emerald-50 text-emerald-500"
-                >disponible</span
-              >
-            </div>
-
-            <!-- Dra. Vega -->
-            <div class="border border-slate-100 rounded-[10px] p-3">
-              <div class="flex items-center gap-2 mb-2">
-                <div
-                  class="w-[30px] h-[30px] rounded-[7px] bg-rose-500 text-white flex items-center justify-center text-[11px] font-bold shrink-0"
-                >
-                  DV
-                </div>
-                <div>
-                  <div class="text-xs font-semibold">Dra. Vega</div>
-                  <div class="text-[10px] text-slate-400">Infantil</div>
-                </div>
-              </div>
-              <div class="text-[11px] text-slate-500 mb-1.5">5 pacientes hoy</div>
-              <span
-                class="px-2.5 py-0.5 rounded-full text-[10px] font-semibold bg-blue-50 text-blue-600"
-                >en sesión</span
-              >
-            </div>
+              }
+            }
           </div>
         </div>
       </div>
