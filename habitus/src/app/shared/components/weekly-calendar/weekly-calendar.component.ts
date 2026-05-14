@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Appointment, } from '../../../core/models/appointment.model';
+import { Appointment } from '../../../services/appointment.service';
 import { AppointmentService } from '../../../services/appointment.service';
+import { NewEditAppointment } from "../new-edit-appointment/new-edit-appointment.component";
 
 /** Cita enriquecida con posición visual dentro de la celda del calendario */
 interface CalendarEvent {
@@ -28,7 +29,7 @@ interface WeekDay {
 @Component({
   selector: 'app-weekly-calendar',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, NewEditAppointment],
   templateUrl: './weekly-calendar.component.html',
 })
 export class WeeklyCalendarComponent implements OnInit {
@@ -74,15 +75,32 @@ export class WeeklyCalendarComponent implements OnInit {
     });
   }
 
-  getAppointmentsByDay(): Appointment[][] {
+  getAppointmentsByDay(): { hour: string, appointments: Appointment[] }[][] {
     const days = this.currentWeek.map((day) => day.fullDate);
     return days.map((day) => {
       const dayStr = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
-      const found = this.appointments.filter((app) => {
+      const dayAppointments = this.appointments.filter((app) => {
         const appDateStr = app.date.substring(0, 10);
         return appDateStr === dayStr;
       });
-      return found;
+
+      // Agrupar por hora
+      const grouped: Record<string, Appointment[]> = {};
+      dayAppointments.forEach((app) => {
+        const hour = app.hour.substring(0, 5); // HH:MM
+        if (!grouped[hour]) {
+          grouped[hour] = [];
+        }
+        grouped[hour].push(app);
+      });
+
+      // Ordenar por hora
+      const sortedHours = Object.keys(grouped).sort();
+
+      return sortedHours.map((hour) => ({
+        hour,
+        appointments: grouped[hour],
+      }));
     });
   }
 
