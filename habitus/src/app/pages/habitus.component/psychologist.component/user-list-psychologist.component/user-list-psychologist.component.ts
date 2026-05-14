@@ -44,7 +44,6 @@ export class UserListPsychologistComponent implements OnInit {
     () => this.allPatients().filter((u) => u.status === 'active').length
   );
 
-  // Datos del psicólogo logueado
   psychologist = computed(() => this.authService.currentUser());
 
   constructor(
@@ -61,11 +60,17 @@ export class UserListPsychologistComponent implements OnInit {
     this.isLoading.set(true);
     this.error.set(null);
 
-    // getAll() ya filtra por psicólogo en el backend según el token Bearer
-    // Filtramos en frontend para asegurarnos de mostrar solo pacientes
+    const psychologistId = this.authService.currentUser()?.id;
+
     this.userService.getAll().subscribe({
       next: (users) => {
-        const patients = users.filter((u) => u.rol === 'patient');
+        const patients = users.filter((u) => {
+          const isPatient = u.rol === 'patient';
+          const belongsToMe =
+            u.patient_profile?.psychologist_id === psychologistId ||
+            u.patientProfile?.psychologist_id === psychologistId;
+          return isPatient && belongsToMe;
+        });
         this.allPatients.set(patients);
         this.isLoading.set(false);
       },
@@ -99,18 +104,18 @@ export class UserListPsychologistComponent implements OnInit {
 
   getStatusClass(status?: string): string {
     return status === 'active'
-      ? 'bg-green-100 text-green-700'
-      : 'bg-gray-100 text-gray-500';
+      ? 'bg-emerald-50 text-emerald-700'
+      : 'bg-slate-100 text-slate-600';
   }
 
   getAvatarColor(name: string): string {
     const colors = [
-      'bg-blue-200 text-blue-700',
-      'bg-purple-200 text-purple-700',
-      'bg-rose-200 text-rose-700',
-      'bg-amber-200 text-amber-700',
-      'bg-teal-200 text-teal-700',
-      'bg-indigo-200 text-indigo-700',
+      'bg-blue-100 text-blue-700',
+      'bg-purple-100 text-purple-700',
+      'bg-rose-100 text-rose-700',
+      'bg-amber-100 text-amber-700',
+      'bg-teal-100 text-teal-700',
+      'bg-indigo-100 text-indigo-700',
     ];
     const index = (name?.charCodeAt(0) ?? 0) % colors.length;
     return colors[index];
@@ -119,4 +124,13 @@ export class UserListPsychologistComponent implements OnInit {
   retry(): void {
     this.loadPatients();
   }
+  getAge(birthDate?: string): number {
+  if (!birthDate) return 0;
+  const today = new Date();
+  const birth = new Date(birthDate);
+  let age = today.getFullYear() - birth.getFullYear();
+  const m = today.getMonth() - birth.getMonth();
+  if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) age--;
+  return age;
+}
 }

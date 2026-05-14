@@ -24,7 +24,6 @@
     <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-5 mb-4">
       <div class="text-sm font-semibold text-slate-900 mb-3">Buscar Pacientes</div>
       <div class="flex items-center gap-3">
-        <!-- Búsqueda -->
         <div class="relative flex-1">
           <span class="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400">
             <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -39,8 +38,6 @@
             class="w-full h-10 pl-9 pr-3 rounded-lg border border-slate-200 bg-white text-sm outline-none focus:ring-2 focus:ring-blue-100 focus:border-blue-300"
           />
         </div>
-
-        <!-- Filtro estado -->
         <div class="flex items-center gap-1 bg-slate-100 rounded-lg p-1">
           <button
             (click)="onStatusChange('all')"
@@ -64,20 +61,12 @@
       </div>
     </div>
 
-    <!-- Tabla -->
-    <div class="bg-white rounded-2xl border border-slate-100 shadow-sm overflow-hidden">
-      <div class="px-5 py-3.5 border-b border-slate-100 flex items-center justify-between">
-        <div class="text-sm font-semibold text-slate-900">Pacientes</div>
-        @if (!isLoading() && !error()) {
-          <div class="text-xs text-slate-500">
-            Mostrando {{ filteredUsers().length }} paciente{{ filteredUsers().length !== 1 ? 's' : '' }}
-          </div>
-        }
-      </div>
+    <!-- Lista de pacientes -->
+    <div class="space-y-3">
 
       <!-- Cargando -->
       @if (isLoading()) {
-        <div class="p-10 flex flex-col items-center justify-center gap-3 text-slate-400">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-10 flex flex-col items-center justify-center gap-3 text-slate-400">
           <div class="w-7 h-7 border-2 border-blue-200 border-t-blue-500 rounded-full animate-spin"></div>
           <p class="text-sm">Cargando pacientes...</p>
         </div>
@@ -85,7 +74,7 @@
 
       <!-- Error -->
       @else if (error()) {
-        <div class="p-10 flex flex-col items-center justify-center gap-3">
+        <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-10 flex flex-col items-center justify-center gap-3">
           <svg width="32" height="32" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" class="text-red-300">
             <circle cx="12" cy="12" r="10"/><path d="M12 8v4m0 4h.01"/>
           </svg>
@@ -96,110 +85,92 @@
         </div>
       }
 
-      <!-- Lista -->
+      <!-- Tarjetas -->
       @else {
-        <div class="overflow-x-auto">
-          <table class="min-w-full text-left">
-            <thead class="bg-slate-50">
-              <tr class="text-[11px] uppercase tracking-wide text-slate-500">
-                <th class="px-5 py-3 font-semibold">Paciente</th>
-                <th class="px-5 py-3 font-semibold">DNI</th>
-                <th class="px-5 py-3 font-semibold">Contacto</th>
-                <th class="px-5 py-3 font-semibold">Estado</th>
-                <th class="px-5 py-3 font-semibold">Alta</th>
-                <th class="px-5 py-3 font-semibold text-right">Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              @if (filteredUsers().length === 0) {
-                <tr>
-                  <td colspan="6" class="px-5 py-10 text-center text-sm text-slate-400">
-                    No se encontraron pacientes para los filtros seleccionados.
-                  </td>
-                </tr>
-              }
-              @for (user of filteredUsers(); track user.id) {
-                <tr class="border-t border-slate-100 hover:bg-slate-50 transition-colors">
+        @if (filteredUsers().length === 0) {
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm p-10 text-center text-sm text-slate-400">
+            No se encontraron pacientes para los filtros seleccionados.
+          </div>
+        }
 
-                  <!-- Paciente -->
-                  <td class="px-5 py-3">
-                    <div class="flex items-center gap-3">
-                      <div
-                        class="w-8 h-8 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0"
-                        [ngClass]="getAvatarColor(user.name)"
-                      >
-                        {{ getInitials(user.name, user.surname) }}
-                      </div>
-                      <div class="leading-tight">
-                        <div class="text-[13px] font-semibold text-slate-900">{{ user.name }} {{ user.surname }}</div>
-                        <div class="text-[11px] text-slate-400">{{ user.email }}</div>
-                      </div>
-                    </div>
-                  </td>
+        @for (user of filteredUsers(); track user.id) {
+          <div class="bg-white rounded-2xl border border-slate-100 shadow-sm px-5 py-4 hover:border-slate-200 transition-colors">
+            <div class="flex items-start justify-between gap-4">
 
-                  <!-- DNI -->
-                  <td class="px-5 py-3 text-[13px] text-slate-700 font-mono">
-                    {{ user.dni }}
-                  </td>
-
-                  <!-- Contacto -->
-                  <td class="px-5 py-3 text-[13px] text-slate-700">
-                    {{ user.telephone || '—' }}
-                  </td>
-
-                  <!-- Estado -->
-                  <td class="px-5 py-3">
+              <!-- Izquierda: avatar + info -->
+              <div class="flex items-start gap-4 min-w-0">
+                <div
+                  class="w-10 h-10 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                  [ngClass]="getAvatarColor(user.name)"
+                >
+                  {{ getInitials(user.name, user.surname) }}
+                </div>
+                <div class="min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class="text-sm font-semibold text-slate-900">{{ user.name }} {{ user.surname }}</span>
                     <span
-                      class="inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold"
+                      class="inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-semibold"
                       [class.bg-emerald-50]="user.status === 'active'"
                       [class.text-emerald-700]="user.status === 'active'"
                       [class.bg-slate-100]="user.status !== 'active'"
-                      [class.text-slate-600]="user.status !== 'active'"
+                      [class.text-slate-500]="user.status !== 'active'"
                     >
                       {{ getStatusLabel(user.status) }}
                     </span>
-                  </td>
+                  </div>
 
-                  <!-- Alta -->
-                  <td class="px-5 py-3 text-[13px] text-slate-500">
-                    {{ user.created_at | date:'dd/MM/yyyy' }}
-                  </td>
-
-                  <!-- Acciones -->
-                  <td class="px-5 py-3">
-                    <div class="flex justify-end items-center gap-1 text-slate-400">
-                      <button
-                        (click)="navigateToPatient(user)"
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition"
-                      >
-                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
-                        </svg>
-                        Ver Ficha
-                      </button>
-                      <button
-                        class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-500 bg-slate-50 hover:bg-slate-100 transition"
-                      >
-                        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8m8 4H8m2-8H8"/>
-                        </svg>
-                        Informe
-                      </button>
-                      <button class="p-2 rounded-md hover:bg-slate-100 hover:text-slate-600 transition">
-                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                          <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
-                        </svg>
-                      </button>
+                  @if (user.patient_profile?.consultation_reason) {
+                    <div class="text-xs text-slate-500 mt-0.5 truncate max-w-sm">
+                      {{ user.patient_profile?.consultation_reason }}
                     </div>
-                  </td>
+                  }
 
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
+                  <div class="flex items-center gap-3 mt-2 flex-wrap">
+                    
+                   
+                    @if (user.patient_profile?.birth_date) {
+                      <span class="inline-flex items-center gap-1 text-[11px] text-slate-400">
+                        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+                        </svg>
+                      </span>
+                    }
+                  </div>
+                </div>
+              </div>
+
+              
+              <div class="flex items-center gap-3 shrink-0">
+                
+                <button
+                  (click)="navigateToPatient(user)"
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition"
+                >
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  Ver Ficha
+                </button>
+                <button
+                  class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-slate-500 bg-slate-50 hover:bg-slate-100 transition"
+                >
+                  <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8m8 4H8m2-8H8"/>
+                  </svg>
+                  Informe
+                </button>
+                <button class="p-2 rounded-md hover:bg-slate-100 hover:text-slate-600 transition text-slate-400">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>
+                  </svg>
+                </button>
+              </div>
+
+            </div>
+          </div>
+        }
       }
-    </div>
 
+    </div>
   </div>
 </div>
