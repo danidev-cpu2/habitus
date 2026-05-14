@@ -1,0 +1,147 @@
+<div *ngIf="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-4">
+  <!-- MODAL -->
+  <div class="w-full max-w-xl rounded-2xl bg-white p-6 shadow-xl">
+    <!-- HEADER -->
+    <div class="mb-6 flex items-center justify-between">
+      <h2 class="text-xl font-semibold text-slate-800">
+        {{ isEditMode ? 'Editar Cita' : 'Nueva Cita' }}
+      </h2>
+
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="text-2xl text-slate-500 transition hover:text-slate-700"
+      >
+        ×
+      </button>
+    </div>
+
+    <div
+      *ngIf="isEditMode"
+      class="mb-6 grid grid-cols-1 gap-4 rounded-2xl bg-slate-100 p-4 text-slate-700 md:grid-cols-2"
+    >
+      <div class="space-y-1">
+        <span class="text-sm font-medium text-slate-500">Paciente</span> <br />
+        <span class="text-sm font-semibold">{{ editingPatientLabel }}</span>
+      </div>
+
+      <div class="space-y-1">
+        <span class="text-sm font-medium text-slate-500">Psicólogo</span> <br />
+        <span class="text-sm font-semibold">{{ editingPsychologistLabel }}</span>
+      </div>
+    </div>
+
+    <div class="space-y-4">
+      <div *ngIf="errorMessage" class="rounded-2xl bg-rose-100 p-4 text-sm text-rose-700">
+        {{ errorMessage }}
+      </div>
+
+      <div *ngIf="successMessage" class="rounded-2xl bg-emerald-100 p-4 text-sm text-emerald-700">
+        {{ successMessage }}
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div class="space-y-5">
+      <!-- CREAR -->
+      <ng-container *ngIf="!isEditMode">
+        <!-- PSICÓLOGO -->
+        <div class="space-y-1">
+          <label class="text-md font-medium text-slate-700"> Psicólogo </label>
+
+          <select
+            name="psychologist"
+            [(ngModel)]="selectedPsychologistId"
+            (change)="onPsychologistChange()"
+            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+          >
+            <option [ngValue]="null">Seleccionar psicólogo</option>
+            <option *ngFor="let psychologist of psychologists" [ngValue]="psychologist.id">
+              {{ psychologist.name }} {{ psychologist.surname }}
+            </option>
+          </select>
+        </div>
+
+        <!-- PACIENTE -->
+        <div class="space-y-1">
+          <label class="text-md font-medium text-slate-700"> Paciente </label>
+
+          <!-- SELECT -->
+          <select
+            name="patient"
+            [(ngModel)]="selectedPatientId"
+            (change)="onPatientChange()"
+            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+          >
+            <option [ngValue]="null">Seleccionar paciente</option>
+            <option *ngFor="let patient of filteredPatients" [ngValue]="patient.id">
+              {{ patient.name }} {{ patient.surname }}
+            </option>
+          </select>
+        </div>
+      </ng-container>
+
+      <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+        <!-- FECHA -->
+        <div class="space-y-1">
+          <label class="text-md font-medium text-slate-700">Día</label>
+
+          <input
+            name="date"
+            type="date"
+            [(ngModel)]="appointmentDate"
+            [min]="minDate"
+            (change)="validateWeekDay()"
+            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+          />
+        </div>
+        <!-- HORA -->
+
+        <div class="space-y-1">
+          <label class="text-md font-medium text-slate-700">Hora</label>
+
+          <input
+            name="hour"
+            type="time"
+            [(ngModel)]="appointmentHour"
+            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+          />
+        </div>
+      </div>
+
+      <!-- ESTADO -->
+      <div class="space-y-1">
+        <label class="text-md font-medium text-slate-700">Estado</label>
+
+        <select
+          name="status"
+          [(ngModel)]="status"
+          class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+        >
+          <option value="pending">Sin confirmar</option>
+          <option value="held">Confirmada</option>
+          <option value="canceled">Cancelada</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="mt-8 flex justify-end gap-3">
+      <button
+        type="button"
+        (click)="closeModal()"
+        class="btn rounded-xl border border-slate-300 font-medium text-slate-700 transition hover:bg-slate-100"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        (click)="saveAppointment()"
+        class="btn btn-primary rounded-xl border bg-blue-500 font-medium text-white transition hover:bg-blue-600"
+      >
+        {{ isEditMode ? 'Guardar Cambios' : 'Crear Cita' }}
+      </button>
+    </div>
+  </div>
+</div>

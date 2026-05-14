@@ -1,7 +1,7 @@
-export type AppointmentType   = 'individual' | 'grupal' | 'evaluacion';
+
 export type AppointmentStatus = 'pending' | 'confirmed' | 'canceled' | 'held';
 
-/** Mapea la tabla `appointments` de la BD habitus */
+
 export interface Appointment {
   id: number;
   patient_id: number;
@@ -9,10 +9,9 @@ export interface Appointment {
   /** ISO date YYYY-MM-DD */
   date: string;
   /** Hora inicio en formato HH:MM (24 h) */
-  start_time: string;
+  hour: string;
   /** Hora fin en formato HH:MM (24 h) */
   end_time: string;
-  type: AppointmentType;
   status: AppointmentStatus;
   notes?: string;
   created_at?: string;
@@ -27,9 +26,8 @@ export interface CreateAppointmentDto {
   patient_id: number;
   psychologist_id: number;
   date: string;
-  start_time: string;
+  hour: string;
   end_time: string;
-  type: AppointmentType;
   notes?: string;
 }
 
@@ -38,9 +36,8 @@ export interface UpdateAppointmentDto {
   patient_id?: number;
   psychologist_id?: number;
   date?: string;
-  start_time?: string;
+  hour?: string;
   end_time?: string;
-  type?: AppointmentType;
   status?: AppointmentStatus;
   notes?: string;
 }
@@ -67,51 +64,51 @@ export function getMockAppointments(): Appointment[] {
   return [
     {
       id: 1, patient_id: 10, psychologist_id: 1,
-      date: isoDate(mon, 1), start_time: '09:00', end_time: '10:00',
-      type: 'individual', status: 'pending',
+      date: isoDate(mon, 1), hour: '09:00', end_time: '10:00',
+      status: 'pending',
       patient:      { id: 10, name: 'Juan',    surname: 'Pérez'    },
       psychologist: { id: 1,  name: 'María',   surname: 'García'   },
     },
     {
       id: 2, patient_id: 11, psychologist_id: 1,
-      date: isoDate(mon, 1), start_time: '11:00', end_time: '12:00',
-      type: 'evaluacion', status: 'pending',
+      date: isoDate(mon, 1), hour: '11:00', end_time: '12:00',
+      status: 'pending',
       patient:      { id: 11, name: 'Laura',   surname: 'Gómez'    },
       psychologist: { id: 1,  name: 'María',   surname: 'García'   },
     },
     {
       id: 3, patient_id: 12, psychologist_id: 2,
-      date: isoDate(mon, 2), start_time: '10:00', end_time: '11:00',
-      type: 'individual', status: 'pending',
+      date: isoDate(mon, 2), hour: '10:00', end_time: '11:00',
+      status: 'pending',
       patient:      { id: 12, name: 'Roberto', surname: 'Silva'    },
       psychologist: { id: 2,  name: 'Ana',     surname: 'Martínez' },
     },
     {
       // Misma hora y día que cita 3 → dos psicólogos a las 10:00 del miércoles
       id: 7, patient_id: 20, psychologist_id: 3,
-      date: isoDate(mon, 2), start_time: '10:00', end_time: '11:00',
-      type: 'individual', status: 'confirmed',
+      date: isoDate(mon, 2), hour: '10:00', end_time: '11:00',
+      status: 'pending',
       patient:      { id: 20, name: 'Marta',   surname: 'Ruiz'     },
       psychologist: { id: 3,  name: 'Carlos',  surname: 'López'    },
     },
     {
       id: 4, patient_id: 13, psychologist_id: 3,
-      date: isoDate(mon, 2), start_time: '16:00', end_time: '17:30',
-      type: 'grupal', status: 'pending',
+      date: isoDate(mon, 2), hour: '16:00', end_time: '17:30',
+      status: 'pending',
       patient:      { id: 13, name: 'Grupo',   surname: 'Adolescentes' },
       psychologist: { id: 3,  name: 'Carlos',  surname: 'López'        },
     },
     {
       id: 5, patient_id: 14, psychologist_id: 3,
-      date: isoDate(mon, 4), start_time: '09:00', end_time: '10:00',
-      type: 'individual', status: 'pending',
+      date: isoDate(mon, 4), hour: '09:00', end_time: '10:00',
+      status: 'pending',
       patient:      { id: 14, name: 'Carmen',  surname: 'Ruiz'     },
       psychologist: { id: 3,  name: 'Carlos',  surname: 'López'    },
     },
     {
       id: 6, patient_id: 15, psychologist_id: 4,
-      date: isoDate(mon, 5), start_time: '14:00', end_time: '15:00',
-      type: 'evaluacion', status: 'held',
+      date: isoDate(mon, 5), hour: '14:00', end_time: '15:00',
+      status: 'pending',
       patient:      { id: 15, name: 'Diego',   surname: 'Fernández' },
       psychologist: { id: 4,  name: 'Pedro',   surname: 'Sánchez'   },
     },

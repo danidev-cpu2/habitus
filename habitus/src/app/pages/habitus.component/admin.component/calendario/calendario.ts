@@ -1,7 +1,7 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { WeeklyCalendarComponent } from '../../../../shared/components/weekly-calendar/weekly-calendar.component';
-import { AppointmentService } from '../../../../core/services/appointment.service';
 import { Appointment, getMockAppointments } from '../../../../core/models/appointment.model';
+import { AppointmentService } from '../../../../services/appointment.service';
+import { WeeklyCalendarComponent } from "../../../../shared/components/weekly-calendar/weekly-calendar.component";
 
 @Component({
   selector: 'app-calendario',
