@@ -12,6 +12,7 @@ import { ReceptionistComponent } from './pages/habitus.component/receptionist.co
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
 import { TransferPaxComponent } from './pages/habitus.component/receptionist.component/transfer-pax.component/transfer-pax.component';
+import { Calendario } from './pages/habitus.component/admin.component/calendario/calendario';
 import { authGuard, noAuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
 
@@ -95,6 +96,12 @@ export const routes: Routes = [
       {
         path: 'usuarios/nuevo',
         component: AddUsers,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      },
+      {
+        path: 'calendario',
+        component: Calendario,
         canActivate: [roleGuard],
         data: { roles: ['admin'] }
       }
