@@ -34,22 +34,30 @@
   <div class="overflow-hidden rounded-2xl border border-slate-200">
     <!-- Month Header -->
     <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
-      <h3 class="text-lg font-semibold capitalize text-slate-700">Marzo 2026</h3>
+      <h3 class="text-lg font-semibold capitalize text-slate-700">
+        {{ currentMonth }}
+      </h3>
 
       <div class="flex items-center gap-2">
         <button
+          type="button"
+          (click)="previousWeek()"
           class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100"
         >
           ←
         </button>
 
         <button
+          type="button"
+          (click)="goToToday()"
           class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
         >
           Hoy
         </button>
 
         <button
+          type="button"
+          (click)="nextWeek()"
           class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100"
         >
           →
@@ -58,124 +66,53 @@
     </div>
 
     <!-- Days -->
-    <div class="grid grid-cols-7 border-b border-slate-200 bg-slate-50">
-      <div class="border-r border-slate-200 p-3 text-center">
-        <p class="text-xs text-slate-400">Lun</p>
-        <p class="mt-1 font-semibold text-slate-700">2</p>
-      </div>
+    <div class="grid grid-cols-5 border-b border-slate-200 bg-slate-50">
+      <div
+        *ngFor="let day of currentWeek"
+        class="border-r border-slate-200 p-3 text-center last:border-r-0"
+        [ngClass]="day.isToday ? 'bg-blue-50' : ''"
+      >
+        <p class="text-xs text-slate-400">
+          {{ day.dayName }}
+        </p>
 
-      <div class="border-r border-slate-200 p-3 text-center">
-        <p class="text-xs text-slate-400">Mar</p>
-        <p class="mt-1 font-semibold text-slate-700">3</p>
-      </div>
-
-      <div class="border-r border-slate-200 p-3 text-center">
-        <p class="text-xs text-slate-400">Mié</p>
-        <p class="mt-1 font-semibold text-slate-700">4</p>
-      </div>
-
-      <div class="border-r border-slate-200 bg-blue-50 p-3 text-center">
-        <p class="text-xs text-slate-400">Jue</p>
-        <p class="mt-1 font-semibold text-blue-600">5</p>
-      </div>
-
-      <div class="border-r border-slate-200 p-3 text-center">
-        <p class="text-xs text-slate-400">Vie</p>
-        <p class="mt-1 font-semibold text-slate-700">6</p>
-      </div>
-
-      <div class="border-r border-slate-200 p-3 text-center">
-        <p class="text-xs text-slate-400">Sáb</p>
-        <p class="mt-1 font-semibold text-slate-700">7</p>
-      </div>
-
-      <div class="p-3 text-center">
-        <p class="text-xs text-slate-400">Dom</p>
-        <p class="mt-1 font-semibold text-slate-700">8</p>
+        <p class="mt-1 font-semibold" [ngClass]="day.isToday ? 'text-blue-600' : 'text-slate-700'">
+          {{ day.dayNumber }}
+        </p>
       </div>
     </div>
 
-    <div class="grid grid-cols-7 min-h-[320px]">
-      <div class="border-r border-slate-200 p-2 space-y-2">
-        <div class="rounded-xl border border-blue-200 bg-blue-100 p-3 transition hover:shadow-sm">
-          <p class="text-xs font-medium text-blue-600">09:00</p>
-
-          <p class="mt-1 text-sm font-semibold text-slate-700">Ana López</p>
-
-          <p class="text-xs text-slate-500">Dr. García</p>
-        </div>
-
-        <div class="rounded-xl border border-amber-200 bg-amber-100 p-3 transition hover:shadow-sm">
-          <p class="text-xs font-medium text-amber-600">10:30</p>
-
-          <p class="mt-1 text-sm font-semibold text-slate-700">Carlos Ruiz</p>
-
-          <p class="text-xs text-slate-500">Dra. Martínez</p>
-        </div>
-      </div>
-
-      <div class="border-r border-slate-200 p-2 space-y-2">
-        <div class="rounded-xl border border-blue-200 bg-blue-100 p-3 transition hover:shadow-sm">
-          <p class="text-xs font-medium text-blue-600">11:00</p>
-
-          <p class="mt-1 text-sm font-semibold text-slate-700">María Sánchez</p>
-
-          <p class="text-xs text-slate-500">Dr. García</p>
-        </div>
-      </div>
-
-      <div class="border-r border-slate-200 p-2 space-y-2">
+    <!-- Appointments -->
+    <div class="grid grid-cols-5 min-h-[320px]">
+      <div
+        *ngFor="let dayAppointments of getAppointmentsByDay(); let dayIndex = index"
+        class="border-r border-slate-200 p-2 space-y-2"
+        [ngClass]="dayIndex === 4 ? 'last:border-r-0' : ''"
+      >
         <div
-          class="rounded-xl border border-emerald-200 bg-emerald-100 p-3 transition hover:shadow-sm"
+          *ngFor="let appointment of dayAppointments"
+          class="rounded-xl p-3 transition hover:shadow-sm"
+          [ngClass]="[
+            getPsychologistColor(appointment).border,
+            getPsychologistColor(appointment).bg,
+          ]"
         >
-          <p class="text-xs font-medium text-emerald-600">09:30</p>
-
-          <p class="mt-1 text-sm font-semibold text-slate-700">Pedro Gómez</p>
-
-          <p class="text-xs text-slate-500">Dr. Fernández</p>
+          <p class="text-xs font-medium" [ngClass]="getPsychologistColor(appointment).text">
+            {{ appointment.hour }}
+          </p>
+          <p class="mt-1 text-sm font-semibold text-slate-700">{{ appointment.patient.name }}</p>
+          <p class="text-xs text-slate-500">{{ appointment.psychologist.name }}</p>
         </div>
       </div>
-
-      <div class="border-r border-slate-200 bg-blue-50/40 p-2 space-y-2">
-        <div class="rounded-xl border border-blue-200 bg-blue-100 p-3 transition hover:shadow-sm">
-          <p class="text-xs font-medium text-blue-600">14:00</p>
-
-          <p class="mt-1 text-sm font-semibold text-slate-700">Laura Torres</p>
-
-          <p class="text-xs text-slate-500">Dra. Ramírez</p>
-        </div>
-      </div>
-
-      <div class="border-r border-slate-200 p-2 space-y-2">
-        <div class="rounded-xl border border-amber-200 bg-amber-100 p-3 transition hover:shadow-sm">
-          <p class="text-xs font-medium text-amber-600">16:00</p>
-
-          <p class="mt-1 text-sm font-semibold text-slate-700">Javier Díaz</p>
-
-          <p class="text-xs text-slate-500">Dr. García</p>
-        </div>
-      </div>
-
-      <div class="border-r border-slate-200 p-2"></div>
-
-      <div class="p-2"></div>
     </div>
   </div>
 
+  <!-- Legend -->
   <div class="mt-5 flex flex-wrap items-center gap-5 text-sm">
-    <div class="flex items-center gap-2">
-      <span class="h-3 w-3 rounded-full bg-blue-400"></span>
-      <span class="text-slate-600">Psicologo 1</span>
-    </div>
+    <div *ngFor="let psychologist of getActivePsychologists()" class="flex items-center gap-2">
+      <span class="h-3 w-3 rounded-full" [ngClass]="psychologist.color.dot"></span>
 
-    <div class="flex items-center gap-2">
-      <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
-      <span class="text-slate-600">Psicologo 2</span>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <span class="h-3 w-3 rounded-full bg-amber-400"></span>
-      <span class="text-slate-600">Psicologo 3</span>
+      <span class="text-slate-600"> {{ psychologist.name }} {{ psychologist.surname }} </span>
     </div>
   </div>
 </div>
