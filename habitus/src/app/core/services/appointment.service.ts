@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
-import { Appointment, CreateAppointmentDto, UpdateAppointmentDto } from '../models/appointment.model';
+import { Appointment, AppointmentStatus, CreateAppointmentDto, UpdateAppointmentDto } from '../models/appointment.model';
 import { ApiResponse } from '../models/auth.model';
 
 export interface AppointmentFilters {
@@ -60,6 +60,10 @@ export class AppointmentService {
 
   update(id: number, dto: UpdateAppointmentDto): Observable<ApiResponse<Appointment>> {
     return this.http.put<ApiResponse<Appointment>>(`${this.apiUrl}/${id}`, dto);
+  }
+
+  updateStatus(id: number, status: AppointmentStatus): Observable<ApiResponse<Appointment>> {
+    return this.http.patch<ApiResponse<Appointment>>(`${this.apiUrl}/${id}/status`, { status });
   }
 
   delete(id: number): Observable<ApiResponse<void>> {

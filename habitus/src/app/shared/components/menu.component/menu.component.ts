@@ -46,8 +46,8 @@ export class MenuComponent implements OnInit {
   private readonly navigationConfig: Record<string, any[]> = {
     patient: [
       { href: '/paciente', label: 'Inicio', icon: this.icons.Home },
-/*       { href: '/paciente/calendario', label: 'Calendario', icon: this.icons.Calendar },
-      { href: '/paciente/autoregistro', label: 'Autoregistro', icon: this.icons.BookOpen },
+      { href: '/paciente/calendario', label: 'Calendario', icon: this.icons.Calendar },
+     /*  { href: '/paciente/autoregistro', label: 'Autoregistro', icon: this.icons.BookOpen },
       { href: '/paciente/tareas', label: 'Mis Tareas', icon: this.icons.CheckSquare }, */
     ],
     psychologist: [

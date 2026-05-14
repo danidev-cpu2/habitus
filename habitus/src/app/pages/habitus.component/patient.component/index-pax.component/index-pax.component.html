@@ -3,127 +3,145 @@
   <div class="mb-5 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
-        <!-- Icono -->
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
         </svg>
       </div>
-
       <h2 class="text-lg font-semibold text-slate-800">Próxima Cita</h2>
     </div>
 
-    <span class="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
-      En 2 días
-    </span>
-  </div>
-
-  <!-- Card -->
-  <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
-    <div class="mb-4 flex items-start justify-between gap-4">
-      <div>
-        <h3 class="text-lg font-semibold text-slate-800">Martes, 21 de Enero</h3>
-
-        <div class="mt-2 flex items-center gap-2 text-sm text-slate-500">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-4 w-4"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-
-          <span>10:00 - 11:00</span>
-        </div>
-      </div>
-
-      <span class="rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
-        Sesión Individual
+    @if (nextAppointment()) {
+      <span class="rounded-full px-3 py-1 text-xs font-medium"
+        [class]="nextAppointment()!.status === 'confirmada'
+          ? 'bg-green-50 text-green-600'
+          : 'bg-blue-50 text-blue-600'">
+        {{ nextAppointment()!.status === 'confirmada' ? 'Confirmada' : daysLabel() }}
       </span>
+    }
+  </div>
+
+  <!-- Appointment card -->
+  @if (nextAppointment(); as apt) {
+    <div class="rounded-xl border border-slate-200 bg-slate-50 p-5">
+      <div class="mb-4 flex items-start justify-between gap-4">
+        <div>
+          <h3 class="text-lg font-semibold text-slate-800">{{ apt.dayLabel }}</h3>
+          <div class="mt-2 flex items-center gap-2 text-sm text-slate-500">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <span>{{ apt.timeRange }}</span>
+          </div>
+        </div>
+        <span class="rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
+          {{ apt.type }}
+        </span>
+      </div>
+
+      <div class="space-y-3 border-t border-slate-200 pt-4">
+        <!-- Doctor -->
+        <div class="flex items-start gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <div>
+            <p class="text-sm font-medium text-slate-700">{{ apt.doctorName }}</p>
+            <p class="text-sm text-slate-500">{{ apt.specialty }}</p>
+          </div>
+        </div>
+
+        <!-- Lugar -->
+        <div class="flex items-center gap-3">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <span class="text-sm text-slate-600">{{ apt.location }}</span>
+        </div>
+      </div>
     </div>
 
-    <div class="space-y-3 border-t border-slate-200 pt-4">
-      <!-- Doctor -->
-      <div class="flex items-start gap-3">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="mt-0.5 h-4 w-4 text-slate-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
+    <!-- Actions -->
+    <div class="mt-5 flex gap-3">
+      <button
+        (click)="goToCalendar()"
+        class="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600">
+        Ver Calendario
+      </button>
+      <button
+        (click)="openModal()"
+        class="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100">
+        Gestionar
+      </button>
+    </div>
+  } @else {
+    <!-- No appointment -->
+    <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 py-10 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" class="mb-3 h-10 w-10 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+      </svg>
+      <p class="text-sm font-medium text-slate-500">No tienes citas próximas</p>
+      <p class="mt-1 text-xs text-slate-400">Contacta con recepción para agendar una cita</p>
+    </div>
 
-        <div>
-          <p class="text-sm font-medium text-slate-700">Dr. Carlos Mendoza</p>
+    <div class="mt-5">
+      <button
+        (click)="goToCalendar()"
+        class="w-full rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600">
+        Ver Calendario
+      </button>
+    </div>
+  }
+</div>
 
-          <p class="text-sm text-slate-500">Terapia Cognitivo-Conductual</p>
+<!-- Modal -->
+@if (isModalOpen()) {
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center"
+    (click)="closeModal()">
+
+    <!-- Backdrop -->
+    <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
+
+    <!-- Card -->
+    <div
+      class="relative z-10 w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl"
+      (click)="$event.stopPropagation()">
+
+      <!-- Icono -->
+      <div class="mb-5 flex justify-center">
+        <div class="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z" />
+          </svg>
         </div>
       </div>
 
-      <!-- Lugar -->
-      <div class="flex items-center gap-3">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          class="h-4 w-4 text-slate-400"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-          />
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-          />
-        </svg>
+      <h2 class="mb-2 text-center text-xl font-bold text-slate-800">¿Acudirás a la cita?</h2>
 
-        <span class="text-sm text-slate-600"> Consultorio 3 </span>
+      @if (nextAppointment(); as apt) {
+        <p class="mb-6 text-center text-sm text-slate-500">
+          {{ apt.dayLabel }} · {{ apt.timeRange }}<br />
+          {{ apt.doctorName }}
+        </p>
+      }
+
+      <!-- Botones -->
+      <div class="flex flex-col gap-3">
+        <button
+          (click)="confirmAppointment()"
+          [disabled]="isLoading()"
+          class="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600 disabled:opacity-50">
+          {{ isLoading() ? 'Guardando...' : 'Sí (confirmar)' }}
+        </button>
+
+        <button
+          (click)="cancelAppointment()"
+          [disabled]="isLoading()"
+          class="w-full rounded-xl border-2 border-red-400 bg-slate-100 py-3 text-sm font-semibold text-red-500 transition hover:bg-red-50 active:scale-95 disabled:opacity-50">
+          {{ isLoading() ? 'Guardando...' : 'No (cancelar)' }}
+        </button>
       </div>
     </div>
   </div>
-
-  <!-- Actions -->
-  <div class="mt-5 flex gap-3">
-    <button
-      class="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600"
-    >
-      Ver Calendario
-    </button>
-
-    <button
-      class="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-    >
-      Gestionar
-    </button>
-  </div>
-</div>
+}
