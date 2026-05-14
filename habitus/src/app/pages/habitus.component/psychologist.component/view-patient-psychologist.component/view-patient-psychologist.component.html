@@ -1,0 +1,99 @@
+<div class="min-h-screen bg-gray-50 p-8">
+
+  <!-- Header -->
+  <div class="flex items-start justify-between mb-8">
+    <div>
+      <h1 class="text-2xl font-semibold text-gray-800">{{ fullName() }}</h1>
+      <p class="text-sm text-gray-500 mt-1">{{ diagnosis() }}</p>
+    </div>
+    <button
+      (click)="editarFicha()"
+      class="text-sm font-semibold text-blue-600 bg-blue-50 rounded-lg px-4 py-2 hover:bg-blue-100 transition"
+    >
+      Editar Ficha
+    </button>
+  </div>
+
+  <!-- Datos básicos -->
+  <div class="bg-white rounded-xl p-6 border border-gray-200 mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
+    <div class="flex items-center space-x-4">
+      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+        <i-lucide name="user" class="w-6 h-6"></i-lucide>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600">DNI</p>
+        <p class="text-gray-900 font-semibold">{{ patient()?.dni }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+        <i-lucide name="mail" class="w-6 h-6"></i-lucide>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600">Email</p>
+        <p class="text-gray-900 font-semibold">{{ patient()?.email }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+        <i-lucide name="phone" class="w-6 h-6"></i-lucide>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600">Teléfono</p>
+        <p class="text-gray-900 font-semibold">{{ patient()?.telephone || 'No especificado' }}</p>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-4">
+      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+        <i-lucide name="calendar" class="w-6 h-6"></i-lucide>
+      </div>
+      <div>
+        <p class="text-sm font-medium text-gray-600">Edad</p>
+        <p class="text-gray-900 font-semibold">{{ age() }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex border-b border-gray-200 mb-8 text-sm font-semibold text-gray-600 space-x-6">
+    <button
+      (click)="selectTab('historial')"
+      [class.text-blue-600]="selectedTab() === 'historial'"
+      [class.border-b-2]="selectedTab() === 'historial'"
+      class="pb-2 border-transparent border-b-2 transition"
+    >
+      Historial
+    </button>
+    <button
+      (click)="selectTab('notas')"
+      [class.text-blue-600]="selectedTab() === 'notas'"
+      [class.border-b-2]="selectedTab() === 'notas'"
+      class="pb-2 border-transparent border-b-2 transition"
+    >
+      Notas
+    </button>
+    <button
+      
+    >
+      Control Conductual
+    </button>
+    <button
+    >
+      Resumen IA
+    </button>
+  </div>
+
+  <!-- Solo muestra contenido de historial (por instrucción) -->
+  <div *ngIf="selectedTab() === 'historial'" class="bg-white rounded-xl p-6 border border-gray-200">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">
+      Historial de Citas
+      <span class="text-xs text-gray-500 ml-2">{{ /* aquí sesiones contadas cuando las tengas */ }}</span>
+    </h2>
+
+    <!-- Historial vacío por ahora (rellena cuando tengas las sesiones) -->
+    <p class="text-gray-500 text-sm">No hay historial cargado</p>
+  </div>
+</div>
