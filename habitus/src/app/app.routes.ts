@@ -8,6 +8,8 @@ import { AddUsers } from './pages/habitus.component/admin.component/add-users/ad
 import { PatientComponent } from './pages/habitus.component/patient.component/patient.component';
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
+import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
+import { ViewPatientPsychologistComponent } from './pages/habitus.component/psychologist.component/view-patient-psychologist.component/view-patient-psychologist.component';
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
@@ -53,6 +55,24 @@ const receptionistChildrenRoutes: Routes = [
   },
 ];
 
+const psychologistChildrenRoutes: Routes = [
+  {
+    path: '',
+    component: PsychologistComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['psychologist'] },
+    children: [
+      {
+        path: '',
+        component: UserListPsychologistComponent,
+      },
+      {
+        path: 'patients/:id',
+        component: ViewPatientPsychologistComponent,
+      },
+    ],
+  },
+];
 export const routes: Routes = [
   {
     path: '',
@@ -121,9 +141,15 @@ export const routes: Routes = [
         path: '',
         component: PsychologistComponent,
         canActivate: [roleGuard],
-        data: { roles: ['psychologist'] }
+        data: { roles: ['psychologist'] },
+        children: [...psychologistChildrenRoutes],
       }
     ]
+  },
+  {
+    path: 'psicologo',
+    redirectTo: 'psychologist',
+    pathMatch: 'full'
   },
   {
     path: 'receptionist',
