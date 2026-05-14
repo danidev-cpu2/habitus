@@ -8,6 +8,7 @@ import { AddUsers } from './pages/habitus.component/admin.component/add-users/ad
 import { PatientComponent } from './pages/habitus.component/patient.component/patient.component';
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
+import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
@@ -52,16 +53,27 @@ const receptionistChildrenRoutes: Routes = [
     ],
   },
 ];
+const psychologistChildrenRoutes: Routes = [
+  {
+    path: '',
+    component: PsychologistComponent,
+    canActivate: [roleGuard],
+    data: { roles: ['psychologist'] },
+    children: [
+      { path: 'pacientes', component: UserListPsychologistComponent },
+    ],
+  },
+];
 
 export const routes: Routes = [
   {
     path: '',
-    component: LandingPageComponent
+    component: LandingPageComponent,
   },
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [noAuthGuard]
+    canActivate: [noAuthGuard],
   },
   {
     path: 'admin',
@@ -72,45 +84,45 @@ export const routes: Routes = [
         path: '',
         component: AdminComponent,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/:id/editar',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/:id/editar',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios',
         component: UserList,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/nuevo',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
-      }
-    ]
+        data: { roles: ['admin'] },
+      },
+    ],
   },
   {
     path: 'patient',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...patientChildrenRoutes]
+    children: [...patientChildrenRoutes],
   },
   {
     path: 'paciente',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...patientChildrenRoutes]
+    children: [...patientChildrenRoutes],
   },
   {
     path: 'psychologist',
@@ -121,29 +133,37 @@ export const routes: Routes = [
         path: '',
         component: PsychologistComponent,
         canActivate: [roleGuard],
-        data: { roles: ['psychologist'] }
-      }
-    ]
+        data: { roles: ['psychologist'] },
+        children: [
+          {
+            path: 'patients',
+            component: UserListPsychologistComponent,
+          },
+        ],
+      },
+    ],
   },
   {
     path: 'receptionist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...receptionistChildrenRoutes]
+    children: [...receptionistChildrenRoutes],
   },
   {
-    path: 'psicologo',
-    redirectTo: 'psychologist',
-    pathMatch: 'full'
+  path: 'psicologo',
+  component: HabitusComponent,
+  canActivate: [authGuard],
+  children: [...psychologistChildrenRoutes],
   },
+  
   {
     path: 'recepcion',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...receptionistChildrenRoutes]
+    children: [...receptionistChildrenRoutes],
   },
   {
     path: '**',
-    redirectTo: ''
-  }
+    redirectTo: '',
+  },
 ];
