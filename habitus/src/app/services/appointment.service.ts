@@ -2,15 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export type AppointmentStatus = 'pending' | 'held' | 'canceled';
+
 export interface Appointment {
   id: number;
   patient_id: number;
   psychologist_id: number;
-  status: string;
+  status: AppointmentStatus;
   date: string; // formato ISO
   hour: string; // formato HH:MM:SS
-  created_at: string;
-  updated_at: string;
+  end_time: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
   patient: {
     id: number;
     name: string;
