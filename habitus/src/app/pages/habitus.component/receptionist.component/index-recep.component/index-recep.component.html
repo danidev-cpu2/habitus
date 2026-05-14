@@ -8,11 +8,27 @@
     </div>
 
     <button
+      type="button"
+      (click)="isAppointmentModalOpen = true"
       class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
     >
       + Nueva Cita
     </button>
   </div>
+
+  <div
+    *ngIf="recentAppointmentMessage"
+    class="mb-5 rounded-2xl bg-emerald-100 p-4 text-sm text-emerald-700"
+  >
+    {{ recentAppointmentMessage }}
+  </div>
+
+  <app-new-edit-appointment
+    [isOpen]="isAppointmentModalOpen"
+    (close)="isAppointmentModalOpen = false"
+    (appointmentSaved)="handleAppointmentCreated($event)"
+  >
+  </app-new-edit-appointment>
 
   <!-- Calendar -->
   <div class="overflow-hidden rounded-2xl border border-slate-200">
