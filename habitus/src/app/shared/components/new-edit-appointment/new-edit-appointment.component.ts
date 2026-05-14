@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AppointmentService } from '../../../core/services/appointment.service';
 import { UserService } from '../../../core/services/user.service';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
 import { User } from '../../../core/models/user.model';
+import { AppointmentService } from '../../../services/appointment.service';
 
 @Component({
   selector: 'app-new-edit-appointment',

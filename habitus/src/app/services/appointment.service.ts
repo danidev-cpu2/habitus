@@ -38,5 +38,19 @@ export class AppointmentService {
     return this.http.get<Appointment[]>(this.apiUrl);
   }
 
-  // otros métodos si es necesario
+  getAppointment(id: number): Observable<Appointment> {
+    return this.http.get<Appointment>(`${this.apiUrl}/${id}`);
+  }
+
+  create(payload: any): Observable<any> {
+    return this.http.post(this.apiUrl, payload);
+  }
+
+  update(id: number, payload: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/${id}`, payload);
+  }
+
+  delete(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`);
+  }
 }
