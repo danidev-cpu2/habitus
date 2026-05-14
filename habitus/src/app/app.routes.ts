@@ -62,26 +62,20 @@ const psychologistChildrenRoutes: Routes = [
     canActivate: [roleGuard],
     data: { roles: ['psychologist'] },
     children: [
-      {
-        path: '',
-        component: UserListPsychologistComponent,
-      },
-      {
-        path: 'patients/:id',
-        component: ViewPatientPsychologistComponent,
-      },
+      { path: 'pacientes', component: UserListPsychologistComponent },
+      {path: 'pacientes/:id', component: ViewPatientPsychologistComponent }
     ],
   },
 ];
 export const routes: Routes = [
   {
     path: '',
-    component: LandingPageComponent
+    component: LandingPageComponent,
   },
   {
     path: 'login',
     component: LoginComponent,
-    canActivate: [noAuthGuard]
+    canActivate: [noAuthGuard],
   },
   {
     path: 'admin',
@@ -92,45 +86,45 @@ export const routes: Routes = [
         path: '',
         component: AdminComponent,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/:id/editar',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/:id/editar',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios',
         component: UserList,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
+        data: { roles: ['admin'] },
       },
       {
         path: 'usuarios/nuevo',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] }
-      }
-    ]
+        data: { roles: ['admin'] },
+      },
+    ],
   },
   {
     path: 'patient',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...patientChildrenRoutes]
+    children: [...patientChildrenRoutes],
   },
   {
     path: 'paciente',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...patientChildrenRoutes]
+    children: [...patientChildrenRoutes],
   },
   {
     path: 'psychologist',
@@ -142,34 +136,43 @@ export const routes: Routes = [
         component: PsychologistComponent,
         canActivate: [roleGuard],
         data: { roles: ['psychologist'] },
-        children: [...psychologistChildrenRoutes],
-      }
-    ]
+        children: [
+          {
+            path: 'patients',
+            component: UserListPsychologistComponent,
+          },
+          {
+            path: 'patients/:id',
+            component: ViewPatientPsychologistComponent,
+          },
+        ],
+      },
+    ],
   },
   {
     path: 'psicologo',
     redirectTo: 'psychologist',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'receptionist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...receptionistChildrenRoutes]
+    children: [...receptionistChildrenRoutes],
   },
   {
     path: 'psicologo',
     redirectTo: 'psychologist',
-    pathMatch: 'full'
+    pathMatch: 'full',
   },
   {
     path: 'recepcion',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [...receptionistChildrenRoutes]
+    children: [...receptionistChildrenRoutes],
   },
   {
     path: '**',
-    redirectTo: ''
-  }
+    redirectTo: '',
+  },
 ];
