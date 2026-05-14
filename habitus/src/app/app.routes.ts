@@ -161,9 +161,10 @@ export const routes: Routes = [
     children: [...receptionistChildrenRoutes],
   },
   {
-    path: 'psicologo',
-    redirectTo: 'psychologist',
-    pathMatch: 'full',
+  path: 'psicologo',
+  component: HabitusComponent,
+  canActivate: [authGuard],
+  children: [...psychologistChildrenRoutes],
   },
   {
     path: 'recepcion',

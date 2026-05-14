@@ -1,99 +1,242 @@
 <div class="min-h-screen bg-gray-50 p-8">
 
-  <!-- Header -->
-  <div class="flex items-start justify-between mb-8">
-    <div>
-      <h1 class="text-2xl font-semibold text-gray-800">{{ fullName() }}</h1>
-      <p class="text-sm text-gray-500 mt-1">{{ diagnosis() }}</p>
-    </div>
-    <button
-      (click)="editarFicha()"
-      class="text-sm font-semibold text-blue-600 bg-blue-50 rounded-lg px-4 py-2 hover:bg-blue-100 transition"
-    >
-      Editar Ficha
-    </button>
-  </div>
-
-  <!-- Datos básicos -->
-  <div class="bg-white rounded-xl p-6 border border-gray-200 mb-8 grid grid-cols-1 md:grid-cols-4 gap-6">
-    <div class="flex items-center space-x-4">
-      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-        <i-lucide name="user" class="w-6 h-6"></i-lucide>
-      </div>
-      <div>
-        <p class="text-sm font-medium text-gray-600">DNI</p>
-        <p class="text-gray-900 font-semibold">{{ patient()?.dni }}</p>
-      </div>
-    </div>
-
-    <div class="flex items-center space-x-4">
-      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-        <i-lucide name="mail" class="w-6 h-6"></i-lucide>
-      </div>
-      <div>
-        <p class="text-sm font-medium text-gray-600">Email</p>
-        <p class="text-gray-900 font-semibold">{{ patient()?.email }}</p>
-      </div>
-    </div>
-
-    <div class="flex items-center space-x-4">
-      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-        <i-lucide name="phone" class="w-6 h-6"></i-lucide>
-      </div>
-      <div>
-        <p class="text-sm font-medium text-gray-600">Teléfono</p>
-        <p class="text-gray-900 font-semibold">{{ patient()?.telephone || 'No especificado' }}</p>
-      </div>
-    </div>
-
-    <div class="flex items-center space-x-4">
-      <div class="p-3 rounded-full bg-blue-100 text-blue-600">
-        <i-lucide name="calendar" class="w-6 h-6"></i-lucide>
-      </div>
-      <div>
-        <p class="text-sm font-medium text-gray-600">Edad</p>
-        <p class="text-gray-900 font-semibold">{{ age() }}</p>
-      </div>
+  <!-- Loading -->
+  <div
+    *ngIf="isLoading()"
+    class="flex min-h-[400px] items-center justify-center"
+  >
+    <div class="rounded-xl border border-gray-200 bg-white px-6 py-4 text-sm font-semibold text-gray-700 shadow-sm">
+      Cargando paciente...
     </div>
   </div>
 
-  <!-- Tabs -->
-  <div class="flex border-b border-gray-200 mb-8 text-sm font-semibold text-gray-600 space-x-6">
+  <!-- Error -->
+  <div
+    *ngIf="!isLoading() && error()"
+    class="rounded-xl border border-red-200 bg-red-50 p-6 text-red-700"
+  >
+    <p class="text-sm font-semibold">
+      {{ error() }}
+    </p>
+
     <button
-      (click)="selectTab('historial')"
-      [class.text-blue-600]="selectedTab() === 'historial'"
-      [class.border-b-2]="selectedTab() === 'historial'"
-      class="pb-2 border-transparent border-b-2 transition"
+      type="button"
+      (click)="retry()"
+      class="mt-4 rounded-md bg-red-600 px-4 py-2 text-sm font-semibold text-white hover:bg-red-700"
     >
-      Historial
-    </button>
-    <button
-      (click)="selectTab('notas')"
-      [class.text-blue-600]="selectedTab() === 'notas'"
-      [class.border-b-2]="selectedTab() === 'notas'"
-      class="pb-2 border-transparent border-b-2 transition"
-    >
-      Notas
-    </button>
-    <button
-      
-    >
-      Control Conductual
-    </button>
-    <button
-    >
-      Resumen IA
+      Reintentar
     </button>
   </div>
 
-  <!-- Solo muestra contenido de historial (por instrucción) -->
-  <div *ngIf="selectedTab() === 'historial'" class="bg-white rounded-xl p-6 border border-gray-200">
-    <h2 class="text-lg font-semibold text-gray-800 mb-4">
-      Historial de Citas
-      <span class="text-xs text-gray-500 ml-2"></span>
-    </h2>
+  <!-- Contenido principal -->
+  <ng-container *ngIf="!isLoading() && !error() && patient()">
 
-    <!-- Historial vacío por ahora (rellena cuando tengas las sesiones) -->
-    <p class="text-gray-500 text-sm">No hay historial cargado</p>
-  </div>
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+
+      <div>
+        <h1 class="flex items-center gap-3 text-4xl font-semibold text-gray-900">
+          <span>{{ fullName() }}</span>
+
+          <span
+            class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold"
+            [ngClass]="isActive() ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-600'"
+          >
+            {{ statusLabel() }}
+          </span>
+        </h1>
+
+        <p
+          *ngIf="diagnosis()"
+          class="mt-2 text-sm text-gray-500"
+        >
+          {{ diagnosis() }}
+        </p>
+      </div>
+
+      <!-- Botón decorativo -->
+      <button
+        type="button"
+        aria-disabled="true"
+        class="flex cursor-default select-none items-center gap-2 border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700"
+      >
+        <i-lucide name="pencil" class="h-4 w-4 text-gray-600"></i-lucide>
+        <span>Editar Ficha</span>
+      </button>
+
+    </div>
+
+    <!-- Tarjeta datos básicos -->
+    <div class="mb-6 w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+
+      <div class="grid w-full grid-cols-1 gap-8 md:grid-cols-4">
+
+        <!-- DNI -->
+        <div class="flex min-w-0 items-center gap-4">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <i-lucide name="user" class="h-6 w-6"></i-lucide>
+          </div>
+
+          <div class="min-w-0">
+            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              DNI
+            </p>
+            <p class="truncate text-base font-semibold text-gray-900">
+              {{ dni() }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Email -->
+        <div class="flex min-w-0 items-center gap-4">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <i-lucide name="mail" class="h-6 w-6"></i-lucide>
+          </div>
+
+          <div class="min-w-0">
+            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Email
+            </p>
+            <p class="truncate text-base font-semibold text-gray-900">
+              {{ email() }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Teléfono -->
+        <div class="flex min-w-0 items-center gap-4">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <i-lucide name="phone" class="h-6 w-6"></i-lucide>
+          </div>
+
+          <div class="min-w-0">
+            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Teléfono
+            </p>
+            <p class="truncate text-base font-semibold text-gray-900">
+              {{ telephone() }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Edad -->
+        <div class="flex min-w-0 items-center gap-4">
+          <div class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-blue-100 text-blue-600">
+            <i-lucide name="calendar" class="h-6 w-6"></i-lucide>
+          </div>
+
+          <div class="min-w-0">
+            <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Edad
+            </p>
+            <p class="truncate text-base font-semibold text-gray-900">
+              {{ age() }}
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- Tabs -->
+    <nav class="mb-6 grid w-full grid-cols-4 overflow-hidden rounded-lg border border-gray-200 bg-white text-sm font-semibold text-gray-600 shadow-sm">
+
+      <button
+        type="button"
+        (click)="selectTab('historial')"
+        class="flex items-center justify-center gap-3 border-r border-gray-200 px-5 py-4 transition hover:bg-gray-50"
+        [class.bg-gray-100]="selectedTab() === 'historial'"
+        [class.text-gray-900]="selectedTab() === 'historial'"
+      >
+        <i-lucide name="calendar" class="h-5 w-5"></i-lucide>
+        <span>Historial</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="selectTab('notas')"
+        class="flex items-center justify-center gap-3 border-r border-gray-200 px-5 py-4 transition hover:bg-gray-50"
+        [class.bg-gray-100]="selectedTab() === 'notas'"
+        [class.text-gray-900]="selectedTab() === 'notas'"
+      >
+        <i-lucide name="message-square" class="h-5 w-5"></i-lucide>
+        <span>Notas</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="selectTab('controlConductual')"
+        class="flex items-center justify-center gap-3 border-r border-gray-200 px-5 py-4 transition hover:bg-gray-50"
+        [class.bg-gray-100]="selectedTab() === 'controlConductual'"
+        [class.text-gray-900]="selectedTab() === 'controlConductual'"
+      >
+        <i-lucide name="clipboard" class="h-5 w-5"></i-lucide>
+        <span>Control Conductual</span>
+      </button>
+
+      <button
+        type="button"
+        (click)="selectTab('resumenIA')"
+        class="flex items-center justify-center gap-3 px-5 py-4 transition hover:bg-gray-50"
+        [class.bg-gray-100]="selectedTab() === 'resumenIA'"
+        [class.text-gray-900]="selectedTab() === 'resumenIA'"
+      >
+        <i-lucide name="sparkles" class="h-5 w-5"></i-lucide>
+        <span>Resumen IA</span>
+      </button>
+
+    </nav>
+
+    <!-- Contenido de tabs -->
+    <section class="w-full rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
+
+      <!-- Historial -->
+      <div *ngIf="selectedTab() === 'historial'">
+        <h2 class="text-3xl font-semibold text-gray-900">
+          Historial de Citas
+        </h2>
+
+        <p class="mt-4 text-sm text-gray-500">
+          No hay historial cargado
+        </p>
+      </div>
+
+      <!-- Notas -->
+      <div *ngIf="selectedTab() === 'notas'">
+        <h2 class="text-3xl font-semibold text-gray-900">
+          Notas
+        </h2>
+
+        <p class="mt-4 text-sm text-gray-500">
+          No hay notas cargadas
+        </p>
+      </div>
+
+      <!-- Control Conductual -->
+      <div *ngIf="selectedTab() === 'controlConductual'">
+        <h2 class="text-3xl font-semibold text-gray-900">
+          Control Conductual
+        </h2>
+
+        <p class="mt-4 text-sm text-gray-500">
+          No hay información de control conductual cargada
+        </p>
+      </div>
+
+      <!-- Resumen IA -->
+      <div *ngIf="selectedTab() === 'resumenIA'">
+        <h2 class="text-3xl font-semibold text-gray-900">
+          Resumen IA
+        </h2>
+
+        <p class="mt-4 text-sm text-gray-500">
+          No hay resumen generado todavía
+        </p>
+      </div>
+
+    </section>
+
+  </ng-container>
+
 </div>
