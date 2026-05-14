@@ -1,16 +1,38 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { AppointmentService, Appointment } from '../../../../services/appointment.service';
-import { WeeklyCalendarComponent } from "../../../../shared/components/weekly-calendar/weekly-calendar.component";
+import { Appointment } from '../../../services/appointment.service';
+import { AppointmentService } from '../../../services/appointment.service';
+import { NewEditAppointment } from "../new-edit-appointment/new-edit-appointment.component";
+
+/** Cita enriquecida con posición visual dentro de la celda del calendario */
+interface CalendarEvent {
+  apt: Appointment;
+  /** 0=lun … 6=dom relativo a la semana visible */
+  dayOffset: number;
+  startHour: number;
+  startMin: number;
+  endHour: number;
+  endMin: number;
+  /** Índice de columna dentro de la celda (para citas simultáneas) */
+  colIndex: number;
+  /** Total de citas en la misma celda (hora + día) */
+  colTotal: number;
+}
+
+interface WeekDay {
+  offset: number;
+  shortName: string;
+  date: number;
+  isToday: boolean;
+}
 
 @Component({
-  selector: 'app-index-recep',
+  selector: 'app-weekly-calendar',
   standalone: true,
-  imports: [CommonModule, WeeklyCalendarComponent],
-  templateUrl: './index-recep.component.html',
-  styleUrls: ['./index-recep.component.css'],
+  imports: [CommonModule, NewEditAppointment],
+  templateUrl: './weekly-calendar.component.html',
 })
-export class IndexRecepComponent implements OnInit {
+export class WeeklyCalendarComponent implements OnInit {
   isAppointmentModalOpen = false;
   recentAppointmentMessage = '';
   currentMonth = '';
@@ -53,15 +75,32 @@ export class IndexRecepComponent implements OnInit {
     });
   }
 
-  getAppointmentsByDay(): Appointment[][] {
+  getAppointmentsByDay(): { hour: string, appointments: Appointment[] }[][] {
     const days = this.currentWeek.map((day) => day.fullDate);
     return days.map((day) => {
       const dayStr = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
-      const found = this.appointments.filter((app) => {
+      const dayAppointments = this.appointments.filter((app) => {
         const appDateStr = app.date.substring(0, 10);
         return appDateStr === dayStr;
       });
-      return found;
+
+      // Agrupar por hora
+      const grouped: Record<string, Appointment[]> = {};
+      dayAppointments.forEach((app) => {
+        const hour = app.hour.substring(0, 5); // HH:MM
+        if (!grouped[hour]) {
+          grouped[hour] = [];
+        }
+        grouped[hour].push(app);
+      });
+
+      // Ordenar por hora
+      const sortedHours = Object.keys(grouped).sort();
+
+      return sortedHours.map((hour) => ({
+        hour,
+        appointments: grouped[hour],
+      }));
     });
   }
 
@@ -70,7 +109,7 @@ export class IndexRecepComponent implements OnInit {
 
     this.appointments.forEach((appointment) => {
       const psychologist = appointment.psychologist;
-      if (!psychologist || psychologist.status !== 'active') {
+      if (!psychologist) {
         return;
       }
 
