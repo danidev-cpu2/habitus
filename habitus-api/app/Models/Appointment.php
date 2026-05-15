@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Appointment extends Model
 {
+    use HasFactory;
+
     // Definimos los atributos de esta manera parapoder utilizar
     // las funciones de create() y update()
     protected $fillable = [
