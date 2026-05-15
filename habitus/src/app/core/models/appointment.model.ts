@@ -1,5 +1,6 @@
 
-export type AppointmentStatus = 'pending' | 'held' | 'canceled';
+export type AppointmentStatus = 'pending' | 'confirmed' | 'canceled' | 'held';
+
 
 export interface Appointment {
   id: number;

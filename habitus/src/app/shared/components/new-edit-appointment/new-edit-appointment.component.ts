@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/services/user.service';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
 import { User } from '../../../core/models/user.model';
-import { AppointmentService } from '../../../services/appointment.service';
+import { AppointmentService } from '../../../core/services/appointment.service';
 
 @Component({
   selector: 'app-new-edit-appointment',
@@ -223,6 +223,7 @@ export class NewEditAppointment implements OnInit, OnChanges {
       psychologist_id: psychologistId,
       date: this.appointmentDate,
       hour: this.appointmentHour,
+      end_time: this.computeEndTime(this.appointmentHour, this.duration),
       status: this.status,
     };
 
@@ -231,10 +232,13 @@ export class NewEditAppointment implements OnInit, OnChanges {
       : this.appointmentService.create(payload);
 
     request.subscribe({
-      next: (response: { data: Appointment; message: string }) => {
+      next: (response) => {
         this.successMessage = response.message ?? 'Cita guardada correctamente.';
         this.errorMessage = '';
-        this.appointmentSaved.emit(response.data);
+        if (response.data) {
+          this.appointmentSaved.emit(response.data);
+          this.appointmentService.triggerRefresh();
+        }
 
         if (!this.isEditMode) {
           this.resetForm();
@@ -247,6 +251,14 @@ export class NewEditAppointment implements OnInit, OnChanges {
         this.successMessage = '';
       },
     });
+  }
+
+  private computeEndTime(startHour: string, durationMinutes: number): string {
+    const [h, m] = startHour.split(':').map(Number);
+    const totalMinutes = h * 60 + m + durationMinutes;
+    const endH = Math.floor(totalMinutes / 60) % 24;
+    const endM = totalMinutes % 60;
+    return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
   }
 
   private patchAppointment(appointment: Appointment): void {

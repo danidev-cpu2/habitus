@@ -33,6 +33,10 @@ const patientChildrenRoutes: Routes = [
         path: '',
         component: IndexPaxComponent,
       },
+      {
+        path: 'calendario',
+        component: Calendario,
+      },
     ],
   },
 ];
