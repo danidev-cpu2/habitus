@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Appointment } from '../../../services/appointment.service';
-import { AppointmentService } from '../../../services/appointment.service';
+import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
+import { AppointmentService } from '../../../core/services/appointment.service';
 import { NewEditAppointment } from "../new-edit-appointment/new-edit-appointment.component";
+import { AuthService } from '../../../core/services/auth.service';
+import { LucideAngularModule, Clock, CircleCheck, CircleX, BadgeCheck, LucideIconData } from 'lucide-angular';
 
 /** Cita enriquecida con posición visual dentro de la celda del calendario */
 interface CalendarEvent {
@@ -29,16 +31,47 @@ interface WeekDay {
 @Component({
   selector: 'app-weekly-calendar',
   standalone: true,
-  imports: [CommonModule, NewEditAppointment],
+  imports: [CommonModule, NewEditAppointment, LucideAngularModule],
   templateUrl: './weekly-calendar.component.html',
 })
 export class WeeklyCalendarComponent implements OnInit {
+  private authService = inject(AuthService);
+  readonly isPatient = this.authService.hasRole('patient');
+
   isAppointmentModalOpen = false;
   recentAppointmentMessage = '';
   currentMonth = '';
   currentDate = new Date();
 
   appointments: Appointment[] = [];
+
+  readonly statusIcons: Record<AppointmentStatus, LucideIconData> = {
+    pending:   Clock,
+    confirmed: CircleCheck,
+    canceled:  CircleX,
+    held:      BadgeCheck,
+  };
+
+  readonly statusIconColors: Record<AppointmentStatus, string> = {
+    pending:   'text-amber-500',
+    confirmed: 'text-emerald-500',
+    canceled:  'text-red-500',
+    held:      'text-blue-500',
+  };
+
+  readonly statusLabels: Record<AppointmentStatus, string> = {
+    pending:   'Pendiente',
+    confirmed: 'Confirmada',
+    canceled:  'Cancelada',
+    held:      'Realizada',
+  };
+
+  readonly statusBadgeClasses: Record<AppointmentStatus, string> = {
+    pending:   'bg-amber-50 text-amber-600',
+    confirmed: 'bg-emerald-50 text-emerald-600',
+    canceled:  'bg-red-50 text-red-500 line-through',
+    held:      'bg-blue-50 text-blue-600',
+  };
 
   psychologistColors = [
     { bg: 'bg-blue-100', border: 'border-blue-200', text: 'text-blue-600', dot: 'bg-blue-400' },
@@ -66,8 +99,8 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   loadAppointments(): void {
-    this.appointmentService.getAppointments().subscribe({
-      next: (appointments: any) => {
+    this.appointmentService.getAll().subscribe({
+      next: (appointments) => {
         this.appointments = appointments;
         this.cdr.detectChanges();
       },
