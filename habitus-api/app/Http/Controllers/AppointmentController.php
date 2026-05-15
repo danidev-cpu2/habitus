@@ -25,9 +25,12 @@ class AppointmentController extends Controller
                 ->where('psychologist_id', Auth::user()->id)
                 ->get();
         } else {
-            // Y si el usuario solo es admin, solo recogera sus citas.
+            // Paciente: solo citas desde hoy en adelante (sin historial pasado).
             $appointments = Appointment::with(['patient', 'psychologist'])
                 ->where('patient_id', Auth::user()->id)
+                ->whereDate('date', '>=', now()->toDateString())
+                ->orderBy('date')
+                ->orderBy('hour')
                 ->get();
         }
 

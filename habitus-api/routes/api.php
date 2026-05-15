@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', [LoginController::class, 'logout']);
     Route::apiResource('users', UserController::class);
     Route::apiResource('appointments', AppointmentController::class);
+    Route::patch('appointments/{appointment}/status', [AppointmentController::class, 'updateStatus']);
     Route::apiResource('daily-logs', DailyLogController::class);
 });
 

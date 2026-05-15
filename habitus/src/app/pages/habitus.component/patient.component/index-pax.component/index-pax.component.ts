@@ -1,6 +1,7 @@
 import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 import { AppointmentService } from '../../../../core/services/appointment.service';
 import { Appointment, AppointmentStatus } from '../../../../core/models/appointment.model';
 
@@ -54,10 +55,12 @@ export class IndexPaxComponent implements OnInit {
   }
 
   loadAll(): void {
+    const todayStr = new Date().toISOString().slice(0, 10);
     this.appointmentService.getAll().subscribe({
       next: (data) => {
         const views = data
           .filter(a => a.status !== 'canceled')
+          .filter(a => a.date.substring(0, 10) >= todayStr)
           .map(a => this.mapToView(a));
         this._all.set(views);
       },
@@ -113,6 +116,7 @@ export class IndexPaxComponent implements OnInit {
     if (!apt) return;
 
     this.isLoading.set(true);
+    this.feedbackMsg.set('');
     this.appointmentService.updateStatus(apt.id, apiStatus).subscribe({
       next: () => {
         this.isLoading.set(false);
@@ -122,10 +126,12 @@ export class IndexPaxComponent implements OnInit {
         this.feedbackMsg.set('✓ Estado actualizado correctamente.');
         this.feedbackOk.set(true);
       },
-      error: () => {
-        this.feedbackMsg.set('No se pudo actualizar la cita. Inténtalo de nuevo.');
+      error: (err: HttpErrorResponse) => {
+        const serverMsg = err.error?.message ?? err.error?.error ?? null;
+        this.feedbackMsg.set(serverMsg ?? `No se pudo actualizar (HTTP ${err.status}). Inténtalo de nuevo.`);
         this.feedbackOk.set(false);
         this.isLoading.set(false);
+        console.error('[setStatus] PATCH error:', err.status, err.error);
       },
     });
   }
