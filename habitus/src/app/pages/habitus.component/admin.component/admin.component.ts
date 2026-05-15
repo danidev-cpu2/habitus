@@ -155,4 +155,3 @@ export class AdminComponent implements OnInit {
     return full || p.email || 'Sin nombre';
   }
 }
-
