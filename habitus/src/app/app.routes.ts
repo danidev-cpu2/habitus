@@ -12,7 +12,7 @@ import { PsychologistComponent } from './pages/habitus.component/psychologist.co
 import { ViewPatientPsychologistComponent } from './pages/habitus.component/psychologist.component/view-patient-psychologist.component/view-patient-psychologist.component';
 
 import { IndexPsychologistComponent } from './pages/habitus.component/psychologist.component/index-psychologist.component/index-psychologist.component';
-
+import { PsychoCalendarComponent } from './pages/habitus.component/psychologist.component/psycho-calendar.component/psycho-calendar.component';
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
@@ -83,6 +83,10 @@ const psychologistChildrenRoutes: Routes = [
         path: 'pacientes',
         component: UserListPsychologistComponent,
       },
+      {
+        path: 'calendario',
+        component: PsychoCalendarComponent,
+      }
     ],
   },
 ];
