@@ -72,12 +72,12 @@ const psychologistChildrenRoutes: Routes = [
         component: IndexPsychologistComponent,
       },
       {
-        path: 'pacientes',
-        component: UserListPsychologistComponent,
-      },
-      {
         path: 'pacientes/:id',
         component: ViewPatientPsychologistComponent,
+      },
+      {
+        path: 'pacientes',
+        component: UserListPsychologistComponent,
       },
     ],
   },

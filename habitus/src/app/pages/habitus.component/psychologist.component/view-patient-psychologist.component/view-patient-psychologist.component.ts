@@ -6,6 +6,8 @@ import { LucideAngularModule } from 'lucide-angular';
 import { User } from '../../../../core/models/user.model';
 import { UserService } from '../../../../core/services/user.service';
 import { AuthService } from '../../../../core/services/auth.service';
+import { Appointment, AppointmentStatus } from '../../../../services/appointment.service';
+import { AppointmentService } from '../../../../services/appointment.service';
 
 type PatientTab = 'historial' | 'notas' | 'controlConductual' | 'resumenIA';
 
@@ -27,6 +29,12 @@ export class ViewPatientPsychologistComponent implements OnInit {
   private loadedKey = '';
 
   patient = computed(() => this.patientData());
+
+  // Citas del paciente
+  appointments: Appointment[] = [];
+  isAppointmentModalOpen = false;
+  isEditMode = false;
+  appointmentToEdit: Appointment | null = null;
 
   psychologist = computed(() => this.authService.currentUser());
 
@@ -101,6 +109,7 @@ export class ViewPatientPsychologistComponent implements OnInit {
   constructor(
     private userService: UserService,
     private authService: AuthService,
+    private appointmentService: AppointmentService,
     private route: ActivatedRoute,
   ) {
     /**
@@ -188,6 +197,8 @@ export class ViewPatientPsychologistComponent implements OnInit {
         }
 
         this.patientData.set(patient);
+          // Cargar citas del paciente (desde API)
+          this.loadAppointmentsForPatient(Number(patient.id));
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -197,6 +208,59 @@ export class ViewPatientPsychologistComponent implements OnInit {
         this.isLoading.set(false);
       },
     });
+  }
+
+  private loadAppointmentsForPatient(patientId: number): void {
+    this.appointmentService.getAppointments().subscribe({
+      next: (list: Appointment[]) => {
+        console.log('Citas totales recibidas:', list?.length ?? 0, list?.slice?.(0, 5));
+        this.appointments = (list ?? []).filter((a) => {
+          // Acepta patient_id o relación poblada
+          return Number(a.patient_id) === Number(patientId) || Number(a.patient?.id) === Number(patientId);
+        });
+        // ordenar por fecha ascendente y hora
+        this.appointments.sort((a, b) => (a.date === b.date ? a.hour.localeCompare(b.hour) : a.date.localeCompare(b.date)));
+        console.log('Citas filtradas para paciente', patientId, ':', this.appointments.length);
+        // Adjuntar las citas al objeto paciente para acceso desde template: patient().appointments
+        const p = this.patientData();
+        if (p) {
+          const updated = { ...(p as any), appointments: this.appointments } as any;
+          this.patientData.set(updated);
+          console.log('Patient object updated with appointments:', (this.patientData() as any)?.appointments?.length ?? 0);
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando citas:', err);
+        this.appointments = [];
+      },
+    });
+  }
+
+  appointmentInitials(appointment: Appointment): string {
+    const first = appointment.patient?.name?.trim()?.[0] ?? '';
+    const second = appointment.patient?.surname?.trim()?.[0] ?? '';
+    return `${first}${second}`.toUpperCase() || 'P';
+  }
+
+  statusBadgeClass(status: AppointmentStatus): string {
+    switch (status) {
+      case 'held':
+        return 'bg-emerald-50 text-emerald-500';
+      case 'canceled':
+        return 'bg-red-50 text-red-500';
+      default:
+        return 'bg-amber-50 text-amber-500';
+    }
+  }
+
+  appointmentStatusLabel(status: AppointmentStatus): string {
+    return status === 'held' ? 'confirmada' : status === 'canceled' ? 'cancelada' : 'pendiente';
+  }
+
+  openEditModal(appointment: Appointment) {
+    this.appointmentToEdit = appointment;
+    this.isEditMode = true;
+    this.isAppointmentModalOpen = true;
   }
 
   selectTab(tab: PatientTab): void {

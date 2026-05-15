@@ -181,9 +181,4 @@ export class IndexPsychologistComponent implements OnInit {
       month: 'short',
     }).format(date)}`;
   }
-
-  private navigateToPatients(): void {
-    this.router.navigate(['/psicologo/pacientes']);
-  }
-  }
 }

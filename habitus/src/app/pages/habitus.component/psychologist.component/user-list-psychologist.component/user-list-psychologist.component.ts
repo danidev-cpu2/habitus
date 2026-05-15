@@ -1,7 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
 import { User } from '../../../../core/models/user.model';
 import { UserService } from '../../../../core/services/user.service';
@@ -10,7 +10,7 @@ import { AuthService } from '../../../../core/services/auth.service';
 @Component({
   selector: 'app-user-list-psychologist',
   standalone: true,
-  imports: [CommonModule, FormsModule, LucideAngularModule],
+  imports: [CommonModule, FormsModule, LucideAngularModule, RouterModule],
   templateUrl: './user-list-psychologist.component.html',
   styleUrl: './user-list-psychologist.component.css',
 })
