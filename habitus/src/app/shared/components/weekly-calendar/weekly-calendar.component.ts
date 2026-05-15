@@ -29,6 +29,11 @@ interface WeekDay {
   isToday: boolean;
 }
 
+interface AppointmentHourGroup {
+  hour: string;
+  appointments: Appointment[];
+}
+
 @Component({
   selector: 'app-weekly-calendar',
   standalone: true,
@@ -117,32 +122,29 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
     });
   }
 
-  getAppointmentsByDay(): { hour: string, appointments: Appointment[] }[][] {
+  getAppointmentsByDay(): AppointmentHourGroup[][] {
     const days = this.currentWeek.map((day) => day.fullDate);
     return days.map((day) => {
       const dayStr = `${day.getFullYear()}-${String(day.getMonth() + 1).padStart(2, '0')}-${String(day.getDate()).padStart(2, '0')}`;
-      const dayAppointments = this.appointments.filter((app) => {
-        const appDateStr = app.date.substring(0, 10);
-        return appDateStr === dayStr;
-      });
+      const dayAppointments = this.appointments
+        .filter((app) => app.date.substring(0, 10) === dayStr)
+        .sort((a, b) => a.hour.localeCompare(b.hour));
 
-      // Agrupar por hora
       const grouped: Record<string, Appointment[]> = {};
       dayAppointments.forEach((app) => {
-        const hour = app.hour.substring(0, 5); // HH:MM
+        const hour = app.hour.substring(0, 5);
         if (!grouped[hour]) {
           grouped[hour] = [];
         }
         grouped[hour].push(app);
       });
 
-      // Ordenar por hora
-      const sortedHours = Object.keys(grouped).sort();
-
-      return sortedHours.map((hour) => ({
-        hour,
-        appointments: grouped[hour],
-      }));
+      return Object.keys(grouped)
+        .sort()
+        .map((hour) => ({
+          hour,
+          appointments: grouped[hour],
+        }));
     });
   }
 

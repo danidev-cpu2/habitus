@@ -23,7 +23,12 @@ export interface AppointmentView {
 
 @Component({
   selector: 'app-index-pax',
+<<<<<<< HEAD
   imports: [CommonModule],
+=======
+  standalone: true,
+  imports: [],
+>>>>>>> origin
   templateUrl: './index-pax.component.html',
 })
 export class IndexPaxComponent implements OnInit {
