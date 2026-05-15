@@ -77,7 +77,7 @@ const psychologistChildrenRoutes: Routes = [
       },
       {
         path: 'pacientes/:id',
-        component: UserListPsychologistComponent,
+        component: ViewPatientPsychologistComponent,
       },
     ],
   },
