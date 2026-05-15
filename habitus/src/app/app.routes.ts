@@ -8,14 +8,19 @@ import { AddUsers } from './pages/habitus.component/admin.component/add-users/ad
 import { PatientComponent } from './pages/habitus.component/patient.component/patient.component';
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
-import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
+
 import { ViewPatientPsychologistComponent } from './pages/habitus.component/psychologist.component/view-patient-psychologist.component/view-patient-psychologist.component';
+
+import { IndexPsychologistComponent } from './pages/habitus.component/psychologist.component/index-psychologist.component/index-psychologist.component';
+
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
 import { TransferPaxComponent } from './pages/habitus.component/receptionist.component/transfer-pax.component/transfer-pax.component';
+import { Calendario } from './pages/habitus.component/admin.component/calendario/calendario';
 import { authGuard, noAuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
 
 const patientChildrenRoutes: Routes = [
   {
@@ -62,11 +67,22 @@ const psychologistChildrenRoutes: Routes = [
     canActivate: [roleGuard],
     data: { roles: ['psychologist'] },
     children: [
-      { path: 'pacientes', component: UserListPsychologistComponent },
-      {path: 'pacientes/:id', component: ViewPatientPsychologistComponent }
+      {
+        path: '',
+        component: IndexPsychologistComponent,
+      },
+      {
+        path: 'pacientes',
+        component: UserListPsychologistComponent,
+      },
+      {
+        path: 'pacientes/:id',
+        component: UserListPsychologistComponent,
+      },
     ],
   },
 ];
+
 export const routes: Routes = [
   {
     path: '',
@@ -110,9 +126,15 @@ export const routes: Routes = [
         path: 'usuarios/nuevo',
         component: AddUsers,
         canActivate: [roleGuard],
-        data: { roles: ['admin'] },
+        data: { roles: ['admin'] }
       },
-    ],
+      {
+        path: 'calendario',
+        component: Calendario,
+        canActivate: [roleGuard],
+        data: { roles: ['admin'] }
+      }
+    ]
   },
   {
     path: 'patient',
@@ -130,41 +152,19 @@ export const routes: Routes = [
     path: 'psychologist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: PsychologistComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['psychologist'] },
-        children: [
-          {
-            path: 'patients',
-            component: UserListPsychologistComponent,
-          },
-          {
-            path: 'patients/:id',
-            component: ViewPatientPsychologistComponent,
-          },
-        ],
-      },
-    ],
+    children: [...psychologistChildrenRoutes],
   },
   {
     path: 'psicologo',
-    redirectTo: 'psychologist',
-    pathMatch: 'full',
+    component: HabitusComponent,
+    canActivate: [authGuard],
+    children: [...psychologistChildrenRoutes],
   },
   {
     path: 'receptionist',
     component: HabitusComponent,
     canActivate: [authGuard],
     children: [...receptionistChildrenRoutes],
-  },
-  {
-  path: 'psicologo',
-  component: HabitusComponent,
-  canActivate: [authGuard],
-  children: [...psychologistChildrenRoutes],
   },
   {
     path: 'recepcion',

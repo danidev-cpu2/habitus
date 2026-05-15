@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LucideAngularModule } from 'lucide-angular';
-
 import { User } from '../../../../core/models/user.model';
 import { UserService } from '../../../../core/services/user.service';
 import { AuthService } from '../../../../core/services/auth.service';
@@ -131,9 +130,7 @@ export class UserListPsychologistComponent implements OnInit {
       'bg-teal-100 text-teal-700',
       'bg-indigo-100 text-indigo-700',
     ];
-
     const index = (name?.charCodeAt(0) ?? 0) % colors.length;
-
     return colors[index];
   }
 
