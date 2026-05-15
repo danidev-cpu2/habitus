@@ -139,9 +139,24 @@ export class WeeklyCalendarComponent implements OnInit {
   }
 
   handleAppointmentCreated(appointment: any): void {
-    this.recentAppointmentMessage = `Cita creada para ${appointment.date} a las ${appointment.hour}`;
+    const formattedDate = this.formatAppointmentDate(appointment.date);
+    this.recentAppointmentMessage = `Cita creada para ${formattedDate} a las ${appointment.hour}`;
     this.isAppointmentModalOpen = false;
     this.loadAppointments(); // recargar citas
+  }
+
+  formatAppointmentDate(dateString: string): string {
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
+    }
+
+    const formatted = new Intl.DateTimeFormat('es-ES', {
+      day: 'numeric',
+      month: 'long',
+    }).format(date);
+
+    return formatted.replace(/\b\w/, (char) => char.toUpperCase());
   }
 
   generateCurrentWeek(baseDate: Date): void {
