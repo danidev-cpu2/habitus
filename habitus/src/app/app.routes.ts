@@ -8,7 +8,7 @@ import { AddUsers } from './pages/habitus.component/admin.component/add-users/ad
 import { PatientComponent } from './pages/habitus.component/patient.component/patient.component';
 import { IndexPaxComponent } from './pages/habitus.component/patient.component/index-pax.component/index-pax.component';
 import { PsychologistComponent } from './pages/habitus.component/psychologist.component/psychologist.component';
-import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
+import { IndexPsychologistComponent } from './pages/habitus.component/psychologist.component/index-psychologist.component/index-psychologist.component';
 import { ReceptionistComponent } from './pages/habitus.component/receptionist.component/receptionist.component';
 import { IndexRecepComponent } from './pages/habitus.component/receptionist.component/index-recep.component/index-recep.component';
 import { CreatePaxComponent } from './pages/habitus.component/receptionist.component/create-pax.component/create-pax.component';
@@ -16,6 +16,7 @@ import { TransferPaxComponent } from './pages/habitus.component/receptionist.com
 import { Calendario } from './pages/habitus.component/admin.component/calendario/calendario';
 import { authGuard, noAuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
 
 const patientChildrenRoutes: Routes = [
   {
@@ -58,6 +59,7 @@ const receptionistChildrenRoutes: Routes = [
     ],
   },
 ];
+
 const psychologistChildrenRoutes: Routes = [
   {
     path: '',
@@ -65,7 +67,18 @@ const psychologistChildrenRoutes: Routes = [
     canActivate: [roleGuard],
     data: { roles: ['psychologist'] },
     children: [
-      { path: 'pacientes', component: UserListPsychologistComponent },
+      {
+        path: '',
+        component: IndexPsychologistComponent,
+      },
+      {
+        path: 'pacientes',
+        component: UserListPsychologistComponent,
+      },
+      {
+        path: 'pacientes/:id',
+        component: UserListPsychologistComponent,
+      },
     ],
   },
 ];
@@ -88,12 +101,6 @@ export const routes: Routes = [
       {
         path: '',
         component: AdminComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['admin'] },
-      },
-      {
-        path: 'usuarios/:id/editar',
-        component: AddUsers,
         canActivate: [roleGuard],
         data: { roles: ['admin'] },
       },
@@ -139,20 +146,13 @@ export const routes: Routes = [
     path: 'psychologist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: PsychologistComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['psychologist'] },
-        children: [
-          {
-            path: 'patients',
-            component: UserListPsychologistComponent,
-          },
-        ],
-      },
-    ],
+    children: [...psychologistChildrenRoutes],
+  },
+  {
+    path: 'psicologo',
+    component: HabitusComponent,
+    canActivate: [authGuard],
+    children: [...psychologistChildrenRoutes],
   },
   {
     path: 'receptionist',
@@ -160,13 +160,6 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [...receptionistChildrenRoutes],
   },
-  {
-  path: 'psicologo',
-  component: HabitusComponent,
-  canActivate: [authGuard],
-  children: [...psychologistChildrenRoutes],
-  },
-
   {
     path: 'recepcion',
     component: HabitusComponent,
