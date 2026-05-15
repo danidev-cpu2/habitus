@@ -1,148 +1,156 @@
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 1 — PRÓXIMAS CITAS (solo pendientes)
+════════════════════════════════════════════════ -->
 <div class="w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
 
-  <!-- Header -->
-  <div class="mb-5 flex items-center justify-between">
+  <div class="mb-4 flex items-center justify-between">
     <div class="flex items-center gap-2">
       <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-100 text-blue-600">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z"/>
         </svg>
       </div>
-      <h2 class="text-lg font-semibold text-slate-800">Próxima Cita</h2>
+      <h2 class="text-lg font-semibold text-slate-800">Citas por Confirmar</h2>
     </div>
-
-    @if (nextAppointment()) {
-      <span
-        class="rounded-full px-3 py-1 text-xs font-medium transition-all duration-300"
-        [ngClass]="badge().classes"
-      >
-        {{ badge().text }}
-      </span>
-    }
+    <span class="rounded-full bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-600">
+      {{ pending().length }} pendiente{{ pending().length !== 1 ? 's' : '' }}
+    </span>
   </div>
 
-  @if (nextAppointment(); as apt) {
-
-    <!-- Aviso de cita pasada -->
-    @if (isPast()) {
-      <div class="mb-4 flex items-center gap-2 rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-600">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-        </svg>
-        Esta cita ya pasó. Confirma si acudiste o cancélala.
-      </div>
-    }
-
-    <!-- Mensaje de sincronización tras confirmar -->
-    @if (syncMessage()) {
-      <div class="mb-4 flex items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-3 text-sm text-emerald-700">
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-        </svg>
-        {{ syncMessage() }}
-      </div>
-    }
-
-    <!-- Card de cita -->
+  <!-- Feedback global -->
+  @if (feedbackMsg()) {
     <div
-      class="rounded-xl border p-5 transition-all duration-300"
-      [ngClass]="apt.status === 'cancelada'
-        ? 'border-red-100 bg-red-50 opacity-60'
-        : apt.status === 'confirmada'
-          ? 'border-emerald-100 bg-emerald-50'
-          : isPast()
-            ? 'border-red-100 bg-red-50/40'
-            : 'border-slate-200 bg-slate-50'"
+      class="mb-4 flex items-center gap-2 rounded-xl px-4 py-3 text-sm"
+      [ngClass]="feedbackOk() ? 'bg-emerald-50 border border-emerald-100 text-emerald-700' : 'bg-red-50 border border-red-100 text-red-600'"
     >
-      <div class="mb-4 flex items-start justify-between gap-4">
-        <div>
-          <h3 class="text-lg font-semibold text-slate-800">{{ apt.dayLabel }}</h3>
-          <div class="mt-2 flex items-center gap-2 text-sm text-slate-500">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
-            </svg>
-            <span>{{ apt.timeRange }}</span>
-          </div>
-        </div>
-        <span class="rounded-full bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
-          {{ apt.type }}
-        </span>
-      </div>
-
-      <div class="space-y-3 border-t border-slate-200 pt-4">
-        <div class="flex items-start gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="mt-0.5 h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-          <div>
-            <p class="text-sm font-medium text-slate-700">{{ apt.doctorName }}</p>
-            <p class="text-sm text-slate-500">{{ apt.specialty }}</p>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/>
-          </svg>
-          <span class="text-sm text-slate-600">{{ apt.location }}</span>
-        </div>
-      </div>
+      {{ feedbackMsg() }}
     </div>
+  }
 
-    <!-- Actions -->
-    <div class="mt-5 flex gap-3">
-      <button
-        (click)="goToCalendar()"
-        class="flex-1 rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600"
-      >
-        Ver Calendario
-      </button>
-
-      @if (apt.status === 'pendiente') {
-        <button
-          (click)="openModal()"
-          class="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
+  @if (pending().length > 0) {
+    <div class="space-y-3">
+      @for (apt of pending(); track apt.id) {
+        <div
+          class="rounded-xl border p-4"
+          [ngClass]="isPast(apt) ? 'border-red-100 bg-red-50/40' : 'border-slate-200 bg-slate-50'"
         >
-          Gestionar
-        </button>
+          @if (isPast(apt)) {
+            <p class="mb-2 text-xs text-red-500">⚠ Esta cita ya pasó. Confirma si acudiste o cancélala.</p>
+          }
+          <div class="flex items-center justify-between gap-3">
+            <div class="min-w-0 flex-1">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-sm font-semibold text-slate-800">{{ apt.dayLabel }}</span>
+                <span class="rounded-full px-2 py-0.5 text-xs font-medium" [ngClass]="dayBadge(apt).classes">
+                  {{ dayBadge(apt).text }}
+                </span>
+              </div>
+              <p class="mt-1 text-xs text-slate-500">{{ apt.timeRange }} · {{ apt.doctorName }}</p>
+            </div>
+            <button
+              (click)="openModal(apt)"
+              class="shrink-0 rounded-lg border border-slate-300 bg-white px-3 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-slate-100"
+            >
+              Gestionar
+            </button>
+          </div>
+        </div>
+      }
+    </div>
+  } @else {
+    <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 py-8 text-center">
+      <p class="text-sm font-medium text-slate-500">No tienes citas pendientes</p>
+      <p class="mt-1 text-xs text-slate-400">Contacta con recepción para agendar una cita</p>
+    </div>
+  }
+
+  <button
+    (click)="goToCalendar()"
+    class="mt-4 w-full rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600"
+  >
+    Ver Calendario Completo
+  </button>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════
+     SECCIÓN 2 — MI AGENDA (todas, no canceladas)
+════════════════════════════════════════════════ -->
+<div class="mt-4 w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+
+  <div class="mb-4 flex items-center gap-2">
+    <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-100 text-violet-600">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
+      </svg>
+    </div>
+    <h2 class="text-lg font-semibold text-slate-800">Mi Agenda</h2>
+  </div>
+
+  @if (agenda().length > 0) {
+
+    <div class="overflow-hidden rounded-xl border border-slate-200">
+      @for (apt of agenda(); track apt.id; let last = $last) {
+        <div
+          class="flex items-center gap-4 px-4 py-3 transition hover:bg-slate-50"
+          [ngClass]="last ? '' : 'border-b border-slate-100'"
+        >
+          <!-- Fecha compacta -->
+          <div class="flex w-14 shrink-0 flex-col items-center rounded-lg bg-slate-100 py-2 text-center">
+            <span class="text-[10px] font-medium uppercase text-slate-400">
+              {{ apt.shortDate.split(' ')[1] ?? '' }}
+            </span>
+            <span class="text-lg font-bold leading-tight text-slate-700">
+              {{ apt.shortDate.split(' ')[0] }}
+            </span>
+          </div>
+
+          <!-- Info -->
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-slate-800">{{ apt.doctorName }}</p>
+            <p class="mt-0.5 text-xs text-slate-500">{{ apt.timeRange }}</p>
+          </div>
+
+          <!-- Badge estado -->
+          <span
+            class="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-medium"
+            [ngClass]="statusCfg[apt.status].badge"
+          >
+            {{ statusCfg[apt.status].label }}
+          </span>
+
+          <!-- Botón gestionar -->
+          <button
+            (click)="openModal(apt)"
+            class="shrink-0 rounded-lg border border-slate-200 bg-white p-1.5 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+            title="Gestionar cita"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+            </svg>
+          </button>
+        </div>
       }
     </div>
 
   } @else {
-
-    <!-- Sin cita -->
-    <div class="flex flex-col items-center justify-center rounded-xl border border-dashed border-slate-200 bg-slate-50 py-10 text-center">
-      <svg xmlns="http://www.w3.org/2000/svg" class="mb-3 h-10 w-10 text-slate-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10m-11 9h12a2 2 0 002-2V7a2 2 0 00-2-2H6a2 2 0 00-2 2v11a2 2 0 002 2z"/>
-      </svg>
-      <p class="text-sm font-medium text-slate-500">No tienes citas próximas</p>
-      <p class="mt-1 text-xs text-slate-400">Contacta con recepción para agendar una cita</p>
-    </div>
-
-    <div class="mt-5">
-      <button
-        (click)="goToCalendar()"
-        class="w-full rounded-lg bg-blue-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-blue-600"
-      >
-        Ver Calendario
-      </button>
-    </div>
+    <p class="py-6 text-center text-sm text-slate-400">No hay citas registradas</p>
   }
 </div>
 
-<!-- Modal gestionar -->
-@if (isModalOpen()) {
-  <div
-    class="fixed inset-0 z-50 flex items-center justify-center"
-    (click)="closeModal()"
-  >
+
+<!-- ═══════════════════════════════════
+     MODAL — Gestionar cita
+════════════════════════════════════ -->
+@if (isModalOpen() && selectedApt(); as apt) {
+  <div class="fixed inset-0 z-50 flex items-center justify-center" (click)="closeModal()">
     <div class="absolute inset-0 bg-black/40 backdrop-blur-sm"></div>
 
     <div
       class="relative z-10 w-full max-w-sm rounded-2xl bg-white p-8 shadow-xl"
       (click)="$event.stopPropagation()"
     >
+      <!-- Icono -->
       <div class="mb-5 flex justify-center">
         <div class="flex h-14 w-14 items-center justify-center rounded-full bg-blue-50">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-7 w-7 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -151,30 +159,82 @@
         </div>
       </div>
 
-      <h2 class="mb-2 text-center text-xl font-bold text-slate-800">¿Acudiste a la cita?</h2>
+      <h2 class="mb-1 text-center text-xl font-bold text-slate-800">Gestionar cita</h2>
+      <p class="mb-1 text-center text-sm font-medium text-slate-700">{{ apt.dayLabel }}</p>
+      <p class="mb-5 text-center text-sm text-slate-500">{{ apt.timeRange }} · {{ apt.doctorName }}</p>
 
-      @if (nextAppointment(); as apt) {
-        <p class="mb-6 text-center text-sm text-slate-500">
-          {{ apt.dayLabel }} · {{ apt.timeRange }}<br/>
-          {{ apt.doctorName }}
-        </p>
+      <!-- Badge estado actual -->
+      <div class="mb-5 flex justify-center">
+        <span class="rounded-full px-3 py-1 text-xs font-medium" [ngClass]="statusCfg[apt.status].badge">
+          Estado actual: {{ statusCfg[apt.status].label }}
+        </span>
+      </div>
+
+      <!-- Error dentro del modal -->
+      @if (feedbackMsg() && !feedbackOk()) {
+        <div class="mb-4 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-xs text-center text-red-600">
+          {{ feedbackMsg() }}
+        </div>
       }
 
       <div class="flex flex-col gap-3">
-        <button
-          (click)="confirmAppointment()"
-          [disabled]="isLoading()"
-          class="flex-1 rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-600 disabled:opacity-50"
-        >
-          Confirmar cita
-        </button>
+
+        <!-- Pendiente → puede confirmar o cancelar -->
+        @if (apt.status === 'pendiente') {
+          <button
+            (click)="setStatus('confirmed')"
+            [disabled]="isLoading()"
+            class="rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-600 disabled:opacity-50"
+          >
+            {{ isLoading() ? 'Guardando...' : 'Sí, acudí a la cita' }}
+          </button>
+          <button
+            (click)="setStatus('canceled')"
+            [disabled]="isLoading()"
+            class="rounded-xl border-2 border-red-300 bg-slate-100 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-50 disabled:opacity-50"
+          >
+            {{ isLoading() ? 'Guardando...' : 'No pude asistir, cancelar' }}
+          </button>
+        }
+
+        <!-- Confirmada → puede revertir a pendiente o cancelar -->
+        @if (apt.status === 'confirmada') {
+          <button
+            (click)="setStatus('pending')"
+            [disabled]="isLoading()"
+            class="rounded-lg bg-amber-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-amber-600 disabled:opacity-50"
+          >
+            {{ isLoading() ? 'Guardando...' : 'Revertir a pendiente' }}
+          </button>
+          <button
+            (click)="setStatus('canceled')"
+            [disabled]="isLoading()"
+            class="rounded-xl border-2 border-red-300 bg-slate-100 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-50 disabled:opacity-50"
+          >
+            {{ isLoading() ? 'Guardando...' : 'Cancelar cita' }}
+          </button>
+        }
+
+        <!-- Realizada → solo info + cancelar -->
+        @if (apt.status === 'realizada') {
+          <p class="rounded-lg bg-blue-50 px-4 py-3 text-center text-sm text-blue-600">
+            Esta cita fue marcada como realizada.
+          </p>
+          <button
+            (click)="setStatus('canceled')"
+            [disabled]="isLoading()"
+            class="rounded-xl border-2 border-red-300 bg-slate-100 py-2.5 text-sm font-semibold text-red-500 transition hover:bg-red-50 disabled:opacity-50"
+          >
+            {{ isLoading() ? 'Guardando...' : 'Cancelar cita' }}
+          </button>
+        }
 
         <button
-          (click)="cancelAppointment()"
+          (click)="closeModal()"
           [disabled]="isLoading()"
-          class="w-full rounded-xl border-2 border-red-300 bg-slate-100 py-3 text-sm font-semibold text-red-500 transition hover:bg-red-50 disabled:opacity-50"
+          class="py-2 text-xs text-slate-400 transition hover:text-slate-600 disabled:opacity-50"
         >
-          {{ isLoading() ? 'Guardando...' : 'Cancelar cita' }}
+          Cerrar
         </button>
       </div>
     </div>

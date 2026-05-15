@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { Appointment, AppointmentStatus, CreateAppointmentDto, UpdateAppointmentDto } from '../models/appointment.model';
 import { ApiResponse } from '../models/auth.model';
@@ -18,6 +18,14 @@ export interface AppointmentFilters {
 @Injectable({ providedIn: 'root' })
 export class AppointmentService {
   private readonly apiUrl = `${environment.apiUrl}/appointments`;
+
+  /** Emite cuando cualquier cita es creada, actualizada o cancelada. */
+  private readonly refreshSubject = new Subject<void>();
+  readonly refresh$ = this.refreshSubject.asObservable();
+
+  triggerRefresh(): void {
+    this.refreshSubject.next();
+  }
 
   constructor(private http: HttpClient) {}
 

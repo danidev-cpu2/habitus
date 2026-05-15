@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { NewEditAppointment } from "../new-edit-appointment/new-edit-appointment.component";
@@ -39,7 +40,7 @@ interface AppointmentHourGroup {
   imports: [CommonModule, NewEditAppointment, LucideAngularModule],
   templateUrl: './weekly-calendar.component.html',
 })
-export class WeeklyCalendarComponent implements OnInit {
+export class WeeklyCalendarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   readonly isPatient = this.authService.hasRole('patient');
 
@@ -94,13 +95,21 @@ export class WeeklyCalendarComponent implements OnInit {
     isToday: boolean;
   }[] = [];
 
+  private refreshSub!: Subscription;
+
   constructor(
     private appointmentService: AppointmentService,
     private cdr: ChangeDetectorRef
   ) { }
+
   ngOnInit(): void {
     this.generateCurrentWeek(this.currentDate);
     this.loadAppointments();
+    this.refreshSub = this.appointmentService.refresh$.subscribe(() => this.loadAppointments());
+  }
+
+  ngOnDestroy(): void {
+    this.refreshSub?.unsubscribe();
   }
 
   loadAppointments(): void {
