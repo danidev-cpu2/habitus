@@ -126,8 +126,8 @@
                   }
 
                   <div class="flex items-center gap-3 mt-2 flex-wrap">
-
-
+                    
+                   
                     @if (user.patient_profile?.birth_date) {
                       <span class="inline-flex items-center gap-1 text-[11px] text-slate-400">
                         <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
@@ -139,18 +139,19 @@
                 </div>
               </div>
 
-
+              
               <div class="flex items-center gap-3 shrink-0">
-
-                <button
-                  (click)="navigateToPatient(user)"
+                
+                <a
+                  [routerLink]="['/psicologo/pacientes', user.id]"
+                  role="button"
                   class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold text-blue-600 bg-blue-50 hover:bg-blue-100 transition"
                 >
                   <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                     <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>
                   </svg>
                   Ver Ficha
-                </button>
+                </a>
               </div>
 
             </div>

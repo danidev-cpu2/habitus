@@ -9,7 +9,7 @@ import { AppointmentService, Appointment } from '../../../../services/appointmen
 @Component({
   selector: 'app-index-psychologist',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule,],
   templateUrl: './index-psychologist.component.html',
   styleUrl: './index-psychologist.component.css',
 })
@@ -182,4 +182,3 @@ export class IndexPsychologistComponent implements OnInit {
     }).format(date)}`;
   }
 }
-
