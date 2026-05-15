@@ -24,7 +24,7 @@ class UpdateAppointmentRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'status' => 'required|in:pending,canceled,held',
+            'status' => 'required|in:pending,confirmed,canceled,held',
         ];
     }
 
@@ -32,7 +32,7 @@ class UpdateAppointmentRequest extends FormRequest
     {
         return [
             'status.required' => 'El estado es obligatorio.',
-            'status.in'       => 'El estado debe ser: pending, canceled o held.',
+            'status.in'       => 'El estado debe ser: pending, confirmed, canceled o held.',
         ];
     }
 }
