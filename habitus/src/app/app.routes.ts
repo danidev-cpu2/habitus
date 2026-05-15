@@ -16,6 +16,7 @@ import { TransferPaxComponent } from './pages/habitus.component/receptionist.com
 import { Calendario } from './pages/habitus.component/admin.component/calendario/calendario';
 import { authGuard, noAuthGuard } from './core/guards/auth.guard';
 import { roleGuard } from './core/guards/role.guard';
+import { UserListPsychologistComponent } from './pages/habitus.component/psychologist.component/user-list-psychologist.component/user-list-psychologist.component';
 
 const patientChildrenRoutes: Routes = [
   {
@@ -66,6 +67,14 @@ const psychologistChildrenRoutes: Routes = [
         path: '',
         component: IndexPsychologistComponent,
       },
+      {
+        path: 'pacientes',
+        component: UserListPsychologistComponent,
+      },
+      {
+        path: 'pacientes/:id',
+        component: UserListPsychologistComponent,
+      },
     ],
   },
 ];
@@ -88,12 +97,6 @@ export const routes: Routes = [
       {
         path: '',
         component: AdminComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['admin'] },
-      },
-      {
-        path: 'usuarios/:id/editar',
-        component: AddUsers,
         canActivate: [roleGuard],
         data: { roles: ['admin'] },
       },
@@ -139,31 +142,19 @@ export const routes: Routes = [
     path: 'psychologist',
     component: HabitusComponent,
     canActivate: [authGuard],
-    children: [
-      {
-        path: '',
-        component: PsychologistComponent,
-        canActivate: [roleGuard],
-        data: { roles: ['psychologist'] },
-        children: [
-          {
-            path: '',
-            component: IndexPsychologistComponent,
-          },
-        ],
-      }
-    ]
+    children: [...psychologistChildrenRoutes],
+  },
+  {
+    path: 'psicologo',
+    component: HabitusComponent,
+    canActivate: [authGuard],
+    children: [...psychologistChildrenRoutes],
   },
   {
     path: 'receptionist',
     component: HabitusComponent,
     canActivate: [authGuard],
     children: [...receptionistChildrenRoutes],
-  },
-  {
-    path: 'psicologo',
-    redirectTo: 'psychologist',
-    pathMatch: 'full',
   },
   {
     path: 'recepcion',
