@@ -1,136 +1,57 @@
-<div class="w-full rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-  <!-- Header -->
-  <div class="mb-6 flex items-start justify-between gap-4">
-    <div>
-      <h2 class="text-2xl font-bold text-slate-800">Calendario de Citas</h2>
+<div class="overflow-hidden rounded-2xl border border-slate-200">
 
-      <p class="mt-1 text-sm text-slate-500">Gestiona y reprograma las citas</p>
+  <!-- Month Header (igual que antes) -->
+  <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
+    <h3 class="text-lg font-semibold capitalize text-slate-700">{{ currentMonth }}</h3>
+    <div class="flex items-center gap-2">
+      <button type="button" (click)="previousWeek()"
+        class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100">←</button>
+      <button type="button" (click)="goToToday()"
+        class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100">Hoy</button>
+      <button type="button" (click)="nextWeek()"
+        class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100">→</button>
     </div>
-
-    <button
-      *ngIf="!isPatient"
-      type="button"
-      (click)="isAppointmentModalOpen = true"
-      class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
-    >
-      + Nueva Cita
-    </button>
   </div>
 
-  <div
-    *ngIf="recentAppointmentMessage"
-    class="mb-5 rounded-2xl bg-emerald-100 p-4 text-sm text-emerald-700"
-  >
-    {{ recentAppointmentMessage }}
-  </div>
-
-  <app-new-edit-appointment
-    [isOpen]="isAppointmentModalOpen"
-    [isEditMode]="isEditMode"
-    [appointmentToEdit]="selectedAppointmentToEdit"
-    [lockedPsychologistId]="isPsychologist ? (currentUser?.id ?? null) : null"
-    (close)="closeAppointmentModal()"
-    (appointmentSaved)="handleAppointmentCreated($event)"
-  >
-  </app-new-edit-appointment>
-
-  <!-- Calendar -->
-  <div class="overflow-hidden rounded-2xl border border-slate-200">
-    <!-- Month Header -->
-    <div class="flex items-center justify-between border-b border-slate-200 bg-slate-50 px-5 py-4">
-      <h3 class="text-lg font-semibold capitalize text-slate-700">
-        {{ currentMonth }}
-      </h3>
-
-      <div class="flex items-center gap-2">
-        <button
-          type="button"
-          (click)="previousWeek()"
-          class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100"
-        >
-          ←
-        </button>
-
-        <button
-          type="button"
-          (click)="goToToday()"
-          class="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 transition hover:bg-slate-100"
-        >
-          Hoy
-        </button>
-
-        <button
-          type="button"
-          (click)="nextWeek()"
-          class="rounded-lg border border-slate-200 bg-white p-2 text-slate-600 transition hover:bg-slate-100"
-        >
-          →
-        </button>
-      </div>
-    </div>
-
-    <!-- Days -->
+  <!-- ═══ VISTA DESKTOP (md+): grid 5 columnas ═══ -->
+  <div class="hidden md:block">
+    <!-- Days header -->
     <div class="grid grid-cols-5 border-b border-slate-200 bg-slate-50">
-      <div
-        *ngFor="let day of currentWeek"
+      <div *ngFor="let day of currentWeek"
         class="border-r border-slate-200 p-3 text-center last:border-r-0"
-        [ngClass]="day.isToday ? 'bg-blue-50' : ''"
-      >
-        <p class="text-xs text-slate-400">
-          {{ day.dayName }}
-        </p>
-
+        [ngClass]="day.isToday ? 'bg-blue-50' : ''">
+        <p class="text-xs text-slate-400">{{ day.dayName }}</p>
         <p class="mt-1 font-semibold" [ngClass]="day.isToday ? 'text-blue-600' : 'text-slate-700'">
           {{ day.dayNumber }}
         </p>
       </div>
     </div>
-
-    <!-- Appointments -->
+    <!-- Appointments grid -->
     <div class="grid grid-cols-5 min-h-[320px]">
-      <div
-        *ngFor="let dayAppointments of getAppointmentsByDay(); let dayIndex = index"
+      <div *ngFor="let dayAppointments of getAppointmentsByDay(); let dayIndex = index"
         class="border-r border-slate-200 p-2 space-y-2"
-        [ngClass]="dayIndex === 4 ? 'last:border-r-0' : ''"
-      >
+        [ngClass]="dayIndex === 4 ? 'last:border-r-0' : ''">
         <div *ngFor="let hourGroup of dayAppointments" class="flex gap-2">
-          <div
-            *ngFor="let appointment of hourGroup.appointments"
+          <div *ngFor="let appointment of hourGroup.appointments"
             (click)="openAppointmentForEdit(appointment)"
             class="rounded-xl p-3 transition hover:shadow-md flex-1 border cursor-pointer"
-            [ngClass]="[
-              getPsychologistColor(appointment).border,
-              getPsychologistColor(appointment).bg,
-            ]"
-          >
-            <!-- Hora + icono de status -->
+            [ngClass]="[getPsychologistColor(appointment).border, getPsychologistColor(appointment).bg]">
             <div class="flex items-center justify-between mb-1">
               <p class="text-xs font-semibold" [ngClass]="getPsychologistColor(appointment).text">
                 {{ hourGroup.hour }}
               </p>
-              <lucide-angular
-                [img]="statusIcons[appointment.status]"
+              <lucide-angular [img]="statusIcons[appointment.status]"
                 [ngClass]="statusIconColors[appointment.status]"
-                [size]="14"
-                [strokeWidth]="2"
-              ></lucide-angular>
+                [size]="14" [strokeWidth]="2"></lucide-angular>
             </div>
-
-            <!-- Paciente -->
             <p class="text-sm font-semibold text-slate-800 leading-tight">
               {{ appointment.patient?.name }} {{ appointment.patient?.surname }}
             </p>
-
-            <!-- Psicólogo -->
             <p class="text-xs text-slate-500 mt-0.5">
               {{ appointment.psychologist?.name }} {{ appointment.psychologist?.surname }}
             </p>
-
-            <!-- Badge de status -->
-            <span
-              class="mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
-              [ngClass]="statusBadgeClasses[appointment.status]"
-            >
+            <span class="mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
+              [ngClass]="statusBadgeClasses[appointment.status]">
               {{ statusLabels[appointment.status] }}
             </span>
           </div>
@@ -139,12 +60,77 @@
     </div>
   </div>
 
-  <!-- Legend -->
-  <div class="mt-5 flex flex-wrap items-center gap-5 text-sm">
-    <div *ngFor="let psychologist of getActivePsychologists()" class="flex items-center gap-2">
-      <span class="h-3 w-3 rounded-full" [ngClass]="psychologist.color.dot"></span>
+  <!-- ═══ VISTA MÓVIL (<md): selector de día + lista ═══ -->
+  <div class="md:hidden">
+    <!-- Selector de días horizontal con scroll -->
+    <div class="flex overflow-x-auto gap-2 px-3 py-3 border-b border-slate-200 bg-slate-50
+                scrollbar-hide snap-x snap-mandatory">
+      <button *ngFor="let day of currentWeek; let i = index"
+        type="button"
+        (click)="selectDay(i)"
+        class="flex-shrink-0 snap-center flex flex-col items-center px-3 py-2
+               rounded-xl border transition-all min-w-[56px]"
+        [ngClass]="selectedDayIndex === i
+          ? 'bg-blue-500 border-blue-500 text-white'
+          : day.isToday
+            ? 'bg-blue-50 border-blue-200 text-blue-600'
+            : 'bg-white border-slate-200 text-slate-600'">
+        <span class="text-[10px] font-semibold uppercase opacity-70">{{ day.dayName }}</span>
+        <span class="text-base font-bold mt-0.5">{{ day.dayNumber }}</span>
+        <!-- Punto indicador de que hay citas -->
+        <span class="mt-1 w-1.5 h-1.5 rounded-full"
+          [ngClass]="getAppointmentsByDay()[i]?.length
+            ? (selectedDayIndex === i ? 'bg-white' : 'bg-blue-400')
+            : 'bg-transparent'">
+        </span>
+      </button>
+    </div>
 
-      <span class="text-slate-600"> {{ psychologist.name }} {{ psychologist.surname }} </span>
+    <!-- Lista de citas del día seleccionado -->
+    <div class="divide-y divide-slate-100 min-h-[200px]">
+      <ng-container *ngFor="let hourGroup of getAppointmentsForSelectedDay()">
+        <div *ngFor="let appointment of hourGroup.appointments"
+          (click)="openAppointmentForEdit(appointment)"
+          class="flex items-stretch gap-3 px-4 py-3 cursor-pointer hover:bg-slate-50 transition">
+          <!-- Hora + línea vertical -->
+          <div class="flex flex-col items-center gap-1 pt-0.5 w-10 flex-shrink-0">
+            <span class="text-xs font-bold" [ngClass]="getPsychologistColor(appointment).text">
+              {{ hourGroup.hour }}
+            </span>
+            <div class="w-px flex-1 rounded-full" [ngClass]="getPsychologistColor(appointment).border"
+              style="border-left-width: 2px;"></div>
+          </div>
+          <!-- Tarjeta de cita -->
+          <div class="flex-1 rounded-xl border p-3"
+            [ngClass]="[getPsychologistColor(appointment).border, getPsychologistColor(appointment).bg]">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <p class="text-sm font-semibold text-slate-800">
+                  {{ appointment.patient?.name }} {{ appointment.patient?.surname }}
+                </p>
+                <p class="text-xs text-slate-500 mt-0.5">
+                  {{ appointment.psychologist?.name }} {{ appointment.psychologist?.surname }}
+                </p>
+              </div>
+              <lucide-angular [img]="statusIcons[appointment.status]"
+                [ngClass]="statusIconColors[appointment.status]"
+                [size]="16" [strokeWidth]="2"></lucide-angular>
+            </div>
+            <span class="mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
+              [ngClass]="statusBadgeClasses[appointment.status]">
+              {{ statusLabels[appointment.status] }}
+            </span>
+          </div>
+        </div>
+      </ng-container>
+
+      <!-- Estado vacío -->
+      <div *ngIf="!getAppointmentsForSelectedDay()?.length"
+        class="flex flex-col items-center justify-center py-12 text-slate-400 gap-2">
+        <lucide-angular [img]="CalendarX" [size]="32" [strokeWidth]="1.5"></lucide-angular>
+        <p class="text-sm">No hay citas este día</p>
+      </div>
     </div>
   </div>
+
 </div>

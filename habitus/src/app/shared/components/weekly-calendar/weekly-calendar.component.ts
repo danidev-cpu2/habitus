@@ -3,9 +3,8 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit, inject } from '@angula
 import { Subscription } from 'rxjs';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
-import { NewEditAppointment } from "../new-edit-appointment/new-edit-appointment.component";
 import { AuthService } from '../../../core/services/auth.service';
-import { LucideAngularModule, Clock, CircleCheck, CircleX, BadgeCheck, LucideIconData } from 'lucide-angular';
+import { LucideAngularModule, Clock, CircleCheck, CircleX, BadgeCheck, CalendarX, LucideIconData } from 'lucide-angular';
 
 /** Cita enriquecida con posición visual dentro de la celda del calendario */
 interface CalendarEvent {
@@ -37,7 +36,7 @@ interface AppointmentHourGroup {
 @Component({
   selector: 'app-weekly-calendar',
   standalone: true,
-  imports: [CommonModule, NewEditAppointment, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule],
   templateUrl: './weekly-calendar.component.html',
 })
 export class WeeklyCalendarComponent implements OnInit, OnDestroy {
@@ -54,6 +53,19 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
   currentDate = new Date();
 
   appointments: Appointment[] = [];
+
+  readonly CalendarX = CalendarX;
+
+selectedDayIndex = 0; // índice dentro de currentWeek
+
+selectDay(index: number) {
+  this.selectedDayIndex = index;
+}
+
+getAppointmentsForSelectedDay() {
+  const allDays = this.getAppointmentsByDay();
+  return allDays[this.selectedDayIndex] ?? [];
+}
 
   readonly statusIcons: Record<AppointmentStatus, LucideIconData> = {
     pending: Clock,
