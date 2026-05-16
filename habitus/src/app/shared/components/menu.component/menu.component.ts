@@ -1,4 +1,4 @@
-import { Component, OnInit, effect } from '@angular/core';
+import { Component, OnInit, effect, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { User } from '../../../core/models/user.model';
@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-menu-component',
   standalone: true,
-  imports: [CommonModule, RouterModule, LucideAngularModule, ],
+  imports: [CommonModule, RouterModule, LucideAngularModule,],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css',
 })
@@ -47,8 +47,8 @@ export class MenuComponent implements OnInit {
     patient: [
       { href: '/paciente', label: 'Inicio', icon: this.icons.Home },
       { href: '/paciente/calendario', label: 'Calendario', icon: this.icons.Calendar },
-     /*  { href: '/paciente/autoregistro', label: 'Autoregistro', icon: this.icons.BookOpen },
-      { href: '/paciente/tareas', label: 'Mis Tareas', icon: this.icons.CheckSquare }, */
+      /*  { href: '/paciente/autoregistro', label: 'Autoregistro', icon: this.icons.BookOpen },
+       { href: '/paciente/tareas', label: 'Mis Tareas', icon: this.icons.CheckSquare }, */
     ],
     psychologist: [
       { href: '/psicologo', label: 'Mi Panel', icon: this.icons.LayoutDashboard },
@@ -114,5 +114,15 @@ export class MenuComponent implements OnInit {
   logout() {
     this.authService.logoutLocal();
     this.router.navigate(['/login']);
+  }
+
+  menuOpen = signal(false);
+
+  toggleMenu() {
+    this.menuOpen.update(v => !v);
+  }
+
+  closeMenu() {
+    this.menuOpen.set(false);
   }
 }
