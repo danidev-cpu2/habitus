@@ -47,6 +47,8 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
   readonly currentUser = this.authService.currentUser();
 
   isAppointmentModalOpen = false;
+  isEditMode = false;
+  selectedAppointmentToEdit: Appointment | null = null;
   recentAppointmentMessage = '';
   currentMonth = '';
   currentDate = new Date();
@@ -186,7 +188,21 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
     const formattedDate = this.formatAppointmentDate(appointment.date);
     this.recentAppointmentMessage = `Cita creada para ${formattedDate} a las ${appointment.hour}`;
     this.isAppointmentModalOpen = false;
+    this.isEditMode = false;
+    this.selectedAppointmentToEdit = null;
     this.loadAppointments(); // recargar citas
+  }
+
+  openAppointmentForEdit(appointment: Appointment): void {
+    this.selectedAppointmentToEdit = appointment;
+    this.isEditMode = true;
+    this.isAppointmentModalOpen = true;
+  }
+
+  closeAppointmentModal(): void {
+    this.isAppointmentModalOpen = false;
+    this.isEditMode = false;
+    this.selectedAppointmentToEdit = null;
   }
 
   formatAppointmentDate(dateString: string): string {

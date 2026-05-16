@@ -26,8 +26,10 @@
 
   <app-new-edit-appointment
     [isOpen]="isAppointmentModalOpen"
+    [isEditMode]="isEditMode"
+    [appointmentToEdit]="selectedAppointmentToEdit"
     [lockedPsychologistId]="isPsychologist ? (currentUser?.id ?? null) : null"
-    (close)="isAppointmentModalOpen = false"
+    (close)="closeAppointmentModal()"
     (appointmentSaved)="handleAppointmentCreated($event)"
   >
   </app-new-edit-appointment>
@@ -94,7 +96,8 @@
         <div *ngFor="let hourGroup of dayAppointments" class="flex gap-2">
           <div
             *ngFor="let appointment of hourGroup.appointments"
-            class="rounded-xl p-3 transition hover:shadow-md flex-1 border"
+            (click)="openAppointmentForEdit(appointment)"
+            class="rounded-xl p-3 transition hover:shadow-md flex-1 border cursor-pointer"
             [ngClass]="[
               getPsychologistColor(appointment).border,
               getPsychologistColor(appointment).bg,
