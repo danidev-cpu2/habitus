@@ -17,6 +17,7 @@ export class NewEditAppointment implements OnInit, OnChanges {
   @Input() isOpen: boolean = false;
   @Input() isEditMode: boolean = false;
   @Input() appointmentToEdit?: Appointment | null = null;
+  @Input() lockedPsychologistId: number | null = null;
 
   @Output() close = new EventEmitter<void>();
   @Output() appointmentSaved = new EventEmitter<Appointment>();
@@ -121,6 +122,12 @@ export class NewEditAppointment implements OnInit, OnChanges {
     return patient
       ? `${patient.name} ${patient.surname}`
       : 'Paciente no disponible';
+  }
+
+  get lockedPsychologistLabel(): string {
+    if (!this.lockedPsychologistId) return '';
+    const psychologist = this.psychologists.find((p) => p.id === this.lockedPsychologistId);
+    return psychologist ? `${psychologist.name} ${psychologist.surname}` : '';
   }
 
   private getPatientPsychologistId(patient?: User | null): number | null {
@@ -274,11 +281,16 @@ export class NewEditAppointment implements OnInit, OnChanges {
   private resetForm(): void {
     this.selectedPatient = null;
     this.selectedPatientId = null;
-    this.selectedPsychologistId = null;
+    this.selectedPsychologistId = this.lockedPsychologistId || null;
     this.appointmentDate = '';
     this.appointmentHour = '09:00';
     this.duration = 60;
     this.status = 'pending';
     this.filteredPatients = [...this.patients];
+
+    // Si hay psicólogo bloqueado, filtrar pacientes para ese psicólogo
+    if (this.lockedPsychologistId) {
+      this.onPsychologistChange();
+    }
   }
 }

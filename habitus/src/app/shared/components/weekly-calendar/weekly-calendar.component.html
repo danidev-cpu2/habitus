@@ -26,6 +26,7 @@
 
   <app-new-edit-appointment
     [isOpen]="isAppointmentModalOpen"
+    [lockedPsychologistId]="!isPatient ? (currentUser?.id ?? null) : null"
     (close)="isAppointmentModalOpen = false"
     (appointmentSaved)="handleAppointmentCreated($event)"
   >
@@ -127,7 +128,7 @@
               class="mt-2 inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-medium"
               [ngClass]="statusBadgeClasses[appointment.status]"
             >
-            
+
               {{ statusLabels[appointment.status] }}
             </span>
           </div>

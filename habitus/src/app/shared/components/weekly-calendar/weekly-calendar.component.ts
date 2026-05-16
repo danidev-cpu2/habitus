@@ -43,6 +43,7 @@ interface AppointmentHourGroup {
 export class WeeklyCalendarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   readonly isPatient = this.authService.hasRole('patient');
+  readonly currentUser = this.authService.currentUser();
 
   isAppointmentModalOpen = false;
   recentAppointmentMessage = '';

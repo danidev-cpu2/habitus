@@ -49,17 +49,27 @@
         <div class="space-y-1">
           <label class="text-md font-medium text-slate-700"> Psicólogo </label>
 
-          <select
-            name="psychologist"
-            [(ngModel)]="selectedPsychologistId"
-            (change)="onPsychologistChange()"
-            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
-          >
-            <option [ngValue]="null">Seleccionar psicólogo</option>
-            <option *ngFor="let psychologist of psychologists" [ngValue]="psychologist.id">
-              {{ psychologist.name }} {{ psychologist.surname }}
-            </option>
-          </select>
+          <ng-container *ngIf="lockedPsychologistId">
+            <!-- Mostrar psicólogo bloqueado como texto -->
+            <div class="h-10 w-full rounded-xl border border-slate-300 px-4 flex items-center bg-slate-100 text-slate-700">
+              {{ lockedPsychologistLabel }}
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="!lockedPsychologistId">
+            <!-- Selector normal si no hay psicólogo bloqueado -->
+            <select
+              name="psychologist"
+              [(ngModel)]="selectedPsychologistId"
+              (change)="onPsychologistChange()"
+              class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+            >
+              <option [ngValue]="null">Seleccionar psicólogo</option>
+              <option *ngFor="let psychologist of psychologists" [ngValue]="psychologist.id">
+                {{ psychologist.name }} {{ psychologist.surname }}
+              </option>
+            </select>
+          </ng-container>
         </div>
 
         <!-- PACIENTE -->
