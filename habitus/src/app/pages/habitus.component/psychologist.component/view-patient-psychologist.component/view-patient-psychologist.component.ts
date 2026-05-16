@@ -14,7 +14,7 @@ type PatientTab = 'historial' | 'notas' | 'controlConductual' | 'resumenIA';
 @Component({
   selector: 'app-view-patient-psychologist',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule,],
   templateUrl: './view-patient-psychologist.component.html',
   styleUrls: ['./view-patient-psychologist.component.css'],
 })
@@ -150,7 +150,7 @@ export class ViewPatientPsychologistComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   private loadPatient(patientId: number, psychologistId: number): void {
     this.isLoading.set(true);
@@ -197,8 +197,8 @@ export class ViewPatientPsychologistComponent implements OnInit {
         }
 
         this.patientData.set(patient);
-          // Cargar citas del paciente (desde API)
-          this.loadAppointmentsForPatient(Number(patient.id));
+        // Cargar citas del paciente (desde API)
+        this.loadAppointmentsForPatient(Number(patient.id));
         this.isLoading.set(false);
       },
       error: (err) => {
@@ -312,5 +312,20 @@ export class ViewPatientPsychologistComponent implements OnInit {
     }
 
     return age;
+  }
+
+  formatAppointmentDate(dateString: string): string {
+    if (!dateString) return 'Fecha no especificada';
+
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
+    }
+
+    return new Intl.DateTimeFormat('es-ES', {
+      month: 'long',
+      day: '2-digit',
+      year: 'numeric',
+    }).format(date);
   }
 }
