@@ -56,16 +56,16 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
 
   readonly CalendarX = CalendarX;
 
-selectedDayIndex = 0; // índice dentro de currentWeek
+  selectedDayIndex = 0; // índice dentro de currentWeek
 
-selectDay(index: number) {
-  this.selectedDayIndex = index;
-}
+  selectDay(index: number) {
+    this.selectedDayIndex = index;
+  }
 
-getAppointmentsForSelectedDay() {
-  const allDays = this.getAppointmentsByDay();
-  return allDays[this.selectedDayIndex] ?? [];
-}
+  getAppointmentsForSelectedDay() {
+    const allDays = this.getAppointmentsByDay();
+    return allDays[this.selectedDayIndex] ?? [];
+  }
 
   readonly statusIcons: Record<AppointmentStatus, LucideIconData> = {
     pending: Clock,
