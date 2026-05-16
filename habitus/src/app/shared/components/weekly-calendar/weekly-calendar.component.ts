@@ -53,31 +53,31 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
   appointments: Appointment[] = [];
 
   readonly statusIcons: Record<AppointmentStatus, LucideIconData> = {
-    pending:   Clock,
+    pending: Clock,
     confirmed: CircleCheck,
-    canceled:  CircleX,
-    held:      BadgeCheck,
+    canceled: CircleX,
+    held: BadgeCheck,
   };
 
   readonly statusIconColors: Record<AppointmentStatus, string> = {
-    pending:   'text-amber-500',
+    pending: 'text-amber-500',
     confirmed: 'text-emerald-500',
-    canceled:  'text-red-500',
-    held:      'text-blue-500',
+    canceled: 'text-red-500',
+    held: 'text-blue-500',
   };
 
   readonly statusLabels: Record<AppointmentStatus, string> = {
-    pending:   'Pendiente',
+    pending: 'Pendiente',
     confirmed: 'Confirmada',
-    canceled:  'Cancelada',
-    held:      'Realizada',
+    canceled: 'Cancelada',
+    held: 'Realizada',
   };
 
   readonly statusBadgeClasses: Record<AppointmentStatus, string> = {
-    pending:   'bg-amber-50 text-amber-600',
+    pending: 'bg-amber-50 text-amber-600',
     confirmed: 'bg-emerald-50 text-emerald-600',
-    canceled:  'bg-red-50 text-red-500 line-through',
-    held:      'bg-blue-50 text-blue-600',
+    canceled: 'bg-red-50 text-red-500 line-through',
+    held: 'bg-blue-50 text-blue-600',
   };
 
   psychologistColors = [
