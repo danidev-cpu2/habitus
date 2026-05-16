@@ -43,6 +43,7 @@ interface AppointmentHourGroup {
 export class WeeklyCalendarComponent implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   readonly isPatient = this.authService.hasRole('patient');
+  readonly isPsychologist = this.authService.hasRole('psychologist');
   readonly currentUser = this.authService.currentUser();
 
   isAppointmentModalOpen = false;
@@ -56,28 +57,28 @@ export class WeeklyCalendarComponent implements OnInit, OnDestroy {
     pending: Clock,
     confirmed: CircleCheck,
     canceled: CircleX,
-    held: BadgeCheck,
+    held: CircleCheck,
   };
 
   readonly statusIconColors: Record<AppointmentStatus, string> = {
     pending: 'text-amber-500',
     confirmed: 'text-emerald-500',
     canceled: 'text-red-500',
-    held: 'text-blue-500',
+    held: 'text-emerald-500',
   };
 
   readonly statusLabels: Record<AppointmentStatus, string> = {
     pending: 'Pendiente',
     confirmed: 'Confirmada',
     canceled: 'Cancelada',
-    held: 'Realizada',
+    held: 'Confirmada',
   };
 
   readonly statusBadgeClasses: Record<AppointmentStatus, string> = {
     pending: 'bg-amber-50 text-amber-600',
     confirmed: 'bg-emerald-50 text-emerald-600',
     canceled: 'bg-red-50 text-red-500 line-through',
-    held: 'bg-blue-50 text-blue-600',
+    held: 'bg-emerald-50 text-emerald-600',
   };
 
   psychologistColors = [
