@@ -28,6 +28,7 @@ export interface CreateAppointmentDto {
   date: string;
   hour: string;
   end_time: string;
+  status?: AppointmentStatus;
   notes?: string;
 }
 
@@ -66,51 +67,51 @@ export function getMockAppointments(): Appointment[] {
       id: 1, patient_id: 10, psychologist_id: 1,
       date: isoDate(mon, 1), hour: '09:00', end_time: '10:00',
       status: 'pending',
-      patient:      { id: 10, name: 'Juan',    surname: 'Pérez'    },
-      psychologist: { id: 1,  name: 'María',   surname: 'García'   },
+      patient: { id: 10, name: 'Juan', surname: 'Pérez' },
+      psychologist: { id: 1, name: 'María', surname: 'García' },
     },
     {
       id: 2, patient_id: 11, psychologist_id: 1,
       date: isoDate(mon, 1), hour: '11:00', end_time: '12:00',
       status: 'pending',
-      patient:      { id: 11, name: 'Laura',   surname: 'Gómez'    },
-      psychologist: { id: 1,  name: 'María',   surname: 'García'   },
+      patient: { id: 11, name: 'Laura', surname: 'Gómez' },
+      psychologist: { id: 1, name: 'María', surname: 'García' },
     },
     {
       id: 3, patient_id: 12, psychologist_id: 2,
       date: isoDate(mon, 2), hour: '10:00', end_time: '11:00',
       status: 'pending',
-      patient:      { id: 12, name: 'Roberto', surname: 'Silva'    },
-      psychologist: { id: 2,  name: 'Ana',     surname: 'Martínez' },
+      patient: { id: 12, name: 'Roberto', surname: 'Silva' },
+      psychologist: { id: 2, name: 'Ana', surname: 'Martínez' },
     },
     {
       // Misma hora y día que cita 3 → dos psicólogos a las 10:00 del miércoles
       id: 7, patient_id: 20, psychologist_id: 3,
       date: isoDate(mon, 2), hour: '10:00', end_time: '11:00',
       status: 'pending',
-      patient:      { id: 20, name: 'Marta',   surname: 'Ruiz'     },
-      psychologist: { id: 3,  name: 'Carlos',  surname: 'López'    },
+      patient: { id: 20, name: 'Marta', surname: 'Ruiz' },
+      psychologist: { id: 3, name: 'Carlos', surname: 'López' },
     },
     {
       id: 4, patient_id: 13, psychologist_id: 3,
       date: isoDate(mon, 2), hour: '16:00', end_time: '17:30',
       status: 'pending',
-      patient:      { id: 13, name: 'Grupo',   surname: 'Adolescentes' },
-      psychologist: { id: 3,  name: 'Carlos',  surname: 'López'        },
+      patient: { id: 13, name: 'Grupo', surname: 'Adolescentes' },
+      psychologist: { id: 3, name: 'Carlos', surname: 'López' },
     },
     {
       id: 5, patient_id: 14, psychologist_id: 3,
       date: isoDate(mon, 4), hour: '09:00', end_time: '10:00',
       status: 'pending',
-      patient:      { id: 14, name: 'Carmen',  surname: 'Ruiz'     },
-      psychologist: { id: 3,  name: 'Carlos',  surname: 'López'    },
+      patient: { id: 14, name: 'Carmen', surname: 'Ruiz' },
+      psychologist: { id: 3, name: 'Carlos', surname: 'López' },
     },
     {
       id: 6, patient_id: 15, psychologist_id: 4,
       date: isoDate(mon, 5), hour: '14:00', end_time: '15:00',
       status: 'pending',
-      patient:      { id: 15, name: 'Diego',   surname: 'Fernández' },
-      psychologist: { id: 4,  name: 'Pedro',   surname: 'Sánchez'   },
+      patient: { id: 15, name: 'Diego', surname: 'Fernández' },
+      psychologist: { id: 4, name: 'Pedro', surname: 'Sánchez' },
     },
   ];
 }

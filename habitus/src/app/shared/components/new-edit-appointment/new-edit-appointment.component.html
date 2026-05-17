@@ -104,7 +104,8 @@
             [(ngModel)]="appointmentDate"
             [min]="minDate"
             (change)="validateWeekDay()"
-            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+            [disabled]="isPatientEditing"
+            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500"
           />
         </div>
         <!-- HORA -->
@@ -116,7 +117,8 @@
             name="hour"
             type="time"
             [(ngModel)]="appointmentHour"
-            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500"
+            [disabled]="isPatientEditing"
+            class="h-10 w-full rounded-xl border border-slate-300 px-4 outline-none transition focus:border-blue-500 disabled:cursor-not-allowed disabled:bg-slate-100 disabled:text-slate-500"
           />
         </div>
       </div>

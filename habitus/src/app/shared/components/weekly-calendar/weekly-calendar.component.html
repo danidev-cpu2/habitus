@@ -179,7 +179,7 @@
 
       <!-- Estado vacío -->
       <div
-        *ngIf="!getAppointmentsForSelectedDay()?.length"
+        *ngIf="!getAppointmentsForSelectedDay().length"
         class="flex flex-col items-center justify-center py-12 text-slate-400 gap-2"
       >
         <lucide-angular [img]="CalendarX" [size]="32" [strokeWidth]="1.5"></lucide-angular>
@@ -187,4 +187,12 @@
       </div>
     </div>
   </div>
+
+  <app-new-edit-appointment
+    [isOpen]="isAppointmentModalOpen"
+    [isEditMode]="isEditMode"
+    [appointmentToEdit]="selectedAppointmentToEdit"
+    (close)="closeAppointmentModal()"
+    (appointmentSaved)="handleAppointmentCreated($event)"
+  ></app-new-edit-appointment>
 </div>

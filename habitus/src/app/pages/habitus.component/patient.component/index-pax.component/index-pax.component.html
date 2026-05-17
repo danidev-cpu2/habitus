@@ -182,7 +182,7 @@
         <!-- Pendiente → puede confirmar o cancelar -->
         @if (apt.status === 'pendiente') {
           <button
-            (click)="setStatus('confirmed')"
+            (click)="setStatus('held')"
             [disabled]="isLoading()"
             class="rounded-lg bg-emerald-500 px-4 py-2.5 text-sm font-medium text-white transition hover:bg-emerald-600 disabled:opacity-50"
           >

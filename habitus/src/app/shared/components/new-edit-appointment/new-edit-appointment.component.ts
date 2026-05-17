@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../../../core/services/user.service';
+import { AuthService } from '../../../core/services/auth.service';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
 import { User } from '../../../core/models/user.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
@@ -42,13 +43,20 @@ export class NewEditAppointment implements OnInit, OnChanges {
 
   successMessage = '';
   errorMessage = '';
+  isPatient = false;
 
   constructor(
     private appointmentService: AppointmentService,
     private userService: UserService,
+    private authService: AuthService,
   ) { }
 
+  get isPatientEditing(): boolean {
+    return this.isEditMode && this.isPatient;
+  }
+
   ngOnInit(): void {
+    this.isPatient = this.authService.hasRole('patient');
     this.loadUsers();
   }
 
@@ -225,18 +233,28 @@ export class NewEditAppointment implements OnInit, OnChanges {
       return;
     }
 
-    const payload = {
-      patient_id: patientId,
-      psychologist_id: psychologistId,
-      date: this.appointmentDate,
-      hour: this.appointmentHour,
-      end_time: this.computeEndTime(this.appointmentHour, this.duration),
+    const payload: any = {
       status: this.status,
     };
 
+    if (!this.isPatientEditing) {
+      payload.patient_id = patientId;
+      payload.psychologist_id = psychologistId;
+      payload.date = this.appointmentDate;
+      payload.hour = this.appointmentHour;
+      payload.end_time = this.computeEndTime(this.appointmentHour, this.duration);
+    }
+
     const request = this.isEditMode && this.appointmentToEdit?.id
       ? this.appointmentService.update(this.appointmentToEdit.id, payload)
-      : this.appointmentService.create(payload);
+      : this.appointmentService.create({
+        patient_id: patientId,
+        psychologist_id: psychologistId,
+        date: this.appointmentDate,
+        hour: this.appointmentHour,
+        end_time: this.computeEndTime(this.appointmentHour, this.duration),
+        status: this.status,
+      });
 
     request.subscribe({
       next: (response) => {

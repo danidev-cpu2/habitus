@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Appointment, AppointmentStatus } from '../../../core/models/appointment.model';
 import { AppointmentService } from '../../../core/services/appointment.service';
 import { AuthService } from '../../../core/services/auth.service';
+import { NewEditAppointment } from '../new-edit-appointment/new-edit-appointment.component';
 import { LucideAngularModule, Clock, CircleCheck, CircleX, BadgeCheck, CalendarX, LucideIconData } from 'lucide-angular';
 
 /** Cita enriquecida con posición visual dentro de la celda del calendario */
@@ -36,7 +37,7 @@ interface AppointmentHourGroup {
 @Component({
   selector: 'app-weekly-calendar',
   standalone: true,
-  imports: [CommonModule, LucideAngularModule],
+  imports: [CommonModule, LucideAngularModule, NewEditAppointment],
   templateUrl: './weekly-calendar.component.html',
 })
 export class WeeklyCalendarComponent implements OnInit, OnDestroy {
