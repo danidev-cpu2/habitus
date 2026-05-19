@@ -1,4 +1,30 @@
+<div class="flex items-center justify-between px-6 py-4">
+  <div>
+    <h1 class="text-lg font-bold tracking-tight text-slate-900">
+      ¡Bienvenido!
+    </h1>
+    <p class="text-xs text-slate-500 mt-0.5">{{ currentDateLabel }}</p>
+  </div>
+  <div class="flex gap-2">
+    <button
+      type="button"
+      (click)="openNewModal()"
+      class="rounded-xl bg-blue-500 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+    >
+      + Nueva Cita
+    </button>
+  </div>
+</div>
 <app-weekly-calendar
   title="Calendario Global"
   subtitle="Gestiona las citas arrastrando y soltando"
 />
+
+<app-new-edit-appointment
+  [isOpen]="isAppointmentModalOpen"
+  [isEditMode]="isEditMode"
+  [appointmentToEdit]="appointmentToEdit"
+  (close)="isAppointmentModalOpen = false"
+  (appointmentSaved)="handleAppointmentCreated($event)"
+>
+</app-new-edit-appointment>

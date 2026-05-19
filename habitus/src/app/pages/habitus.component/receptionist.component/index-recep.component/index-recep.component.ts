@@ -2,11 +2,12 @@ import { CommonModule } from '@angular/common';
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { AppointmentService, Appointment } from '../../../../services/appointment.service';
 import { WeeklyCalendarComponent } from "../../../../shared/components/weekly-calendar/weekly-calendar.component";
+import { NewEditAppointment } from "../../../../shared/components/new-edit-appointment/new-edit-appointment.component";
 
 @Component({
   selector: 'app-index-recep',
   standalone: true,
-  imports: [CommonModule, WeeklyCalendarComponent],
+  imports: [CommonModule, WeeklyCalendarComponent, NewEditAppointment],
   templateUrl: './index-recep.component.html',
   styleUrls: ['./index-recep.component.css'],
 })
@@ -15,6 +16,8 @@ export class IndexRecepComponent implements OnInit {
   recentAppointmentMessage = '';
   currentMonth = '';
   currentDate = new Date();
+  isEditMode = false;
+  appointmentToEdit: Appointment | null = null;
 
   appointments: Appointment[] = [];
 
@@ -41,6 +44,23 @@ export class IndexRecepComponent implements OnInit {
   ngOnInit(): void {
     this.generateCurrentWeek(this.currentDate);
     this.loadAppointments();
+  }
+
+  get currentDateLabel(): string {
+    return this.formatTodayLabel(new Date());
+  }
+  private formatTodayLabel(date: Date): string {
+    return new Intl.DateTimeFormat('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    }).format(date);
+  }
+
+  openNewModal() {
+    this.isEditMode = false;
+    this.appointmentToEdit = null;
+    this.isAppointmentModalOpen = true;
   }
 
   loadAppointments(): void {
