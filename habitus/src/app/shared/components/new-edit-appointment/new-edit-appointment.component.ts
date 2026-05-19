@@ -286,11 +286,30 @@ export class NewEditAppointment implements OnInit, OnChanges {
     return `${String(endH).padStart(2, '0')}:${String(endM).padStart(2, '0')}`;
   }
 
+  private normalizeTime(value?: string | null): string {
+    if (!value) {
+      return '';
+    }
+
+    const parts = value.split(':').map((segment) => segment.trim());
+    if (parts.length < 2) {
+      return '';
+    }
+
+    const hours = Number(parts[0]);
+    const minutes = Number(parts[1]);
+    if (Number.isNaN(hours) || Number.isNaN(minutes)) {
+      return '';
+    }
+
+    return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+  }
+
   private patchAppointment(appointment: Appointment): void {
     this.selectedPatientId = appointment.patient_id;
     this.selectedPsychologistId = appointment.psychologist_id;
     this.appointmentDate = appointment.date;
-    this.appointmentHour = appointment.hour;
+    this.appointmentHour = this.normalizeTime(appointment.hour);
     this.status = appointment.status;
     this.selectedPatient = this.patients.find((item) => item.id === appointment.patient_id) ?? null;
     this.filteredPatients = [...this.patients];
