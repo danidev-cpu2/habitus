@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { WeeklyCalendarComponent } from "../../../../shared/components/weekly-calendar/weekly-calendar.component";
 import { AuthService } from '../../../../core/services/auth.service';
 import { AppointmentService, Appointment } from '../../../../services/appointment.service';
+import { NewEditAppointment } from "../../../../shared/components/new-edit-appointment/new-edit-appointment.component";
 
 @Component({
   selector: 'app-psycho-calendar.component',
-  imports: [WeeklyCalendarComponent],
+  imports: [WeeklyCalendarComponent, NewEditAppointment],
   templateUrl: './psycho-calendar.component.html',
   styleUrl: './psycho-calendar.component.css',
 })
@@ -16,10 +17,23 @@ export class PsychoCalendarComponent implements OnInit {
   isEditMode = false;
   appointmentToEdit: Appointment | null = null;
 
+  get currentPsychologistId(): number | null {
+    const user = this.authService.currentUser();
+    return user?.rol === 'psychologist' ? user.id : null;
+  }
+
   constructor(
     private authService: AuthService,
     private appointmentService: AppointmentService
   ) { }
+
+
+  handleAppointmentCreated($event: any) {
+    this.isAppointmentModalOpen = false;
+    this.isEditMode = false;
+    this.appointmentToEdit = null;
+    this.loadPsychologistAppointments();
+  }
 
   get psychologistName(): string {
     const user = this.authService.currentUser();
@@ -38,7 +52,7 @@ export class PsychoCalendarComponent implements OnInit {
       month: 'long',
     }).format(date);
   }
-    openNewModal() {
+  openNewModal() {
     this.isEditMode = false;
     this.appointmentToEdit = null;
     this.isAppointmentModalOpen = true;
@@ -56,6 +70,7 @@ export class PsychoCalendarComponent implements OnInit {
       this.isLoading = false;
       return;
     }
+
 
     this.appointmentService.getAppointments().subscribe({
       next: (appointments: Appointment[]) => {

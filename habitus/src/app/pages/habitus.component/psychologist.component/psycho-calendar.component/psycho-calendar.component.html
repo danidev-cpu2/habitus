@@ -5,7 +5,7 @@
     </h1>
     <p class="text-xs text-slate-500 mt-0.5">{{ currentDateLabel }}</p>
   </div>
-  <div class="flex gap-2 ">
+  <div class="flex gap-2">
     <button
       type="button"
       (click)="openNewModal()"
@@ -20,3 +20,13 @@
   title="Calendario Global"
   subtitle="Gestiona las citas arrastrando y soltando"
 />
+
+<app-new-edit-appointment
+  [isOpen]="isAppointmentModalOpen"
+  [isEditMode]="isEditMode"
+  [appointmentToEdit]="appointmentToEdit"
+  [lockedPsychologistId]="currentPsychologistId"
+  (close)="isAppointmentModalOpen = false"
+  (appointmentSaved)="handleAppointmentCreated($event)"
+>
+</app-new-edit-appointment>
