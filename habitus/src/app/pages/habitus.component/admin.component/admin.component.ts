@@ -78,7 +78,8 @@ export class AdminComponent implements OnInit {
   private loadAppointments(): void {
     this.appointmentService.getAppointments().subscribe({
       next: (data: Appointment[]) => {
-        this.appointments = data ?? [];
+        this.appointments = data ?? []; //.sort(a, b) => { a.hour - b.hour }
+        console.log(data);
         const today = this.todayIso();
         this.todayAppointments = this.appointments.filter((appointment) =>
           appointment.date?.substring(0, 10) === today,

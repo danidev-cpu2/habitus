@@ -12,11 +12,37 @@ import { AppointmentService, Appointment } from '../../../../services/appointmen
 export class PsychoCalendarComponent implements OnInit {
   psychologistAppointments: Appointment[] = [];
   isLoading = true;
+  isAppointmentModalOpen = false;
+  isEditMode = false;
+  appointmentToEdit: Appointment | null = null;
 
   constructor(
     private authService: AuthService,
     private appointmentService: AppointmentService
-  ) {}
+  ) { }
+
+  get psychologistName(): string {
+    const user = this.authService.currentUser();
+    if (!user) {
+      return 'Dr. Psicólogo';
+    }
+    return `Dr. ${user.name} ${user.surname}`.trim();
+  }
+  get currentDateLabel(): string {
+    return this.formatTodayLabel(new Date());
+  }
+  private formatTodayLabel(date: Date): string {
+    return new Intl.DateTimeFormat('es-ES', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+    }).format(date);
+  }
+    openNewModal() {
+    this.isEditMode = false;
+    this.appointmentToEdit = null;
+    this.isAppointmentModalOpen = true;
+  }
 
   ngOnInit(): void {
     this.loadPsychologistAppointments();
@@ -24,7 +50,7 @@ export class PsychoCalendarComponent implements OnInit {
 
   loadPsychologistAppointments(): void {
     const currentUser = this.authService.currentUser();
-    
+
     if (!currentUser || !currentUser.id) {
       console.error('No hay usuario autenticado');
       this.isLoading = false;
