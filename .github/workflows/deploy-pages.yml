@@ -24,20 +24,25 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 10.15.0
+
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: npm
-          cache-dependency-path: habitus/package-lock.json
+          cache: pnpm
+          cache-dependency-path: habitus/pnpm-lock.yaml
 
       - name: Install dependencies
         working-directory: habitus
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build for GitHub Pages
         working-directory: habitus
-        run: npm run build:pages
+        run: pnpm run build:pages
 
       - name: Add SPA fallback for client-side routes
         working-directory: habitus
